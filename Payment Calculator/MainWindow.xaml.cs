@@ -63,7 +63,14 @@ namespace Payment_Calculator
                 return;
             }
 
-            AmortizationTable.ItemsSource = calc.MakeTable();
+            try
+            {
+                AmortizationTable.ItemsSource = calc.MakeTable();
+            } catch (System.OverflowException)
+            {
+                MessageBox.Show("The loan is too large to calculate.");
+                return;
+            }
 
             monthlyPaymentTextBox.Text = string.Format("{0:C2}", calc.MonthlyPayment);
             loanAmountTextBox.Text = string.Format("{0:C2}", calc.LoanAmount);
