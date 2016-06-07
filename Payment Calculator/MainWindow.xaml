@@ -1,0 +1,115 @@
+﻿<Window x:Class="Payment_Calculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Payment_Calculator"
+        mc:Ignorable="d"
+        Title="Payment Calculator by Void Type" Height="600" Width="980">
+
+    <Grid>
+
+        <DockPanel>
+            <Menu DockPanel.Dock ="Top">
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Click="About_MenuItem_Click"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <Grid Margin="0,30,20,0" Grid.Row="1" Grid.Column="0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="30*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="lbl02" Text="Asset Cost" Grid.Row="0" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="lbl03" Text="Down Payment" Grid.Row="2" Grid.Column="0" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl04" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl05" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl06" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Center"/>
+
+            <TextBox x:Name="assetCostTextBox"  Grid.Row="0" Grid.Column="1" TabIndex="1"/>
+            <TextBox x:Name="downPaymentTextBox"  Grid.Row="2" Grid.Column="1" TabIndex="1"/>
+            <TextBox x:Name="interestRateTextBox"  Grid.Row="4" Grid.Column="1" TabIndex="3"/>
+            <TextBox x:Name="yearsTextBox"  Grid.Row="6" Grid.Column="1" TabIndex="4"/>
+
+            <ComboBox x:Name="periodsPerYearComboBox"  Grid.Row="8" Grid.Column="1" TabIndex="5"
+                  Loaded="periodsPerYearComboBox_Loaded" />
+
+
+            <TextBlock x:Name="lbl12" Text="Monthly Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl14" Text="Interest Paid" Grid.Row="4" Grid.Column="3" TextAlignment="Center"/>
+            <TextBlock x:Name="lbl15" Text="Total Paid" Grid.Row="6" Grid.Column="3" TextAlignment="Center"/>
+
+            <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="0" Grid.Column="4">
+                <TextBlock x:Name="monthlyPaymentTextBox" />
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="2" Grid.Column="4">
+                <TextBlock x:Name="loanAmountTextBox" />
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="4" Grid.Column="4">
+                <TextBlock x:Name="interestPaidTextBox" />
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="6" Grid.Column="4">
+                <TextBlock x:Name="totalPaidTextBox" />
+            </Border>
+
+            <Grid Grid.Row="8" Grid.Column="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="APR %"/>
+                    <CheckBox x:Name="IsPercentInterestCheckBox" IsChecked="True"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="8" Grid.Column="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="45*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="clearButton" Content="Clear" Click="clearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch"/>
+                <Button x:Name="calcButton" Content="Calculate" Click="calcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="9" Grid.ColumnSpan="2">
+                <DataGrid Name="AmortizationTable" AutoGenerateColumns="False" Margin="0,-10,0,10.4">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=PeriodNumber}" Header="#" />
+                        <DataGridTextColumn Binding="{Binding Path=InterestPayment, StringFormat=c}" Header="Interest Paid" />
+                        <DataGridTextColumn Binding="{Binding Path=PrincipalPayment, StringFormat=c}" Header="Principal Paid" />
+                        <DataGridTextColumn Binding="{Binding Path=BalanceLeft, StringFormat=c}" Header="Balance Left" />
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Window>
