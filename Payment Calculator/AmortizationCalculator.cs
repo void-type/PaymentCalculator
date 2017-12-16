@@ -5,18 +5,10 @@ namespace PaymentCalculator
 {
     public class AmortizationCalculator
     {
-        // Inputs
-        public decimal AssetCost { get; }
-
-        public decimal DownPayment { get; }
-        public decimal InterestRate { get; }
-
         // Calculated variables
         public decimal LoanAmount => AssetCost - DownPayment;
 
-        // Outputs
         public decimal MonthlyPayment => Financial.FindPayment(RatePerPeriod, NumberOfPeriods, -LoanAmount);
-
         public int NumberOfPeriods => Years * PeriodsPerYear;
         public int PeriodsPerYear { get; }
         public decimal RatePerPeriod => InterestRate / PeriodsPerYear;
@@ -59,6 +51,10 @@ namespace PaymentCalculator
             }
             return table;
         }
+
+        private decimal AssetCost { get; }
+        private decimal DownPayment { get; }
+        private decimal InterestRate { get; }
     }
 
     /// <summary>

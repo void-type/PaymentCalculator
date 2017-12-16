@@ -16,14 +16,19 @@ namespace PaymentCalculator
             AssetCostTextBox.Focus();
         }
 
+        private static void DisplayMessage(string msg)
+        {
+            MessageBox.Show(msg);
+        }
+
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
         }
 
-        private void calcButton_Click(object sender, RoutedEventArgs e)
+        private void CalcButton_Click(object sender, RoutedEventArgs e)
         {
-            var calc = ScrubInput();
+            var calc = ValidateInput();
 
             if (calc == null)
             {
@@ -46,7 +51,7 @@ namespace PaymentCalculator
             TotalPaidTextBox.Text = $"{calc.TotalPaid:C2}";
         }
 
-        private void clearButton_Click(object sender, RoutedEventArgs e)
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             // Clear Input
             AssetCostTextBox.Text = "";
@@ -68,25 +73,22 @@ namespace PaymentCalculator
             AssetCostTextBox.Focus();
         }
 
-        private void DisplayMessage(string msg)
-        {
-            MessageBox.Show(msg);
-        }
-
-        private void periodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
+        private void PeriodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
         {
             var options = new List<string>()
             {
                 "Monthly", "Quarterly", "Yearly"
             };
 
-            var cmbx = sender as ComboBox;
-
+            if (!(sender is ComboBox cmbx))
+            {
+                return;
+            }
             cmbx.ItemsSource = options;
             cmbx.SelectedIndex = 0;
         }
 
-        private AmortizationCalculator ScrubInput()
+        private AmortizationCalculator ValidateInput()
         {
             if ((!decimal.TryParse(AssetCostTextBox.Text, out var assetCost)) || (assetCost <= 0))
             {

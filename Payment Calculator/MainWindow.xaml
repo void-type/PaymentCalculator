@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PaymentCalculator"
         mc:Ignorable="d"
         Title="Payment Calculator by VoidType" Height="600" Width="980">
 
@@ -54,7 +53,7 @@
             <TextBox x:Name="YearsTextBox"  Grid.Row="6" Grid.Column="1" TabIndex="4" />
 
             <ComboBox x:Name="PeriodsPerYearComboBox"  Grid.Row="8" Grid.Column="1" TabIndex="5"
-                  Loaded="periodsPerYearComboBox_Loaded" />
+                  Loaded="PeriodsPerYearComboBox_Loaded" />
 
             <TextBlock x:Name="Lbl12" Text="Monthly Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center" />
             <TextBlock x:Name="Lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center" />
@@ -94,8 +93,8 @@
                     <ColumnDefinition Width="45*" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ClearButton" Content="Clear" Click="clearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
-                <Button x:Name="CalcButton" Content="Calculate" Click="calcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch" />
+                <Button x:Name="ClearButton" Content="Clear" Click="ClearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
+                <Button x:Name="CalcButton" Content="Calculate" Click="CalcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch" />
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="9" Grid.ColumnSpan="2">
