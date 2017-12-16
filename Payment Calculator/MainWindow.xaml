@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PaymentCalculator"
         mc:Ignorable="d"
-        Title="Payment Calculator by Void Type" Height="600" Width="980">
+        Title="Payment Calculator by VoidType" Height="600" Width="980">
 
     <Grid>
 
@@ -81,6 +81,9 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="APR %" />
                     <CheckBox x:Name="IsPercentInterestCheckBox" IsChecked="True" />
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="When checked, APR represents whole percent like 4%. When not checked, it's represented in decimal form like 0.04." />
+                    </ToolTipService.ToolTip>
                 </StackPanel>
             </Grid>
 
