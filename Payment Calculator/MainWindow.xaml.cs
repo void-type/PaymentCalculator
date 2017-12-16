@@ -2,15 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Payment_Calculator
+namespace PaymentCalculator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<SinglePaymentInformation> TableItems = new List<SinglePaymentInformation>();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -18,17 +16,36 @@ namespace Payment_Calculator
             assetCostTextBox.Focus();
         }
 
-        private void periodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
+        private List<SinglePaymentInformation> TableItems = new List<SinglePaymentInformation>();
+
+        private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var options = new List<string>()
+            MessageBox.Show("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
+        }
+
+        private void calcButton_Click(object sender, RoutedEventArgs e)
+        {
+            var calc = ScrubInput();
+
+            if (calc == null)
             {
-                "Monthly", "Quarterly", "Yearly"
-            };
+                return;
+            }
 
-            var cmbx = sender as ComboBox;
+            try
+            {
+                AmortizationTable.ItemsSource = calc.MakeTable();
+            }
+            catch (System.OverflowException)
+            {
+                MessageBox.Show("The loan is too large to calculate.");
+                return;
+            }
 
-            cmbx.ItemsSource = options;
-            cmbx.SelectedIndex = 0;
+            monthlyPaymentTextBox.Text = string.Format("{0:C2}", calc.MonthlyPayment);
+            loanAmountTextBox.Text = string.Format("{0:C2}", calc.LoanAmount);
+            interestPaidTextBox.Text = string.Format("{0:C2}", calc.TotalInterestPaid);
+            totalPaidTextBox.Text = string.Format("{0:C2}", calc.TotalPaid);
         }
 
         private void clearButton_Click(object sender, RoutedEventArgs e)
@@ -53,29 +70,22 @@ namespace Payment_Calculator
             assetCostTextBox.Focus();
         }
 
-        private void calcButton_Click(object sender, RoutedEventArgs e)
+        private void DisplayMessage(string msg)
         {
+            MessageBox.Show(msg);
+        }
 
-            var calc = ScrubInput();
-
-            if (calc == null)
+        private void periodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var options = new List<string>()
             {
-                return;
-            }
+                "Monthly", "Quarterly", "Yearly"
+            };
 
-            try
-            {
-                AmortizationTable.ItemsSource = calc.MakeTable();
-            } catch (System.OverflowException)
-            {
-                MessageBox.Show("The loan is too large to calculate.");
-                return;
-            }
+            var cmbx = sender as ComboBox;
 
-            monthlyPaymentTextBox.Text = string.Format("{0:C2}", calc.MonthlyPayment);
-            loanAmountTextBox.Text = string.Format("{0:C2}", calc.LoanAmount);
-            interestPaidTextBox.Text = string.Format("{0:C2}", calc.TotalInterestPaid);
-            totalPaidTextBox.Text = string.Format("{0:C2}", calc.TotalPaid);
+            cmbx.ItemsSource = options;
+            cmbx.SelectedIndex = 0;
         }
 
         private AmortizationCalculator ScrubInput()
@@ -129,9 +139,11 @@ namespace Payment_Calculator
                 case 1:
                     periodsPerYear = 4;
                     break;
+
                 case 2:
                     periodsPerYear = 1;
                     break;
+
                 default:
                     periodsPerYearComboBox.SelectedIndex = 0;
                     periodsPerYear = 12;
@@ -149,16 +161,6 @@ namespace Payment_Calculator
             }
 
             return new AmortizationCalculator(assetCost, downPayment, interestRate, years, periodsPerYear);
-        }
-
-        private void DisplayMessage(string msg)
-        {
-            MessageBox.Show(msg);
-        }
-
-        private void About_MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
         }
     }
 }

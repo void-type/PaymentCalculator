@@ -1,26 +1,27 @@
 ﻿using System;
 
-namespace VoidType.Financial
+namespace PaymentCalculator
 {
-
-    // This is a class with some of the functionality of the Excel and VB.Net finanacial functions. 
-    // This can be used when you need these functions and don't have access to the legacy .Net libraries.
-
+    // This is a class with some of the functionality of the Excel and VB.Net finanacial functions. This can be used when you need these functions and
+    // don't have access to the legacy .Net libraries.
 
     public static class Financial
     {
         #region PMT
+
         public static decimal PMT(decimal r, int nper, decimal pv, decimal fv = 0, int type = 0)
         {
-            var pmt = 0.0m;
+            decimal pmt;
 
             if (nper == 0)
             {
                 pmt = 0;
-            } else if (r == 0)
+            }
+            else if (r == 0)
             {
                 pmt = (fv - pv) / nper;
-            } else
+            }
+            else
             {
                 pmt = r / (decimal)(Math.Pow(1 + (double)r, nper) - 1) * -(pv * (decimal)Math.Pow(1 + (double)r, nper) + fv);
             }
@@ -37,9 +38,11 @@ namespace VoidType.Financial
         {
             return Convert.ToDouble(PMT(Convert.ToDecimal(r), nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
         }
-        #endregion
+
+        #endregion PMT
 
         #region IPMT
+
         public static decimal IPMT(decimal r, int per, int nper, decimal pv, decimal fv = 0, int type = 0)
         {
             var pmt = PMT(r, nper, pv, fv, type);
@@ -57,9 +60,11 @@ namespace VoidType.Financial
         {
             return Convert.ToDouble(IPMT(Convert.ToDecimal(r), per, nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
         }
-        #endregion
+
+        #endregion IPMT
 
         #region PPMT
+
         public static decimal PPMT(decimal r, int per, int nper, decimal pv, decimal fv = 0, int type = 0)
         {
             var pmt = PMT(r, nper, pv, fv, type);
@@ -77,12 +82,14 @@ namespace VoidType.Financial
         {
             return Convert.ToDouble(PPMT(Convert.ToDecimal(r), per, nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
         }
-        #endregion
+
+        #endregion PPMT
 
         #region FV
+
         public static decimal FV(decimal r, int nper, decimal pmt, decimal pv = 0, int type = 0)
         {
-            var fv = 0.0m;
+            decimal fv;
             var pow = (decimal)Math.Pow(1 + (double)r, nper);
 
             if (type == 1)
@@ -93,10 +100,12 @@ namespace VoidType.Financial
             if (nper == 0)
             {
                 fv = -pv;
-            } else if (r == 0)
+            }
+            else if (r == 0)
             {
                 fv = -(pv + (nper * pmt));
-            } else
+            }
+            else
             {
                 fv = -(pmt * (pow - 1) / r + pv * pow);
             }
@@ -108,9 +117,11 @@ namespace VoidType.Financial
         {
             return Convert.ToDouble(FV(Convert.ToDecimal(r), nper, Convert.ToDecimal(pmt), Convert.ToDecimal(pv), type));
         }
-        #endregion
+
+        #endregion FV
 
         #region PV
+
         public static decimal PV(decimal r, int nper, decimal pmt, decimal fv = 0, int type = 0)
         {
             var num = 1.0m;
@@ -119,7 +130,9 @@ namespace VoidType.Financial
             if (r == 0)
             {
                 return (-fv - (pmt * nper));
-            } else if (type == 1)
+            }
+
+            if (type == 1)
             {
                 num = (1 + r);
             }
@@ -130,14 +143,16 @@ namespace VoidType.Financial
         {
             return Convert.ToDouble(PV(Convert.ToDecimal(r), nper, Convert.ToDecimal(pmt), Convert.ToDecimal(pv), type));
         }
-        #endregion
+
+        #endregion PV
 
         #region NPV
+
         public static decimal NPV(decimal r, params decimal[] cfs)
         {
             var ans = 0.0m;
 
-            for (int i = 0; i < cfs.Length; i++)
+            for (var i = 0; i < cfs.Length; i++)
             {
                 ans += cfs[i] / (decimal)Math.Pow((1 + (double)r), (i + 1));
             }
@@ -149,15 +164,14 @@ namespace VoidType.Financial
         {
             var ans = 0.0;
 
-            for (int i = 0; i < cfs.Length; i++)
+            for (var i = 0; i < cfs.Length; i++)
             {
                 ans += cfs[i] / Math.Pow((1 + r), (i + 1));
             }
 
             return ans;
         }
-        #endregion
 
+        #endregion NPV
     }
 }
-

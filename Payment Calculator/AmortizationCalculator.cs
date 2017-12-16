@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using VoidType.Financial;
 
-namespace Payment_Calculator
+namespace PaymentCalculator
 {
     public class AmortizationCalculator
     {
@@ -13,24 +12,18 @@ namespace Payment_Calculator
 
         public decimal InterestRate { get; }
 
-        public int Years { get; }
-
-        public int PeriodsPerYear { get; }
-
         // Calculated variables
         public decimal LoanAmount => AssetCost - DownPayment;
-
-        public decimal RatePerPeriod => InterestRate / PeriodsPerYear;
-
-        public int NumberOfPeriods => Years * PeriodsPerYear;
 
         // Outputs
         public decimal MonthlyPayment => Financial.PMT(RatePerPeriod, NumberOfPeriods, -LoanAmount);
 
+        public int NumberOfPeriods => Years * PeriodsPerYear;
+        public int PeriodsPerYear { get; }
+        public decimal RatePerPeriod => InterestRate / PeriodsPerYear;
         public decimal TotalInterestPaid { get; private set; }
-
         public decimal TotalPaid => TotalInterestPaid + AssetCost;
-
+        public int Years { get; }
 
         public AmortizationCalculator(decimal assetCost, decimal downPayment, decimal interestRate, int years, int periodsPerYear)
         {
@@ -76,17 +69,16 @@ namespace Payment_Calculator
     /// </summary>
     public class SinglePaymentInformation
     {
-        [DisplayName("#")]
-        public int PeriodNumber { get; set; }
+        [DisplayName("Balance Remaining")]
+        public decimal BalanceLeft { get; set; }
 
         [DisplayName("Interest")]
         public decimal InterestPayment { get; set; }
 
+        [DisplayName("#")]
+        public int PeriodNumber { get; set; }
+
         [DisplayName("Principal")]
         public decimal PrincipalPayment { get; set; }
-
-        [DisplayName("Balance Remaining")]
-        public decimal BalanceLeft { get; set; }
-
     }
 }
