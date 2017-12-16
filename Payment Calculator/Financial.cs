@@ -7,171 +7,171 @@ namespace PaymentCalculator
 
     public static class Financial
     {
-        #region PMT
+        #region FindPayment
 
-        public static decimal PMT(decimal r, int nper, decimal pv, decimal fv = 0, int type = 0)
+        public static decimal FindPayment(decimal interestRate, int numberOfPeriods, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            decimal pmt;
+            decimal payment;
 
-            if (nper == 0)
+            if (numberOfPeriods == 0)
             {
-                pmt = 0;
+                payment = 0;
             }
-            else if (r == 0)
+            else if (interestRate == 0)
             {
-                pmt = (fv - pv) / nper;
+                payment = (futureValue - presentValue) / numberOfPeriods;
             }
             else
             {
-                pmt = r / (decimal)(Math.Pow(1 + (double)r, nper) - 1) * -(pv * (decimal)Math.Pow(1 + (double)r, nper) + fv);
+                payment = interestRate / (decimal)(Math.Pow(1 + (double)interestRate, numberOfPeriods) - 1) * -(presentValue * (decimal)Math.Pow(1 + (double)interestRate, numberOfPeriods) + futureValue);
             }
 
-            if (type == 1)
+            if (paymentDueAtBeginningOfPeriod)
             {
-                pmt /= (1 + r);
+                payment /= (1 + interestRate);
             }
 
-            return pmt;
+            return payment;
         }
 
-        public static double PMT(double r, int nper, double pv, double fv = 0, int type = 0)
+        public static double FindPayment(double interestRate, int numberOfPeriods, double presentValue, double futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            return Convert.ToDouble(PMT(Convert.ToDecimal(r), nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
+            return Convert.ToDouble(FindPayment(Convert.ToDecimal(interestRate), numberOfPeriods, Convert.ToDecimal(presentValue), Convert.ToDecimal(futureValue), paymentDueAtBeginningOfPeriod));
         }
 
-        #endregion PMT
+        #endregion FindPayment
 
-        #region IPMT
+        #region FindInterestPayment
 
-        public static decimal IPMT(decimal r, int per, int nper, decimal pv, decimal fv = 0, int type = 0)
+        public static decimal FindInterestPayment(decimal interestRate, int periodNumber, int numberOfPeriods, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            var pmt = PMT(r, nper, pv, fv, type);
-            var ipmt = FV(r, per - 1, pmt, pv, type) * r;
+            var payment = FindPayment(interestRate, numberOfPeriods, presentValue, futureValue, paymentDueAtBeginningOfPeriod);
+            var interestPayment = FindFutureValue(interestRate, periodNumber - 1, payment, presentValue, paymentDueAtBeginningOfPeriod) * interestRate;
 
-            if (type == 1)
+            if (paymentDueAtBeginningOfPeriod)
             {
-                ipmt /= (1 + r);
+                interestPayment /= (1 + interestRate);
             }
 
-            return ipmt;
+            return interestPayment;
         }
 
-        public static double IPMT(double r, int per, int nper, double pv, double fv = 0, int type = 0)
+        public static double FindInterestPayment(double r, int periodNumber, int numberOfPeriods, double pv, double fv = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            return Convert.ToDouble(IPMT(Convert.ToDecimal(r), per, nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
+            return Convert.ToDouble(FindInterestPayment(Convert.ToDecimal(r), periodNumber, numberOfPeriods, Convert.ToDecimal(pv), Convert.ToDecimal(fv), paymentDueAtBeginningOfPeriod));
         }
 
-        #endregion IPMT
+        #endregion FindInterestPayment
 
-        #region PPMT
+        #region FindPrincipalPayment
 
-        public static decimal PPMT(decimal r, int per, int nper, decimal pv, decimal fv = 0, int type = 0)
+        public static decimal FindPrincipalPayment(decimal interestRate, int periodNumber, int numberOfPeriods, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            var pmt = PMT(r, nper, pv, fv, type);
-            var ipmt = FV(r, per - 1, pmt, pv, type) * r;
+            var payment = FindPayment(interestRate, numberOfPeriods, presentValue, futureValue, paymentDueAtBeginningOfPeriod);
+            var interestPayment = FindFutureValue(interestRate, periodNumber - 1, payment, presentValue, paymentDueAtBeginningOfPeriod) * interestRate;
 
-            if (type == 1)
+            if (paymentDueAtBeginningOfPeriod)
             {
-                ipmt /= (1 + r);
+                interestPayment /= (1 + interestRate);
             }
 
-            return pmt - ipmt;
+            return payment - interestPayment;
         }
 
-        public static double PPMT(double r, int per, int nper, double pv, double fv = 0, int type = 0)
+        public static double FindPrincipalPayment(double interestRate, int periodNumber, int numberOfPeriods, double presentValue, double futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            return Convert.ToDouble(PPMT(Convert.ToDecimal(r), per, nper, Convert.ToDecimal(pv), Convert.ToDecimal(fv), type));
+            return Convert.ToDouble(FindPrincipalPayment(Convert.ToDecimal(interestRate), periodNumber, numberOfPeriods, Convert.ToDecimal(presentValue), Convert.ToDecimal(futureValue), paymentDueAtBeginningOfPeriod));
         }
 
-        #endregion PPMT
+        #endregion FindPrincipalPayment
 
-        #region FV
+        #region FindFutureValue
 
-        public static decimal FV(decimal r, int nper, decimal pmt, decimal pv = 0, int type = 0)
+        public static decimal FindFutureValue(decimal interestRate, int numberOfPeriods, decimal payment, decimal presentValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            decimal fv;
-            var pow = (decimal)Math.Pow(1 + (double)r, nper);
+            decimal futureValue;
+            var pow = (decimal)Math.Pow(1 + (double)interestRate, numberOfPeriods);
 
-            if (type == 1)
+            if (paymentDueAtBeginningOfPeriod)
             {
-                pmt = pmt * (1 + r);
+                payment = payment * (1 + interestRate);
             }
 
-            if (nper == 0)
+            if (numberOfPeriods == 0)
             {
-                fv = -pv;
+                futureValue = -presentValue;
             }
-            else if (r == 0)
+            else if (interestRate == 0)
             {
-                fv = -(pv + (nper * pmt));
+                futureValue = -(presentValue + (numberOfPeriods * payment));
             }
             else
             {
-                fv = -(pmt * (pow - 1) / r + pv * pow);
+                futureValue = -(payment * (pow - 1) / interestRate + presentValue * pow);
             }
 
-            return fv;
+            return futureValue;
         }
 
-        public static double FV(double r, int nper, double pmt, double pv = 0, int type = 0)
+        public static double FindFutureValue(double interestRate, int numberOfPeriods, double payment, double presentValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            return Convert.ToDouble(FV(Convert.ToDecimal(r), nper, Convert.ToDecimal(pmt), Convert.ToDecimal(pv), type));
+            return Convert.ToDouble(FindFutureValue(Convert.ToDecimal(interestRate), numberOfPeriods, Convert.ToDecimal(payment), Convert.ToDecimal(presentValue), paymentDueAtBeginningOfPeriod));
         }
 
-        #endregion FV
+        #endregion FindFutureValue
 
-        #region PV
+        #region FindPresentValue
 
-        public static decimal PV(decimal r, int nper, decimal pmt, decimal fv = 0, int type = 0)
+        public static decimal FindPresentValue(decimal interestRate, int numberOfPeriods, decimal payment, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
             var num = 1.0m;
-            var pow = (decimal)Math.Pow((1 + (double)r), nper);
+            var pow = (decimal)Math.Pow((1 + (double)interestRate), numberOfPeriods);
 
-            if (r == 0)
+            if (interestRate == 0)
             {
-                return (-fv - (pmt * nper));
+                return (-futureValue - (payment * numberOfPeriods));
             }
 
-            if (type == 1)
+            if (paymentDueAtBeginningOfPeriod)
             {
-                num = (1 + r);
+                num = (1 + interestRate);
             }
-            return (-(fv + ((pmt * num) * ((pow - 1) / r))) / pow);
+            return (-(futureValue + ((payment * num) * ((pow - 1) / interestRate))) / pow);
         }
 
-        public static double PV(double r, int nper, double pmt, double pv = 0, int type = 0)
+        public static double FindPresentValue(double interestRate, int numberOfPeriods, double payment, double presentValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
-            return Convert.ToDouble(PV(Convert.ToDecimal(r), nper, Convert.ToDecimal(pmt), Convert.ToDecimal(pv), type));
+            return Convert.ToDouble(FindPresentValue(Convert.ToDecimal(interestRate), numberOfPeriods, Convert.ToDecimal(payment), Convert.ToDecimal(presentValue), paymentDueAtBeginningOfPeriod));
         }
 
-        #endregion PV
+        #endregion FindPresentValue
 
-        #region NPV
+        #region FindNetPresentValue
 
-        public static decimal NPV(decimal r, params decimal[] cfs)
+        public static decimal FindNetPresentValue(decimal interestRate, params decimal[] cashFlows)
         {
-            var ans = 0.0m;
+            var netPresentValue = 0.0m;
 
-            for (var i = 0; i < cfs.Length; i++)
+            for (var i = 0; i < cashFlows.Length; i++)
             {
-                ans += cfs[i] / (decimal)Math.Pow((1 + (double)r), (i + 1));
+                netPresentValue += cashFlows[i] / (decimal)Math.Pow((1 + (double)interestRate), (i + 1));
             }
 
-            return ans;
+            return netPresentValue;
         }
 
-        public static double NPV(double r, params double[] cfs)
+        public static double FindNetPresentValue(double r, params double[] cashFlows)
         {
-            var ans = 0.0;
+            var netPresentValue = 0.0;
 
-            for (var i = 0; i < cfs.Length; i++)
+            for (var i = 0; i < cashFlows.Length; i++)
             {
-                ans += cfs[i] / Math.Pow((1 + r), (i + 1));
+                netPresentValue += cashFlows[i] / Math.Pow((1 + r), (i + 1));
             }
 
-            return ans;
+            return netPresentValue;
         }
 
-        #endregion NPV
+        #endregion FindNetPresentValue
     }
 }

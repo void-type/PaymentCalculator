@@ -13,10 +13,8 @@ namespace PaymentCalculator
         {
             InitializeComponent();
 
-            assetCostTextBox.Focus();
+            AssetCostTextBox.Focus();
         }
-
-        private List<SinglePaymentInformation> TableItems = new List<SinglePaymentInformation>();
 
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -42,32 +40,32 @@ namespace PaymentCalculator
                 return;
             }
 
-            monthlyPaymentTextBox.Text = string.Format("{0:C2}", calc.MonthlyPayment);
-            loanAmountTextBox.Text = string.Format("{0:C2}", calc.LoanAmount);
-            interestPaidTextBox.Text = string.Format("{0:C2}", calc.TotalInterestPaid);
-            totalPaidTextBox.Text = string.Format("{0:C2}", calc.TotalPaid);
+            MonthlyPaymentTextBox.Text = $"{calc.MonthlyPayment:C2}";
+            LoanAmountTextBox.Text = $"{calc.LoanAmount:C2}";
+            InterestPaidTextBox.Text = $"{calc.TotalInterestPaid:C2}";
+            TotalPaidTextBox.Text = $"{calc.TotalPaid:C2}";
         }
 
         private void clearButton_Click(object sender, RoutedEventArgs e)
         {
             // Clear Input
-            assetCostTextBox.Text = "";
-            downPaymentTextBox.Text = "";
-            interestRateTextBox.Text = "";
-            yearsTextBox.Text = "";
-            periodsPerYearComboBox.SelectedIndex = 0;
+            AssetCostTextBox.Text = "";
+            DownPaymentTextBox.Text = "";
+            InterestRateTextBox.Text = "";
+            YearsTextBox.Text = "";
+            PeriodsPerYearComboBox.SelectedIndex = 0;
 
             // Clear Output
-            loanAmountTextBox.Text = "";
-            interestPaidTextBox.Text = "";
-            monthlyPaymentTextBox.Text = "";
-            totalPaidTextBox.Text = "";
+            LoanAmountTextBox.Text = "";
+            InterestPaidTextBox.Text = "";
+            MonthlyPaymentTextBox.Text = "";
+            TotalPaidTextBox.Text = "";
 
             // Clear Table
             AmortizationTable.ItemsSource = null;
 
             // Set caret on the 1st input box
-            assetCostTextBox.Focus();
+            AssetCostTextBox.Focus();
         }
 
         private void DisplayMessage(string msg)
@@ -90,19 +88,17 @@ namespace PaymentCalculator
 
         private AmortizationCalculator ScrubInput()
         {
-            decimal assetCost;
-            if ((!decimal.TryParse(assetCostTextBox.Text, out assetCost)) || (assetCost <= 0))
+            if ((!decimal.TryParse(AssetCostTextBox.Text, out var assetCost)) || (assetCost <= 0))
             {
                 DisplayMessage("Please enter an asset cost.");
                 return null;
             }
 
-            if (string.IsNullOrEmpty(downPaymentTextBox.Text))
+            if (string.IsNullOrEmpty(DownPaymentTextBox.Text))
             {
-                downPaymentTextBox.Text = "0";
+                DownPaymentTextBox.Text = "0";
             }
-            decimal downPayment;
-            if ((!decimal.TryParse(downPaymentTextBox.Text, out downPayment)) || (downPayment < 0))
+            if ((!decimal.TryParse(DownPaymentTextBox.Text, out var downPayment)) || (downPayment < 0))
             {
                 DisplayMessage("Please enter a down payment greater than or equal to $0.");
                 return null;
@@ -113,15 +109,13 @@ namespace PaymentCalculator
                 return null;
             }
 
-            decimal interestRate;
-            if ((!decimal.TryParse(interestRateTextBox.Text, out interestRate)) || (interestRate <= 0))
+            if ((!decimal.TryParse(InterestRateTextBox.Text, out var interestRate)) || (interestRate <= 0))
             {
                 DisplayMessage("Please enter an interest rate.");
                 return null;
             }
 
-            int years;
-            if ((!int.TryParse(yearsTextBox.Text, out years)) || (years <= 0))
+            if ((!int.TryParse(YearsTextBox.Text, out var years)) || (years <= 0))
             {
                 DisplayMessage("Please enter how many years the payback period is.");
                 return null;
@@ -132,9 +126,9 @@ namespace PaymentCalculator
                 return null;
             }
 
-            int periodsPerYear = 12;
+            int periodsPerYear;
 
-            switch (periodsPerYearComboBox.SelectedIndex)
+            switch (PeriodsPerYearComboBox.SelectedIndex)
             {
                 case 1:
                     periodsPerYear = 4;
@@ -145,15 +139,16 @@ namespace PaymentCalculator
                     break;
 
                 default:
-                    periodsPerYearComboBox.SelectedIndex = 0;
+                    PeriodsPerYearComboBox.SelectedIndex = 0;
                     periodsPerYear = 12;
                     break;
             }
 
-            if ((bool)IsPercentInterestCheckBox.IsChecked)
+            if (IsPercentInterestCheckBox.IsChecked != null && (bool)IsPercentInterestCheckBox.IsChecked)
             {
                 interestRate /= 100;
             }
+
             if (interestRate > 2)
             {
                 DisplayMessage("Please enter an interest rate less than 200%.");

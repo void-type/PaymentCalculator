@@ -9,14 +9,13 @@ namespace PaymentCalculator
         public decimal AssetCost { get; }
 
         public decimal DownPayment { get; }
-
         public decimal InterestRate { get; }
 
         // Calculated variables
         public decimal LoanAmount => AssetCost - DownPayment;
 
         // Outputs
-        public decimal MonthlyPayment => Financial.PMT(RatePerPeriod, NumberOfPeriods, -LoanAmount);
+        public decimal MonthlyPayment => Financial.FindPayment(RatePerPeriod, NumberOfPeriods, -LoanAmount);
 
         public int NumberOfPeriods => Years * PeriodsPerYear;
         public int PeriodsPerYear { get; }
@@ -44,16 +43,14 @@ namespace PaymentCalculator
 
             var table = new List<SinglePaymentInformation>();
 
-            var row = new SinglePaymentInformation();
-
-            for (int i = 1; i <= NumberOfPeriods; i++)
+            for (var i = 1; i <= NumberOfPeriods; i++)
             {
-                row = new SinglePaymentInformation()
+                var row = new SinglePaymentInformation()
                 {
                     PeriodNumber = i,
-                    InterestPayment = Financial.IPMT(RatePerPeriod, i, NumberOfPeriods, -LoanAmount),
-                    PrincipalPayment = Financial.PPMT(RatePerPeriod, i, NumberOfPeriods, -LoanAmount),
-                    BalanceLeft = Financial.IPMT(RatePerPeriod, i + 1, NumberOfPeriods, -LoanAmount) / RatePerPeriod,
+                    InterestPayment = Financial.FindInterestPayment(RatePerPeriod, i, NumberOfPeriods, -LoanAmount),
+                    PrincipalPayment = Financial.FindPrincipalPayment(RatePerPeriod, i, NumberOfPeriods, -LoanAmount),
+                    BalanceLeft = Financial.FindInterestPayment(RatePerPeriod, i + 1, NumberOfPeriods, -LoanAmount) / RatePerPeriod,
                 };
 
                 table.Add(row);

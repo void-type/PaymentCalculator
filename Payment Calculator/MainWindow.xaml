@@ -17,7 +17,7 @@
             </Menu>
         </DockPanel>
 
-        <Grid Margin="0,30,20,0" Grid.Row="1" Grid.Column="0">
+        <Grid Margin="0,30,20,0" Grid.Column="0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -42,39 +42,39 @@
                 <ColumnDefinition Width="30*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="lbl02" Text="Asset Cost" Grid.Row="0" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="lbl03" Text="Down Payment" Grid.Row="2" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="lbl04" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="lbl05" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="lbl06" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl02" Text="Asset Cost" Grid.Row="0" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl03" Text="Down Payment" Grid.Row="2" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl04" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl05" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl06" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Center" />
 
-            <TextBox x:Name="assetCostTextBox"  Grid.Row="0" Grid.Column="1" TabIndex="1" />
-            <TextBox x:Name="downPaymentTextBox"  Grid.Row="2" Grid.Column="1" TabIndex="1" />
-            <TextBox x:Name="interestRateTextBox"  Grid.Row="4" Grid.Column="1" TabIndex="3" />
-            <TextBox x:Name="yearsTextBox"  Grid.Row="6" Grid.Column="1" TabIndex="4" />
+            <TextBox x:Name="AssetCostTextBox"  Grid.Row="0" Grid.Column="1" TabIndex="1" />
+            <TextBox x:Name="DownPaymentTextBox"  Grid.Row="2" Grid.Column="1" TabIndex="1" />
+            <TextBox x:Name="InterestRateTextBox"  Grid.Row="4" Grid.Column="1" TabIndex="3" />
+            <TextBox x:Name="YearsTextBox"  Grid.Row="6" Grid.Column="1" TabIndex="4" />
 
-            <ComboBox x:Name="periodsPerYearComboBox"  Grid.Row="8" Grid.Column="1" TabIndex="5"
+            <ComboBox x:Name="PeriodsPerYearComboBox"  Grid.Row="8" Grid.Column="1" TabIndex="5"
                   Loaded="periodsPerYearComboBox_Loaded" />
 
-            <TextBlock x:Name="lbl12" Text="Monthly Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="lbl14" Text="Interest Paid" Grid.Row="4" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="lbl15" Text="Total Paid" Grid.Row="6" Grid.Column="3" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl12" Text="Monthly Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl14" Text="Interest Paid" Grid.Row="4" Grid.Column="3" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl15" Text="Total Paid" Grid.Row="6" Grid.Column="3" TextAlignment="Center" />
 
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="0" Grid.Column="4">
-                <TextBlock x:Name="monthlyPaymentTextBox" />
+                <TextBlock x:Name="MonthlyPaymentTextBox" />
             </Border>
 
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="2" Grid.Column="4">
-                <TextBlock x:Name="loanAmountTextBox" />
+                <TextBlock x:Name="LoanAmountTextBox" />
             </Border>
 
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="4" Grid.Column="4">
-                <TextBlock x:Name="interestPaidTextBox" />
+                <TextBlock x:Name="InterestPaidTextBox" />
             </Border>
 
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="6" Grid.Column="4">
-                <TextBlock x:Name="totalPaidTextBox" />
+                <TextBlock x:Name="TotalPaidTextBox" />
             </Border>
 
             <Grid Grid.Row="8" Grid.Column="3">
@@ -94,8 +94,8 @@
                     <ColumnDefinition Width="45*" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="clearButton" Content="Clear" Click="clearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
-                <Button x:Name="calcButton" Content="Calculate" Click="calcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch" />
+                <Button x:Name="ClearButton" Content="Clear" Click="clearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
+                <Button x:Name="CalcButton" Content="Calculate" Click="calcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch" />
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="9" Grid.ColumnSpan="2">
