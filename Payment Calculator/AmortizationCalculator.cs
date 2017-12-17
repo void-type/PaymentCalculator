@@ -5,9 +5,7 @@ namespace PaymentCalculator
 {
     public class AmortizationCalculator
     {
-        // Calculated variables
         public decimal LoanAmount => AssetCost - DownPayment;
-
         public decimal MonthlyPayment => Financial.FindPayment(RatePerPeriod, NumberOfPeriods, -LoanAmount);
         public int NumberOfPeriods => Years * PeriodsPerYear;
         public int PeriodsPerYear { get; }
