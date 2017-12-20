@@ -1,4 +1,6 @@
-﻿namespace PaymentCalculator.Models
+﻿using PaymentCalculator.Wpf.Model.Financial;
+
+namespace PaymentCalculator.Wpf.Model
 {
     /// <summary>
     /// Calculates statistics and amoritization schedule of the loan.

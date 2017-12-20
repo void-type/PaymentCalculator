@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PaymentCalculator.Models
+namespace PaymentCalculator.Wpf.Model.Financial
 {
     /// <summary>
     /// This class has the functionality of the VB.Net and Excel Financial functions, which specialize in time-value of money.
@@ -10,7 +10,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the future value of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="payment">The amount paid against the annuity every period.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
@@ -45,7 +45,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the future value of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="payment">The amount paid against the annuity every period.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
@@ -59,7 +59,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the amount of interest paid as part of the payment made each payment of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="periodNumber">The period number in which to find the interest paid.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
@@ -82,7 +82,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the amount of interest paid as part of the payment made each payment of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="periodNumber">The period number in which to find the interest paid.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
@@ -97,7 +97,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the net present value of an investment of cash flows (payments and receipts) with a discount rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="cashFlows">An array of cashflows in the order they are transacted.</param>
         /// <returns></returns>
         public static decimal FindNetPresentValue(decimal interestRatePerPeriod, params decimal[] cashFlows)
@@ -115,7 +115,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the net present value of an investment of cash flows (payments and receipts) with a discount rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="cashFlows">An array of cashflows in the order they are transacted.</param>
         /// <returns></returns>
         public static double FindNetPresentValue(double interestRatePerPeriod, params double[] cashFlows)
@@ -133,7 +133,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the payment amount per period for an an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
         /// <param name="futureValue">The future value of the annuity.</param>
@@ -167,7 +167,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the payment amount per period for an an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
         /// <param name="futureValue">The future value of the annuity.</param>
@@ -181,7 +181,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the present value of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="payment">The amount paid against the annuity every period.</param>
         /// <param name="futureValue">The future value of the annuity.</param>
@@ -207,7 +207,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the present value of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="payment">The amount paid against the annuity every period.</param>
         /// <param name="futureValue">The future value of the annuity.</param>
@@ -221,7 +221,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the amount of principal paid as part of the payment made each payment of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="periodNumber">The period number in which to find the interest paid.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>
@@ -244,7 +244,7 @@ namespace PaymentCalculator.Models
         /// <summary>
         /// Finds the amount of principal paid as part of the payment made each payment of an annuity of periodic fixed payments and fixed interest rate.
         /// </summary>
-        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year.</param>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divded by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
         /// <param name="periodNumber">The period number in which to find the interest paid.</param>
         /// <param name="numberOfPeriods">The total number of periods in the annuity.</param>
         /// <param name="presentValue">The present value of the annuity.</param>

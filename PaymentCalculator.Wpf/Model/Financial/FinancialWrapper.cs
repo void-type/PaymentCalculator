@@ -1,8 +1,5 @@
-﻿namespace PaymentCalculator.Models
+﻿namespace PaymentCalculator.Wpf.Model.Financial
 {
-    /// <summary>
-    /// Allows the Financial library to be injected as a dependency.
-    /// </summary>
     public class FinancialWrapper : IFinancial
     {
         public decimal FindFutureValue(decimal interestRatePerPeriod, int numberOfPeriods, decimal payment, decimal presentValue = 0,

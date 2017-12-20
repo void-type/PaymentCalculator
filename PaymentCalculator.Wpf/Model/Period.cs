@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PaymentCalculator.Models
+namespace PaymentCalculator.Wpf.Model
 {
     /// <summary>
     /// A representation of per-payment loan information.

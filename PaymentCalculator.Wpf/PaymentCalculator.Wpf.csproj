@@ -7,8 +7,8 @@
     <ProjectGuid>{1BB460C6-C2E9-4603-84BD-0CDDC070A5D8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaymentCalculator</RootNamespace>
-    <AssemblyName>PaymentCalculator</AssemblyName>
+    <RootNamespace>PaymentCalculator.Wpf</RootNamespace>
+    <AssemblyName>PaymentCalculator.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -40,7 +40,7 @@
     <ApplicationIcon>LogoVoidType.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>PaymentCalculator.App</StartupObject>
+    <StartupObject>PaymentCalculator.Wpf.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,21 +71,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Financial\Financial.cs" />
-    <Compile Include="Models\Financial\FinancialWrapper.cs" />
-    <Compile Include="Models\IAmortizationCalculator.cs" />
-    <Compile Include="Models\Financial\IFinancial.cs" />
-    <Compile Include="Models\ILoan.cs" />
-    <Compile Include="Models\IPeriod.cs" />
-    <Compile Include="Models\Period.cs" />
-    <Compile Include="Models\Loan.cs" />
-    <Compile Include="Models\AmortizationCalculator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AmortizationCalculator.cs" />
+    <Compile Include="Model\Financial\Financial.cs" />
+    <Compile Include="Model\Financial\FinancialWrapper.cs" />
+    <Compile Include="Model\Financial\IFinancial.cs" />
+    <Compile Include="Model\IAmortizationCalculator.cs" />
+    <Compile Include="Model\ILoan.cs" />
+    <Compile Include="Model\IPeriod.cs" />
+    <Compile Include="Model\Loan.cs" />
+    <Compile Include="Model\Period.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +115,7 @@
   <ItemGroup>
     <Resource Include="LogoVoidType.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

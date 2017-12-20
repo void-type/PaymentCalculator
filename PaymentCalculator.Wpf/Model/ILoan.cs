@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PaymentCalculator.Models
+namespace PaymentCalculator.Wpf.Model
 {
     public interface ILoan
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace PaymentCalculator
+namespace PaymentCalculator.Wpf
 {
     /// <summary>
     /// Interaction logic for App.xaml

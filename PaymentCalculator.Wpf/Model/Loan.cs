@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PaymentCalculator.Models
+namespace PaymentCalculator.Wpf.Model
 {
     /// <summary>
     /// A representation of loan properties that stay static throughout the life of the loan.

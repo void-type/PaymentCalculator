@@ -1,4 +1,4 @@
-﻿namespace PaymentCalculator.Models
+﻿namespace PaymentCalculator.Wpf.Model
 {
     public interface IPeriod
     {

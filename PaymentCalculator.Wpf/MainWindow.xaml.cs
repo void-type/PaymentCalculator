@@ -1,9 +1,10 @@
-﻿using PaymentCalculator.Models;
+﻿using PaymentCalculator.Wpf.Model;
+using PaymentCalculator.Wpf.Model.Financial;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PaymentCalculator
+namespace PaymentCalculator.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
