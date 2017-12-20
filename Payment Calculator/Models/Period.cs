@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 
-namespace PaymentCalculator.Models.Amoritization
+namespace PaymentCalculator.Models
 {
     /// <summary>
     /// A representation of per-payment loan information.
     /// </summary>
-    public class Period
+    public class Period : IPeriod
     {
         [DisplayName("Balance Remaining")]
         public decimal BalanceLeft { get; set; }

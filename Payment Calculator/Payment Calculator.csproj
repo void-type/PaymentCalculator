@@ -71,11 +71,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Amoritization\Period.cs" />
-    <Compile Include="Models\Amoritization\AmoritizationViewModel.cs" />
-    <Compile Include="Models\Amoritization\Loan.cs" />
-    <Compile Include="Models\Amoritization\AmortizationCalculator.cs" />
-    <Compile Include="Models\Financial.cs" />
+    <Compile Include="Models\Financial\Financial.cs" />
+    <Compile Include="Models\Financial\FinancialWrapper.cs" />
+    <Compile Include="Models\IAmortizationCalculator.cs" />
+    <Compile Include="Models\Financial\IFinancial.cs" />
+    <Compile Include="Models\ILoan.cs" />
+    <Compile Include="Models\IPeriod.cs" />
+    <Compile Include="Models\Period.cs" />
+    <Compile Include="Models\Loan.cs" />
+    <Compile Include="Models\AmortizationCalculator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

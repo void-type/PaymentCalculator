@@ -1,4 +1,4 @@
-﻿using PaymentCalculator.Models.Amoritization;
+﻿using PaymentCalculator.Models;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +10,13 @@ namespace PaymentCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Dictionary<string, int> _periodsPerYearChoices = new Dictionary<string, int>
+        {
+            {"Monthly" , 12},
+            {"Quarterly", 4},
+            {"Yearly" , 1}
+        };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,16 +35,16 @@ namespace PaymentCalculator
 
         private void CalcButton_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = new AmoritizationViewModel();
+            var loan = ValidateAndSetInputs();
 
-            if (!ValidateAndSetInputs(viewModel))
+            if (loan == null)
             {
                 return;
             }
 
             try
             {
-                AmortizationCalculator.Calculate(viewModel);
+                new AmortizationCalculator(new FinancialWrapper()).Calculate(loan);
             }
             catch (System.OverflowException)
             {
@@ -45,59 +52,45 @@ namespace PaymentCalculator
                 return;
             }
 
-            AmortizationTable.ItemsSource = viewModel.Schedule;
-            MonthlyPaymentTextBox.Text = $"{viewModel.Loan.MonthlyPayment:C2}";
-            LoanAmountTextBox.Text = $"{viewModel.Loan.LoanAmount:C2}";
-            InterestPaidTextBox.Text = $"{viewModel.Loan.TotalInterestPaid:C2}";
-            TotalPaidTextBox.Text = $"{viewModel.Loan.TotalPaid:C2}";
+            AmortizationTable.ItemsSource = loan.Schedule;
+            MonthlyPaymentTextBox.Text = $"{loan.MonthlyPayment:C2}";
+            LoanAmountTextBox.Text = $"{loan.LoanAmount:C2}";
+            InterestPaidTextBox.Text = $"{loan.TotalInterestPaid:C2}";
+            TotalPaidTextBox.Text = $"{loan.TotalPaid:C2}";
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            // Clear Input
             AssetCostTextBox.Text = "";
             DownPaymentTextBox.Text = "";
             InterestRateTextBox.Text = "";
             YearsTextBox.Text = "";
             PeriodsPerYearComboBox.SelectedIndex = 0;
-
-            // Clear Output
             LoanAmountTextBox.Text = "";
             InterestPaidTextBox.Text = "";
             MonthlyPaymentTextBox.Text = "";
             TotalPaidTextBox.Text = "";
-
-            // Clear Table
             AmortizationTable.ItemsSource = null;
-
-            // Set caret on the 1st input box
             AssetCostTextBox.Focus();
         }
 
         private void PeriodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
         {
-            var options = new List<string>()
-            {
-                "Monthly", "Quarterly", "Yearly"
-            };
-
             if (!(sender is ComboBox cmbx))
             {
                 return;
             }
 
-            cmbx.ItemsSource = options;
+            cmbx.ItemsSource = _periodsPerYearChoices.Keys;
             cmbx.SelectedIndex = 0;
         }
 
-        private bool ValidateAndSetInputs(AmoritizationViewModel viewModel)
+        private ILoan ValidateAndSetInputs()
         {
-            var loan = viewModel.Loan;
-
             if ((!decimal.TryParse(AssetCostTextBox.Text, out var assetCost)) || (assetCost <= 0))
             {
                 DisplayMessage("Please enter an asset cost.");
-                return false;
+                return null;
             }
 
             if (string.IsNullOrEmpty(DownPaymentTextBox.Text))
@@ -107,47 +100,40 @@ namespace PaymentCalculator
             if ((!decimal.TryParse(DownPaymentTextBox.Text, out var downPayment)) || (downPayment < 0))
             {
                 DisplayMessage("Please enter a down payment greater than or equal to $0.");
-                return false;
+                return null;
             }
             if (downPayment >= assetCost)
             {
                 DisplayMessage("You have already paid off the loan. The down payment is bigger than the loan.");
-                return false;
+                return null;
             }
 
             if ((!int.TryParse(YearsTextBox.Text, out var years)) || (years <= 0))
             {
                 DisplayMessage("Please enter how many years the payback period is.");
-                return false;
+                return null;
             }
             if (years > 450)
             {
                 DisplayMessage("Valid year range is 1 to 450 years.");
-                return false;
+                return null;
             }
 
             int periodsPerYear;
 
-            switch (PeriodsPerYearComboBox.SelectedIndex)
+            try
             {
-                case 1:
-                    periodsPerYear = 4;
-                    break;
-
-                case 2:
-                    periodsPerYear = 1;
-                    break;
-
-                default:
-                    PeriodsPerYearComboBox.SelectedIndex = 0;
-                    periodsPerYear = 12;
-                    break;
+                periodsPerYear = _periodsPerYearChoices[PeriodsPerYearComboBox.Text];
+            }
+            catch (KeyNotFoundException)
+            {
+                periodsPerYear = 12;
             }
 
             if ((!decimal.TryParse(InterestRateTextBox.Text, out var interestRate)) || (interestRate <= 0))
             {
                 DisplayMessage("Please enter an interest rate.");
-                return false;
+                return null;
             }
 
             if (IsPercentInterestCheckBox.IsChecked != null && (bool)IsPercentInterestCheckBox.IsChecked)
@@ -158,16 +144,10 @@ namespace PaymentCalculator
             if (interestRate > 2)
             {
                 DisplayMessage("Please enter an interest rate less than 200%.");
-                return false;
+                return null;
             }
 
-            loan.AssetCost = assetCost;
-            loan.DownPayment = downPayment;
-            loan.Years = years;
-            loan.PeriodsPerYear = periodsPerYear;
-            loan.InterestRate = interestRate;
-
-            return true;
+            return new Loan(assetCost, downPayment, years, periodsPerYear, interestRate);
         }
     }
 }
