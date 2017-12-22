@@ -57,7 +57,11 @@ namespace PaymentCalculator.Wpf.Model
         /// <returns></returns>
         private void CalculateLoan(ILoan loan)
         {
-            loan.LoanAmount = loan.AssetCost - loan.DownPayment;
+            if ((loan.LoanAmount = loan.AssetCost - loan.DownPayment) < 0)
+            {
+                loan.LoanAmount = 0;
+            }
+
             loan.NumberOfPeriods = loan.Years * loan.PeriodsPerYear;
             loan.RatePerPeriod = loan.AnnualInterestRate / loan.PeriodsPerYear;
             loan.MonthlyPayment = _financial.FindPayment(loan.RatePerPeriod, loan.NumberOfPeriods, -loan.LoanAmount);
