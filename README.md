@@ -1,12 +1,14 @@
 # Payment Calculator WPF
-This is a C#.NET loan amoritzation calculator with a WPF UI.
+Payment Calculator is a loan amoritzation calculator made with C#.Net and WPF.
 
 ## Features
-This project also contains the VoidType financial library, which is a replacement of the VB.NET Financial library that uses the decimal types for greater accuracy. There are overloads for double types to remain backward compatible.
-Once compiled it should be a single, portable 750KB exe file.
+This project also contains the VoidType financial library, which is similar to the Microsoft.VisualBasic.Financial class library. It improves upon the VB.Net library by utilizing decimal number types for greater accuracy. There are double type overloads to remain API-compatible with the VB.Net Financial class. There is also a wrapper and interface that can be utilized in other projects to convert the static class for dependency injection.
+
+Once compiled, the single, portable executable is around 750KB.
 
 ## Comments
-This application was created with the skills I gained in college. The idea came from a VB class assignment.
-The financial library was built from some research on the web and my own experience in finance class.
-Feel free to port this application or pass it around as per the license.
-I can't guarantee that it is bug-free, but it has been accurate in my test cases. If you find a bug, feel free to report it and I'll try to fix it. Unit tests may come in the future.
+This application has it's roots in Visual Basic class assignment I had in college. I wanted to port that assignment to C#, but there wasn't a compatible financial library available for C# at the time. Also, .Net was not open source. 
+
+I replicated the Microsoft.VisualBasic.Financial class based on knowledge from my finance classes and reverse-engineering financial functions in Excel and VB.Net. I ran into some errata in the VB implementation when I was first developing the library. I believe I worked around them by using decimal types and using some improved logic, so my implementation will not be a perfect emulation.
+
+Refer to the license for appropriate use of the application or it's source code. I can't guarantee it will be bug-free, but there are some unit tests for common use-cases.
