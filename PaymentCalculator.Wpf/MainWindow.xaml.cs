@@ -1,6 +1,7 @@
 ﻿using PaymentCalculator.Wpf.Model.Amoritization;
 using PaymentCalculator.Wpf.Model.Financial;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,7 +35,7 @@ namespace PaymentCalculator.Wpf
             DisplayMessage("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
         }
 
-        private void CalcButton_Click(object sender, RoutedEventArgs e)
+        private async void CalcButton_Click(object sender, RoutedEventArgs e)
         {
             var loan = ValidateAndSetInputs();
 
@@ -45,7 +46,10 @@ namespace PaymentCalculator.Wpf
 
             try
             {
-                new AmortizationCalculator(new FinancialWrapper()).Calculate(loan);
+                var calculator = new AmortizationCalculator(new FinancialWrapper());
+
+                var task = Task.Run(() => calculator.Calculate(loan));
+                await task;
             }
             catch (System.OverflowException)
             {
