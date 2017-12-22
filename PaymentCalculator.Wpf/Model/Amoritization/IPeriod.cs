@@ -1,4 +1,4 @@
-﻿namespace PaymentCalculator.Wpf.Model
+﻿namespace PaymentCalculator.Wpf.Model.Amoritization
 {
     public interface IPeriod
     {

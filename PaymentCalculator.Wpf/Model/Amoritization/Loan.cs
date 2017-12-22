@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PaymentCalculator.Wpf.Model
+namespace PaymentCalculator.Wpf.Model.Amoritization
 {
     /// <summary>
     /// A representation of loan properties that stay static throughout the life of the loan.

@@ -77,15 +77,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AmortizationCalculator.cs" />
+    <Compile Include="Model\Amoritization\AmortizationCalculator.cs" />
     <Compile Include="Model\Financial\Financial.cs" />
     <Compile Include="Model\Financial\FinancialWrapper.cs" />
     <Compile Include="Model\Financial\IFinancial.cs" />
-    <Compile Include="Model\IAmortizationCalculator.cs" />
-    <Compile Include="Model\ILoan.cs" />
-    <Compile Include="Model\IPeriod.cs" />
-    <Compile Include="Model\Loan.cs" />
-    <Compile Include="Model\Period.cs" />
+    <Compile Include="Model\Amoritization\IAmortizationCalculator.cs" />
+    <Compile Include="Model\Amoritization\ILoan.cs" />
+    <Compile Include="Model\Amoritization\IPeriod.cs" />
+    <Compile Include="Model\Amoritization\Loan.cs" />
+    <Compile Include="Model\Amoritization\Period.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

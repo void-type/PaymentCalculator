@@ -1,4 +1,4 @@
-﻿using PaymentCalculator.Wpf.Model;
+﻿using PaymentCalculator.Wpf.Model.Amoritization;
 using PaymentCalculator.Wpf.Model.Financial;
 using Xunit;
 

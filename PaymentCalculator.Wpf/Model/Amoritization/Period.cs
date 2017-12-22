@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PaymentCalculator.Wpf.Model
+namespace PaymentCalculator.Wpf.Model.Amoritization
 {
     /// <summary>
     /// A representation of per-payment loan information.
