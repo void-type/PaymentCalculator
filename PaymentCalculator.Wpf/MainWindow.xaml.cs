@@ -1,4 +1,4 @@
-﻿using PaymentCalculator.Wpf.Model.Amoritization;
+﻿using PaymentCalculator.Wpf.Model.Amortization;
 using PaymentCalculator.Wpf.Model.Financial;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,10 +13,9 @@ namespace PaymentCalculator.Wpf
     public partial class MainWindow : Window
     {
         private readonly Dictionary<string, int> _periodsPerYearChoices = new Dictionary<string, int>
-        {
-            {"Monthly" , 12},
-            {"Quarterly", 4},
-            {"Yearly" , 1}
+        { { "Monthly", 12 },
+            { "Quarterly", 4 },
+            { "Yearly", 1 }
         };
 
         public MainWindow()
@@ -35,7 +34,7 @@ namespace PaymentCalculator.Wpf
             DisplayMessage("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
         }
 
-        private async void CalcButton_Click(object sender, RoutedEventArgs e)
+        private async Task CalcButton_Click(object sender, RoutedEventArgs e)
         {
             var loan = ValidateAndSetInputs();
 
@@ -47,9 +46,7 @@ namespace PaymentCalculator.Wpf
             try
             {
                 var calculator = new AmortizationCalculator(new FinancialWrapper());
-
-                var task = Task.Run(() => calculator.Calculate(loan));
-                await task;
+                await Task.FromResult(() => calculator.Calculate(loan));
             }
             catch (System.OverflowException)
             {
@@ -141,7 +138,7 @@ namespace PaymentCalculator.Wpf
                 return null;
             }
 
-            if (IsPercentInterestCheckBox.IsChecked != null && (bool)IsPercentInterestCheckBox.IsChecked)
+            if (IsPercentInterestCheckBox.IsChecked != null && (bool) IsPercentInterestCheckBox.IsChecked)
             {
                 interestRate /= 100;
             }

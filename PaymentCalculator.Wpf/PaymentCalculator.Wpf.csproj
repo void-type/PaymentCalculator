@@ -78,15 +78,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Amoritization\AmortizationCalculator.cs" />
+    <Compile Include="Model\Amortization\AmortizationCalculator.cs" />
     <Compile Include="Model\Financial\Financial.cs" />
     <Compile Include="Model\Financial\FinancialWrapper.cs" />
     <Compile Include="Model\Financial\IFinancial.cs" />
-    <Compile Include="Model\Amoritization\IAmortizationCalculator.cs" />
-    <Compile Include="Model\Amoritization\ILoan.cs" />
-    <Compile Include="Model\Amoritization\IPeriod.cs" />
-    <Compile Include="Model\Amoritization\Loan.cs" />
-    <Compile Include="Model\Amoritization\Period.cs" />
+    <Compile Include="Model\Amortization\IAmortizationCalculator.cs" />
+    <Compile Include="Model\Amortization\ILoan.cs" />
+    <Compile Include="Model\Amortization\IPeriod.cs" />
+    <Compile Include="Model\Amortization\Loan.cs" />
+    <Compile Include="Model\Amortization\Period.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -118,7 +118,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

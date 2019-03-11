@@ -1,10 +1,10 @@
-﻿using PaymentCalculator.Wpf.Model.Amoritization;
+﻿using PaymentCalculator.Wpf.Model.Amortization;
 using PaymentCalculator.Wpf.Model.Financial;
 using Xunit;
 
 namespace PaymentCalculator.Tests
 {
-    public class AmoritizationTests
+    public class AmortizationTests
     {
         private readonly IAmortizationCalculator _calculator = new AmortizationCalculator(new FinancialWrapper());
 

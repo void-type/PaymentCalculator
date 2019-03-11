@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PaymentCalculator.Wpf.Model.Amoritization
+namespace PaymentCalculator.Wpf.Model.Amortization
 {
     public interface ILoan
     {

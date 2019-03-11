@@ -1,9 +1,9 @@
 ﻿using PaymentCalculator.Wpf.Model.Financial;
 
-namespace PaymentCalculator.Wpf.Model.Amoritization
+namespace PaymentCalculator.Wpf.Model.Amortization
 {
     /// <summary>
-    /// Calculates statistics and amoritization schedule of the loan.
+    /// Calculates statistics and amortization schedule of the loan.
     /// </summary>
     public class AmortizationCalculator : IAmortizationCalculator
     {
@@ -25,9 +25,9 @@ namespace PaymentCalculator.Wpf.Model.Amoritization
         }
 
         /// <summary>
-        /// Builds an amoritization table with columns for payment number, interest of the payment, principle of the payment, and balance left of the mortgage.
+        /// Builds an amortization table with columns for payment number, interest of the payment, principle of the payment, and balance left of the mortgage.
         /// </summary>
-        /// <param name="loan">An amoritization viewmodel to hold loan calculation state.</param>
+        /// <param name="loan">An amortization viewmodel to hold loan calculation state.</param>
         /// <returns></returns>
         private void CalculateSchedule(ILoan loan)
         {
