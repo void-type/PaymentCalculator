@@ -1,13 +1,12 @@
-using PaymentCalculator.Model.Amortization;
-using PaymentCalculator.Model.Financial;
-using PaymentCalculator.Model.Loan;
+using PaymentCalculator.Model;
+using VoidCore.Finance;
 using Xunit;
 
 namespace PaymentCalculator.Tests
 {
     public class LoanTests
     {
-        private readonly LoanCalculator _calculator = new LoanCalculator(new FinancialWrapper());
+        private readonly LoanCalculator _calculator = new LoanCalculator(new Financial());
 
         [Fact]
         public void MediumMortgage()
@@ -126,7 +125,7 @@ namespace PaymentCalculator.Tests
             Assert.Equal(loan.Request.NumberOfPeriods, loan.Schedule.Count);
         }
 
-        private static void CheckPeriod(decimal principalPayment, decimal interestPayment, decimal balanceLeft, Period actual)
+        private static void CheckPeriod(decimal principalPayment, decimal interestPayment, decimal balanceLeft, AmortizationPeriod actual)
         {
             Assert.Equal(principalPayment, decimal.Round(actual.PrincipalPayment, 2));
             Assert.Equal(interestPayment, decimal.Round(actual.InterestPayment, 2));

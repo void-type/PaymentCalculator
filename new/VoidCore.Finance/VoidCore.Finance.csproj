@@ -5,8 +5,4 @@
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\VoidCore.Finance\VoidCore.Finance.csproj" />
-  </ItemGroup>
-
 </Project>

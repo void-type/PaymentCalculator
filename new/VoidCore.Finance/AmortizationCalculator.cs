@@ -1,7 +1,6 @@
-﻿using PaymentCalculator.Model.Financial;
-using System.Linq;
+﻿using System.Linq;
 
-namespace PaymentCalculator.Model.Amortization
+namespace VoidCore.Finance
 {
     public class AmortizationCalculator
     {
@@ -18,11 +17,11 @@ namespace PaymentCalculator.Model.Amortization
             var numberOfPeriods = request.NumberOfPeriods;
             var totalPrincipal = request.TotalPrincipal;
 
-            var schedule = new Period[numberOfPeriods];
+            var schedule = new AmortizationPeriod[numberOfPeriods];
 
             for (var periodNumber = 1; periodNumber < numberOfPeriods + 1; periodNumber++)
             {
-                schedule[periodNumber - 1] = new Period(
+                schedule[periodNumber - 1] = new AmortizationPeriod(
                     periodNumber,
                     _financial.InterestPayment(ratePerPeriod, periodNumber, numberOfPeriods, -totalPrincipal),
                     _financial.PrincipalPayment(ratePerPeriod, periodNumber, numberOfPeriods, -totalPrincipal),

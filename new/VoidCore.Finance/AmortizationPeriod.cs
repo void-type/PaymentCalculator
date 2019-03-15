@@ -1,8 +1,8 @@
-﻿namespace PaymentCalculator.Model.Amortization
+﻿namespace VoidCore.Finance
 {
-    public class Period
+    public class AmortizationPeriod
     {
-        public Period(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
+        public AmortizationPeriod(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
         {
             PeriodNumber = periodNumber;
             InterestPayment = interestPayment;

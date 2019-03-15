@@ -1,6 +1,6 @@
-﻿using PaymentCalculator.Model.Amortization;
+﻿using VoidCore.Finance;
 
-namespace PaymentCalculator.Model.Loan
+namespace PaymentCalculator.Model
 {
     public class LoanRequest : IAmortizationRequest
     {

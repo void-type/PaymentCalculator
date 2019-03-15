@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using VoidCore.Finance;
 
-namespace PaymentCalculator.Model.Amortization
+namespace PaymentCalculator.Model
 {
-    public class AmortizationResponse
+    public class LoanResponse
     {
-        public AmortizationResponse(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<Period> schedule, IAmortizationRequest request)
+        public LoanResponse(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule, LoanRequest request)
         {
             PaymentPerPeriod = paymentPerPeriod;
             TotalInterestPaid = totalInterestPaid;
@@ -16,7 +17,7 @@ namespace PaymentCalculator.Model.Amortization
         public decimal PaymentPerPeriod { get; }
         public decimal TotalInterestPaid { get; }
         public decimal TotalPaid { get; }
-        public IReadOnlyList<Period> Schedule { get; }
-        public IAmortizationRequest Request { get; }
+        public IReadOnlyList<AmortizationPeriod> Schedule { get; }
+        public LoanRequest Request { get; }
     }
 }

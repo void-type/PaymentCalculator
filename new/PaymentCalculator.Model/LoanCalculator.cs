@@ -1,10 +1,9 @@
-using PaymentCalculator.Model.Amortization;
-using PaymentCalculator.Model.Financial;
+using VoidCore.Finance;
 
-namespace PaymentCalculator.Model.Loan
+namespace PaymentCalculator.Model
 {
     /// <summary>
-    /// A loan extends the standard amortization with periodic escrow and a length of years.
+    /// A loan customizes the standard amortization with periodic escrow and a length of years.
     /// </summary>
     public class LoanCalculator
     {

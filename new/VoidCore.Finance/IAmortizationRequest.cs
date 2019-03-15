@@ -1,4 +1,4 @@
-namespace PaymentCalculator.Model.Amortization
+namespace VoidCore.Finance
 {
     public interface IAmortizationRequest
     {
