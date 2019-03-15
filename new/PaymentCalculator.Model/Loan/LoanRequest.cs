@@ -2,10 +2,8 @@
 
 namespace PaymentCalculator.Model.Loan
 {
-    public class LoanRequest
+    public class LoanRequest : IAmortizationRequest
     {
-        private readonly AmortizationRequest _innerRequest;
-
         public LoanRequest(decimal assetCost, decimal downPayment, decimal escrowPerPeriod, int numberOfYears, int periodsPerYear, decimal annualInterestRate)
         {
             AssetCost = assetCost;
@@ -14,16 +12,19 @@ namespace PaymentCalculator.Model.Loan
             NumberOfYears = numberOfYears;
             PeriodsPerYear = periodsPerYear;
             AnnualInterestRate = annualInterestRate;
+            TotalPrincipal = assetCost - downPayment;
+            NumberOfPeriods = numberOfYears * periodsPerYear;
+            RatePerPeriod = annualInterestRate / periodsPerYear;
         }
 
         public decimal AssetCost { get; }
         public decimal DownPayment { get; }
-        public decimal TotalPrincipal => AssetCost - DownPayment;
+        public decimal TotalPrincipal { get; }
         public decimal EscrowPerPeriod { get; }
         public int NumberOfYears { get; }
         public int PeriodsPerYear { get; }
-        public int NumberOfPeriods => NumberOfYears * PeriodsPerYear;
+        public int NumberOfPeriods { get; }
         public decimal AnnualInterestRate { get; }
-        public decimal RatePerPeriod => AnnualInterestRate / PeriodsPerYear;
+        public decimal RatePerPeriod { get; }
     }
 }

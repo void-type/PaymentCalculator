@@ -4,18 +4,19 @@ namespace PaymentCalculator.Model.Amortization
 {
     public class AmortizationResponse
     {
-        public AmortizationResponse(decimal monthlyPayment, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<Period> schedule, AmortizationRequest request)
+        public AmortizationResponse(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<Period> schedule, IAmortizationRequest request)
         {
-            MonthlyPayment = monthlyPayment;
+            PaymentPerPeriod = paymentPerPeriod;
             TotalInterestPaid = totalInterestPaid;
             TotalPaid = totalPaid;
+            Schedule = schedule;
             Request = request;
         }
 
-        public decimal MonthlyPayment { get; }
+        public decimal PaymentPerPeriod { get; }
         public decimal TotalInterestPaid { get; }
         public decimal TotalPaid { get; }
         public IReadOnlyList<Period> Schedule { get; }
-        public AmortizationRequest Request { get; }
+        public IAmortizationRequest Request { get; }
     }
 }

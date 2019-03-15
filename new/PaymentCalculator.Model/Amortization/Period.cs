@@ -4,10 +4,10 @@
     {
         public Period(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
         {
-            this.PeriodNumber = periodNumber;
-            this.InterestPayment = interestPayment;
-            this.PrincipalPayment = principalPayment;
-            this.BalanceLeft = balanceLeft;
+            PeriodNumber = periodNumber;
+            InterestPayment = interestPayment;
+            PrincipalPayment = principalPayment;
+            BalanceLeft = balanceLeft;
         }
 
         public int PeriodNumber { get; }
