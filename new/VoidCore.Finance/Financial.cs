@@ -33,7 +33,7 @@ namespace VoidCore.Finance
             else
             {
                 var pow = (decimal) Math.Pow(1 + (double) interestRatePerPeriod, numberOfPeriods);
-                return -1 * (payment * (pow - 1) / interestRatePerPeriod + presentValue * pow);
+                return -(payment * (pow - 1) / interestRatePerPeriod + presentValue * pow);
             }
         }
 
@@ -53,7 +53,7 @@ namespace VoidCore.Finance
 
             if (paymentDueAtBeginningOfPeriod)
             {
-                interestPayment /= (1 + interestRatePerPeriod);
+                interestPayment /= 1 + interestRatePerPeriod;
             }
 
             return interestPayment;
@@ -98,12 +98,13 @@ namespace VoidCore.Finance
             }
             else
             {
-                payment = interestRatePerPeriod / (decimal) (Math.Pow(1 + (double) interestRatePerPeriod, numberOfPeriods) - 1) * -(presentValue * (decimal) Math.Pow(1 + (double) interestRatePerPeriod, numberOfPeriods) + futureValue);
+                var pow = (decimal) Math.Pow(1 + (double) interestRatePerPeriod, numberOfPeriods);
+                payment = interestRatePerPeriod / (pow - 1) * -(presentValue * pow + futureValue);
             }
 
             if (paymentDueAtBeginningOfPeriod)
             {
-                payment /= (1 + interestRatePerPeriod);
+                payment /= 1 + interestRatePerPeriod;
             }
 
             return payment;
@@ -120,7 +121,7 @@ namespace VoidCore.Finance
         public decimal PresentValue(decimal interestRatePerPeriod, int numberOfPeriods, decimal payment, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
         {
             var num = 1.0m;
-            var pow = (decimal) Math.Pow((1 + (double) interestRatePerPeriod), numberOfPeriods);
+            var pow = (decimal) Math.Pow(1 + (double) interestRatePerPeriod, numberOfPeriods);
 
             if (interestRatePerPeriod == 0)
             {
@@ -129,9 +130,9 @@ namespace VoidCore.Finance
 
             if (paymentDueAtBeginningOfPeriod)
             {
-                num = (1 + interestRatePerPeriod);
+                num = 1 + interestRatePerPeriod;
             }
-            return (-(futureValue + ((payment * num) * ((pow - 1) / interestRatePerPeriod))) / pow);
+            return -(futureValue + ((payment * num) * ((pow - 1) / interestRatePerPeriod))) / pow;
         }
 
         /// <summary>
@@ -150,10 +151,43 @@ namespace VoidCore.Finance
 
             if (paymentDueAtBeginningOfPeriod)
             {
-                interestPayment /= (1 + interestRatePerPeriod);
+                interestPayment /= 1 + interestRatePerPeriod;
             }
 
             return payment - interestPayment;
+        }
+
+        /// <summary>
+        /// Finds the number of periods left in an annuity.
+        /// </summary>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divided by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
+        /// <param name="payment">The amount paid against the annuity every period.</param>
+        /// <param name="presentValue">The present value of the annuity.</param>
+        /// <param name="futureValue">The future value of the annuity.</param>
+        /// <param name="paymentDueAtBeginningOfPeriod">True implies that the payments are due at the beginning of each period. Default is false.</param>
+        public decimal NumberOfPeriods(decimal interestRatePerPeriod, decimal payment, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false)
+        {
+            if (interestRatePerPeriod == 0)
+            {
+                return (presentValue - futureValue) / payment;
+            }
+
+            decimal numberOfPeriods;
+
+            if (paymentDueAtBeginningOfPeriod)
+            {
+                numberOfPeriods = (payment * (1 + interestRatePerPeriod)) / interestRatePerPeriod;
+            }
+            else
+            {
+                numberOfPeriods = payment / interestRatePerPeriod;
+            }
+
+            var a = (double) (futureValue + numberOfPeriods);
+            var b = (double) (presentValue + numberOfPeriods);
+            var c = (double) (interestRatePerPeriod + 1);
+
+            return (decimal) (Math.Log(a) - Math.Log(b) / Math.Log(c));
         }
     }
 }

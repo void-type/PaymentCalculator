@@ -25,5 +25,17 @@ namespace PaymentCalculator.Model
                 schedule: amortization.Schedule,
                 request: request);
         }
+
+        public LoanResponse CalculateExperimental(LoanRequest request, params PaymentDeviation[] deviations)
+        {
+            var amortization = _amortizationCalculator.CalculateExperimental(request, deviations);
+
+            return new LoanResponse(
+                paymentPerPeriod: amortization.PaymentPerPeriod + request.EscrowPerPeriod,
+                totalInterestPaid: amortization.TotalInterestPaid,
+                totalPaid: request.AssetCost + amortization.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
+                schedule: amortization.Schedule,
+                request: request);
+        }
     }
 }

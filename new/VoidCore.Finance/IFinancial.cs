@@ -63,5 +63,15 @@
         /// <param name="futureValue">The future value of the annuity.</param>
         /// <param name="paymentDueAtBeginningOfPeriod">True implies that the payments are due at the beginning of each period. Default is false.</param>
         decimal PrincipalPayment(decimal interestRatePerPeriod, int periodNumber, int numberOfPeriods, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false);
+
+        /// <summary>
+        /// Finds the number of periods left in an annuity.
+        /// </summary>
+        /// <param name="interestRatePerPeriod">The interest rate per period. Note: use APR divided by number of periods in a year. Use decimal form: 4% should be passed as .04.</param>
+        /// <param name="payment">The amount paid against the annuity every period.</param>
+        /// <param name="presentValue">The present value of the annuity.</param>
+        /// <param name="futureValue">The future value of the annuity.</param>
+        /// <param name="paymentDueAtBeginningOfPeriod">True implies that the payments are due at the beginning of each period. Default is false.</param>
+        decimal NumberOfPeriods(decimal interestRatePerPeriod, decimal payment, decimal presentValue, decimal futureValue = 0, bool paymentDueAtBeginningOfPeriod = false);
     }
 }

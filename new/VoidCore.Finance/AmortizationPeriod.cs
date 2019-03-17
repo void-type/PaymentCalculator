@@ -1,6 +1,6 @@
 ﻿namespace VoidCore.Finance
 {
-    public class AmortizationPeriod
+    public struct AmortizationPeriod
     {
         public AmortizationPeriod(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
         {
