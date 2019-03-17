@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace VoidCore.Finance
 {
@@ -19,7 +20,7 @@ namespace VoidCore.Finance
 
             var schedule = new AmortizationPeriod[numberOfPeriods];
 
-            for (var periodNumber = 1; periodNumber < numberOfPeriods + 1; periodNumber++)
+            Parallel.For(1, numberOfPeriods + 1, periodNumber =>
             {
                 schedule[periodNumber - 1] = new AmortizationPeriod(
                     periodNumber,
@@ -27,7 +28,7 @@ namespace VoidCore.Finance
                     _financial.PrincipalPayment(ratePerPeriod, periodNumber, numberOfPeriods, -totalPrincipal),
                     _financial.InterestPayment(ratePerPeriod, periodNumber + 1, numberOfPeriods, -totalPrincipal) / ratePerPeriod
                 );
-            }
+            });
 
             var paymentPerPeriod = _financial.Payment(ratePerPeriod, numberOfPeriods, -totalPrincipal);
             var totalInterestPaid = schedule.Sum(p => p.InterestPayment);

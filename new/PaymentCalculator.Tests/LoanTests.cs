@@ -107,13 +107,10 @@ namespace PaymentCalculator.Tests
         // [Fact]
         // public void PerformanceTest()
         // {
-        //     var watch = new System.Diagnostics.Stopwatch();
         //     var request = new LoanRequest(100m, 1m, 0, 1000000, 12, 0.000000000001m);
-        //     watch.Start();
         //     var response = _calculator.Calculate(request);
-        //     watch.Stop();
-        //     var numberOfPeriods = response.Request.NumberOfPeriods;
-        //     var time = watch.ElapsedMilliseconds;
+
+        //     Assert.Equal(1000000 * 12, response.Request.NumberOfPeriods);
         // }
 
         private static void CheckLoan(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, int numberOfPeriods, LoanResponse loan)

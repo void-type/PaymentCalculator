@@ -16,14 +16,14 @@ namespace PaymentCalculator.Model
 
         public LoanResponse Calculate(LoanRequest request)
         {
-            var aResponse = _amortizationCalculator.Calculate(request);
+            var amortization = _amortizationCalculator.Calculate(request);
 
             return new LoanResponse(
-                aResponse.PaymentPerPeriod + request.EscrowPerPeriod,
-                aResponse.TotalInterestPaid,
-                request.AssetCost + aResponse.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
-                aResponse.Schedule,
-                request);
+                paymentPerPeriod: amortization.PaymentPerPeriod + request.EscrowPerPeriod,
+                totalInterestPaid: amortization.TotalInterestPaid,
+                totalPaid: request.AssetCost + amortization.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
+                schedule: amortization.Schedule,
+                request: request);
         }
     }
 }
