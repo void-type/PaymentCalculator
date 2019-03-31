@@ -4,7 +4,7 @@ namespace VoidCore.Finance
 {
     public class AmortizationResponse
     {
-        public AmortizationResponse(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule, IAmortizationRequest request)
+        internal AmortizationResponse(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule, AmortizationRequest request)
         {
             PaymentPerPeriod = paymentPerPeriod;
             TotalInterestPaid = totalInterestPaid;
@@ -17,6 +17,6 @@ namespace VoidCore.Finance
         public decimal TotalInterestPaid { get; }
         public decimal TotalPaid { get; }
         public IReadOnlyList<AmortizationPeriod> Schedule { get; }
-        public IAmortizationRequest Request { get; }
+        public AmortizationRequest Request { get; }
     }
 }

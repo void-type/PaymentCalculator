@@ -3,7 +3,7 @@ using VoidCore.Finance;
 namespace PaymentCalculator.Model
 {
     /// <summary>
-    /// A loan customizes the standard amortization with periodic escrow and a length of years.
+    /// A loan customizes the standard amortization with periodic escrow and uses length of years.
     /// </summary>
     public class LoanCalculator
     {
@@ -16,25 +16,15 @@ namespace PaymentCalculator.Model
 
         public LoanResponse Calculate(LoanRequest request)
         {
-            var amortization = _amortizationCalculator.Calculate(request);
+            var amortizationRequest = new AmortizationRequest(request.TotalPrincipal, request.NumberOfPeriods, request.RatePerPeriod);
+
+            var amortizationResponse = _amortizationCalculator.Calculate(amortizationRequest);
 
             return new LoanResponse(
-                paymentPerPeriod: amortization.PaymentPerPeriod + request.EscrowPerPeriod,
-                totalInterestPaid: amortization.TotalInterestPaid,
-                totalPaid: request.AssetCost + amortization.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
-                schedule: amortization.Schedule,
-                request: request);
-        }
-
-        public LoanResponse CalculateExperimental(LoanRequest request, params PaymentDeviation[] deviations)
-        {
-            var amortization = _amortizationCalculator.CalculateExperimental(request, deviations);
-
-            return new LoanResponse(
-                paymentPerPeriod: amortization.PaymentPerPeriod + request.EscrowPerPeriod,
-                totalInterestPaid: amortization.TotalInterestPaid,
-                totalPaid: request.AssetCost + amortization.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
-                schedule: amortization.Schedule,
+                paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
+                totalInterestPaid: amortizationResponse.TotalInterestPaid,
+                totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
+                schedule: amortizationResponse.Schedule,
                 request: request);
         }
     }

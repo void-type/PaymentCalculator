@@ -1,5 +1,4 @@
 using PaymentCalculator.Model;
-using System.Linq;
 using VoidCore.Finance;
 using Xunit;
 
@@ -104,32 +103,6 @@ namespace PaymentCalculator.Tests
             CheckPeriod(0.00m, 4.54m, 1090.00m, response.Schedule[3]);
             CheckPeriod(4.52m, 0.02m, 0.00m, response.Schedule[request.NumberOfPeriods - 1]);
         }
-
-        // [Fact]
-        // public void MediumMortgageWithDoublePayment()
-        // {
-        //     var request = new LoanRequest(350000, 10000, 0, 30, 12, .045m);
-
-        //     var deviations = Enumerable
-        //         .Range(4, 30 * 12)
-        //         .Select(r => new PaymentDeviation(r, 200))
-        //         .ToArray();
-
-        //     var response = _calculator.Calculate(request, deviations);
-
-        //     CheckLoan(1722.73m, 219682.97m, 628788.96m, 30 * 12, response);
-        //     CheckPeriod(452.79m, 1269.94m, 338198.98m, response.Schedule[3]);
-        //     CheckPeriod(1707.60m, 6.40m, 0.00m, response.Schedule[request.NumberOfPeriods - 1]);
-        // }
-
-        // [Fact]
-        // public void PerformanceTest()
-        // {
-        //     var request = new LoanRequest(100m, 1m, 0, 1000000, 12, 0.000000000001m);
-        //     var response = _calculator.Calculate(request);
-
-        //     Assert.Equal(1000000 * 12, response.Request.NumberOfPeriods);
-        // }
 
         private static void CheckLoan(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, int numberOfPeriods, LoanResponse loan)
         {

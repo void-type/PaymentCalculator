@@ -1,8 +1,6 @@
-﻿using VoidCore.Finance;
-
-namespace PaymentCalculator.Model
+﻿namespace PaymentCalculator.Model
 {
-    public class LoanRequest : IAmortizationRequest
+    public class LoanRequest
     {
         public LoanRequest(decimal assetCost, decimal downPayment, decimal escrowPerPeriod, int numberOfYears, int periodsPerYear, decimal annualInterestRate)
         {
@@ -19,12 +17,12 @@ namespace PaymentCalculator.Model
 
         public decimal AssetCost { get; }
         public decimal DownPayment { get; }
-        public decimal TotalPrincipal { get; }
         public decimal EscrowPerPeriod { get; }
         public int NumberOfYears { get; }
         public int PeriodsPerYear { get; }
-        public int NumberOfPeriods { get; }
         public decimal AnnualInterestRate { get; }
+        public decimal TotalPrincipal { get; }
+        public int NumberOfPeriods { get; }
         public decimal RatePerPeriod { get; }
     }
 }

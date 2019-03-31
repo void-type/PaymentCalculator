@@ -2,7 +2,7 @@
 {
     public struct AmortizationPeriod
     {
-        public AmortizationPeriod(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
+        internal AmortizationPeriod(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
         {
             PeriodNumber = periodNumber;
             InterestPayment = interestPayment;
