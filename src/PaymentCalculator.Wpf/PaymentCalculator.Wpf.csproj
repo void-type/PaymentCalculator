@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PaymentCalculator.Model\PaymentCalculator.Model.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <StartupObject>PaymentCalculator.Wpf.App</StartupObject>
+    <ApplicationIcon />
+  </PropertyGroup>
+
+</Project>

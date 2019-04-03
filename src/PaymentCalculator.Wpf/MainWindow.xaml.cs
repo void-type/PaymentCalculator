@@ -1,9 +1,9 @@
-﻿using PaymentCalculator.Wpf.Model.Amortization;
-using PaymentCalculator.Wpf.Model.Financial;
+﻿using PaymentCalculator.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using VoidCore.Finance;
 
 namespace PaymentCalculator.Wpf
 {
@@ -31,34 +31,37 @@ namespace PaymentCalculator.Wpf
 
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            DisplayMessage("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at GitHub.com/void-type");
+            DisplayMessage("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at https://gitHub.com/void-type");
         }
 
-        private async Task CalcButton_Click(object sender, RoutedEventArgs e)
+        private async void CalcButton_Click(object sender, RoutedEventArgs e)
         {
-            var loan = ValidateAndSetInputs();
+            var request = ValidateAndSetInputs();
 
-            if (loan == null)
+            if (request == null)
             {
                 return;
             }
 
             try
             {
-                var calculator = new AmortizationCalculator(new FinancialWrapper());
-                await Task.FromResult(() => calculator.Calculate(loan));
+                var amortizationCalculator = new AmortizationCalculator(new Financial());
+
+                // TODO: request validators
+                var result = await new CalculateLoan.Handler(amortizationCalculator).Handle(request);
+                var response = result.Value;
+
+                AmortizationTable.ItemsSource = response.Schedule;
+                MonthlyPaymentTextBox.Text = $"{response.PaymentPerPeriod:C2}";
+                LoanAmountTextBox.Text = $"{response.Request.TotalPrincipal:C2}";
+                InterestPaidTextBox.Text = $"{response.TotalInterestPaid:C2}";
+                TotalPaidTextBox.Text = $"{response.TotalPaid:C2}";
             }
             catch (System.OverflowException)
             {
                 DisplayMessage("The loan is too large to calculate.");
                 return;
             }
-
-            AmortizationTable.ItemsSource = loan.Schedule;
-            MonthlyPaymentTextBox.Text = $"{loan.MonthlyPayment:C2}";
-            LoanAmountTextBox.Text = $"{loan.LoanAmount:C2}";
-            InterestPaidTextBox.Text = $"{loan.TotalInterestPaid:C2}";
-            TotalPaidTextBox.Text = $"{loan.TotalPaid:C2}";
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -78,16 +81,16 @@ namespace PaymentCalculator.Wpf
 
         private void PeriodsPerYearComboBox_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!(sender is ComboBox cmbx))
+            if (!(sender is ComboBox combo))
             {
                 return;
             }
 
-            cmbx.ItemsSource = _periodsPerYearChoices.Keys;
-            cmbx.SelectedIndex = 0;
+            combo.ItemsSource = _periodsPerYearChoices.Keys;
+            combo.SelectedIndex = 0;
         }
 
-        private ILoan ValidateAndSetInputs()
+        private LoanRequest ValidateAndSetInputs()
         {
             if ((!decimal.TryParse(AssetCostTextBox.Text, out var assetCost)) || (assetCost <= 0))
             {
@@ -115,11 +118,11 @@ namespace PaymentCalculator.Wpf
                 DisplayMessage("Please enter how many years the payback period is.");
                 return null;
             }
-            if (years > 450)
-            {
-                DisplayMessage("Valid year range is 1 to 450 years.");
-                return null;
-            }
+            // if (years > 450)
+            // {
+            //     DisplayMessage("Valid year range is 1 to 450 years.");
+            //     return null;
+            // }
 
             int periodsPerYear;
 
@@ -149,7 +152,7 @@ namespace PaymentCalculator.Wpf
                 return null;
             }
 
-            return new Loan(assetCost, downPayment, years, periodsPerYear, interestRate);
+            return new LoanRequest(assetCost, downPayment, 0, years, periodsPerYear, interestRate);
         }
     }
 }

@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VoidCore.Finance\VoidCore.Finance.csproj" />
+    <PackageReference Include="VoidCore.Model" Version="0.5.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\VoidCore.Finance\src\VoidCore.Finance\VoidCore.Finance.csproj" />
+  </ItemGroup>
 </Project>

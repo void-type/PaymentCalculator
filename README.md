@@ -1,6 +1,6 @@
 # Payment Calculator WPF
 
-Payment Calculator is a loan amortization calculator made with C#.Net and WPF.
+Payment Calculator is a loan amortization calculator made with C#.Net and WPF on .Net Core 3.0.
 
 ## Features
 
