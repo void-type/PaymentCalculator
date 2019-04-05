@@ -13,7 +13,7 @@ Remove-Item -Path "../coverage" -Recurse -ErrorAction SilentlyContinue
 Remove-Item -Path "../testResults" -Recurse -ErrorAction SilentlyContinue
 
 # Run tests, gather coverage
-Push-Location -Path "../tests/VoidCore.Test"
+Push-Location -Path "../tests/PaymentCalculator.Test"
 
 dotnet test `
   --configuration "$Configuration" `

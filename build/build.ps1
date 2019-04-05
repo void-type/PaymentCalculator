@@ -39,12 +39,11 @@ if (-not $SkipTest) {
   Stop-OnError
   Pop-Location
 
-  # TODO: Not supported on .Net Core 3.0 yet
   # Generate code coverage report
-  # Push-Location -Path "../coverage"
-  # reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
-  # Stop-OnError
-  # Pop-Location
+  Push-Location -Path "../coverage"
+  reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
+  Stop-OnError
+  Pop-Location
 }
 
 if (-not $SkipPublish) {
