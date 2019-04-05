@@ -7,13 +7,9 @@ param(
 
 . ./util.ps1
 
-# Clean the artifacts folder
+# Clean the artifacts folders
 Remove-Item -Path "../artifacts" -Recurse -ErrorAction SilentlyContinue
-
-# Clean coverage folder
 Remove-Item -Path "../coverage" -Recurse -ErrorAction SilentlyContinue
-
-# Clean testResults folder
 Remove-Item -Path "../testResults" -Recurse -ErrorAction SilentlyContinue
 
 # Build solution
@@ -24,7 +20,7 @@ Pop-Location
 
 if (-not $SkipTest) {
   # Run tests, gather coverage
-  Push-Location -Path "../tests/PaymentCalculator.Test"
+  Push-Location -Path "$testProjectFolder"
 
   dotnet test `
     --configuration "$Configuration" `
@@ -47,16 +43,9 @@ if (-not $SkipTest) {
 }
 
 if (-not $SkipPublish) {
-  # Create Publish folder
-  Get-ChildItem -Path "../src" |
-    Where-Object { (Test-Path -Path "$($_.FullName)/*.csproj") -eq $true } |
-    Select-Object -ExpandProperty Name |
-    ForEach-Object {
-    Push-Location -Path "../src/$_"
-    InheritDoc --base "./bin/$Configuration/" --overwrite
-    Stop-OnError
-    dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts"
-    Stop-OnError
-    Pop-Location
-  }
+  # Package build
+  Push-Location -Path "$wpfProjectFolder"
+  dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts"
+  Stop-OnError
+  Pop-Location
 }

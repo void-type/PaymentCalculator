@@ -4,3 +4,9 @@ function Stop-OnError {
     Exit $LASTEXITCODE
   }
 }
+
+$shortAppName = "PaymentCalculator"
+$projectName = "$($shortAppName)"
+
+$testProjectFolder = "../tests/$projectName.Test"
+$wpfProjectFolder = "../src/$projectName.Wpf"
