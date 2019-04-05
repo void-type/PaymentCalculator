@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using VoidCore.Domain;
 using VoidCore.Domain.Events;
+using VoidCore.Domain.RuleValidator;
 using VoidCore.Finance;
 
 namespace PaymentCalculator.Model
@@ -18,18 +20,32 @@ namespace PaymentCalculator.Model
 
             protected override IResult<Response> HandleSync(Request request)
             {
-                var amortizationRequest = new AmortizationRequest(request.TotalPrincipal, request.NumberOfPeriods, request.RatePerPeriod);
+                try
+                {
+                    var amortizationRequest = new AmortizationRequest(request.TotalPrincipal, request.NumberOfPeriods, request.RatePerPeriod);
 
-                var amortizationResponse = _amortizationCalculator.Calculate(amortizationRequest);
+                    var amortizationResponse = _amortizationCalculator.Calculate(amortizationRequest);
 
-                var response = new Response(
-                    paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
-                    totalInterestPaid: amortizationResponse.TotalInterestPaid,
-                    totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
-                    schedule: amortizationResponse.Schedule,
-                    request: request);
+                    var response = new Response(
+                        paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
+                        totalInterestPaid: amortizationResponse.TotalInterestPaid,
+                        totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * request.NumberOfPeriods,
+                        schedule: amortizationResponse.Schedule,
+                        request: request);
 
-                return Result.Ok(response);
+                    return Result.Ok(response);
+                }
+                catch (System.AggregateException ex)
+                {
+                    if (ex.InnerExceptions.All(e => e.GetType() == typeof(System.OverflowException)))
+                    {
+                        return Result.Fail<Response>(new LoanOverflowFailure());
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
@@ -75,6 +91,21 @@ namespace PaymentCalculator.Model
             public decimal TotalPaid { get; }
             public IReadOnlyList<AmortizationPeriod> Schedule { get; }
             public Request Request { get; }
+        }
+
+        public class RequestValidator : RuleValidatorAbstract<Request>
+        {
+            public RequestValidator()
+            {
+                CreateRule(r => new Failure("The down payment must be less than the asset cost.", nameof(r.DownPayment)))
+                    .InvalidWhen(r => r.DownPayment >= r.AssetCost);
+
+                CreateRule(r => new Failure("The term must be greater than zero.", nameof(r.NumberOfYears)))
+                    .InvalidWhen(r => r.NumberOfYears <= 0);
+
+                CreateRule(r => new Failure("Periods per year must be greater than zero."))
+                    .InvalidWhen(r => r.PeriodsPerYear <= 0);
+            }
         }
     }
 }
