@@ -1,5 +1,10 @@
 # Payment Calculator WPF
 
+[![License](https://img.shields.io/github/license/void-type/Payment_Calculator_WPF.svg?style=flat-square)](https://github.com/void-type/Payment_Calculator_WPF/blob/master/LICENSE.txt)
+[![Build Status](https://img.shields.io/azure-devops/build/void-type/PaymentCalculator.Wpf/7.svg?style=flat-square)](https://dev.azure.com/void-type/PaymentCalculator.Wpf/_build/latest?definitionId=7&branchName=master)
+[![Test Coverage](https://img.shields.io/azure-devops/coverage/void-type/PaymentCalculator.Wpf/7.svg?style=flat-square)](https://dev.azure.com/void-type/PaymentCalculator.Wpf/_build/latest?definitionId=7&branchName=master)
+[![ReleaseVersion](https://img.shields.io/github/release/void-type/Payment_Calculator_Wpf.svg?style=flat-square)](https://github.com/void-type/Payment_Calculator_WPF/releases)
+
 Payment Calculator is a loan amortization calculator made with C#.Net and WPF on .Net Core 3.0.
 
 ## Features
