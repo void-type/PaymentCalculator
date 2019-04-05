@@ -1,0 +1,67 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "./build.ps1",
+            "options": {
+                "cwd": "./build"
+            },
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "buildDebug",
+            "command": "./build.ps1 -Configuration Debug -SkipTest -SkipPack",
+            "options": {
+                "cwd": "./build"
+            },
+            "type": "shell",
+            "group": "test",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "installAndUpdateTools",
+            "command": "./installAndUpdateTools.ps1",
+            "options": {
+                "cwd": "./build"
+            },
+            "type": "shell",
+            "group": "test"
+        },
+        {
+            "label": "test",
+            "command": "./test.ps1",
+            "options": {
+                "cwd": "./build"
+            },
+            "type": "shell",
+            "group": "test",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "testWatch",
+            "command": "./testWatch.ps1",
+            "options": {
+                "cwd": "./build"
+            },
+            "type": "shell",
+            "group": "test",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+    ]
+}

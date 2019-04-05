@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PaymentCalculator.Tests
 {
-    public class LoanTests
+    public class CalculateLoanHandlerTests
     {
         private readonly CalculateLoan.Handler _calculator = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()));
 

@@ -1,0 +1,46 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.0-preview3'
+
+- task: 'PowerShell@2'
+  displayName: 'Install Build Tools'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'build/installAndUpdateTools.ps1'
+    workingDirectory: 'build'
+
+- task: 'PowerShell@2'
+  displayName: 'Build, Test, and Pack'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'build/build.ps1'
+    workingDirectory: 'build'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage'
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: 'coverage/coverage.cobertura.xml'
+    reportDirectory: 'coverage'
+    # TODO: Disabled because coverage not supported in 3.0 yet
+    condition: never()
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: 'testResults/*.trx'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
+  inputs:
+    pathtoPublish: 'artifacts'
+    artifactName: 'artifacts'
