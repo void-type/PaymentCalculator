@@ -56,7 +56,6 @@ if (-not $SkipPublish) {
     Push-Location -Path "../src/$_"
     InheritDoc --base "./bin/$Configuration/" --overwrite
     Stop-OnError
-    dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts/pre-release" /p:PublicRelease=false
     dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts"
     Stop-OnError
     Pop-Location
