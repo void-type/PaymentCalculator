@@ -60,7 +60,7 @@ namespace PaymentCalculator.Wpf
 
             viewModel.Schedule = response.Schedule;
             viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
-            viewModel.TotalPrincipal = response.Request.TotalPrincipal;
+            viewModel.TotalPrincipal = response.TotalPrincipal;
             viewModel.TotalInterestPaid = response.TotalInterestPaid;
             viewModel.TotalPaid = response.TotalPaid;
         }
