@@ -107,6 +107,17 @@ namespace PaymentCalculator.Tests
             CheckPeriod(4.52m, 0.02m, 0.00m, response.Schedule.Last());
         }
 
+        [Fact]
+        public async Task TooLargeLoanReturnsFailure()
+        {
+            var request = new CalculateLoan.Request(1100m, 10m, 0, 20000000, 12, 0.5m);
+
+            var result = await _calculator.Handle(request);
+
+            Assert.True(result.IsFailed);
+            Assert.IsType<LoanOverflowFailure>(result.Failures.Single());
+        }
+
         private static void CheckLoan(decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, int numberOfPeriods, CalculateLoan.Response response)
         {
             Assert.Equal(paymentPerPeriod, decimal.Round(response.PaymentPerPeriod, 2));

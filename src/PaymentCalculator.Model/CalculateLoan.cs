@@ -35,8 +35,7 @@ namespace PaymentCalculator.Model
                         paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
                         totalInterestPaid: amortizationResponse.TotalInterestPaid,
                         totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * numberOfPeriods,
-                        schedule: amortizationResponse.Schedule,
-                        request: request);
+                        schedule: amortizationResponse.Schedule);
 
                     return Result.Ok(response);
                 }
@@ -76,14 +75,13 @@ namespace PaymentCalculator.Model
 
         public class Response
         {
-            internal Response(decimal totalPrincipal, decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule, Request request)
+            internal Response(decimal totalPrincipal, decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule)
             {
                 TotalPrincipal = totalPrincipal;
                 PaymentPerPeriod = paymentPerPeriod;
                 TotalInterestPaid = totalInterestPaid;
                 TotalPaid = totalPaid;
                 Schedule = schedule;
-                Request = request;
             }
 
             public decimal TotalPrincipal { get; set; }
@@ -91,7 +89,6 @@ namespace PaymentCalculator.Model
             public decimal TotalInterestPaid { get; }
             public decimal TotalPaid { get; }
             public IReadOnlyList<AmortizationPeriod> Schedule { get; }
-            public Request Request { get; }
         }
 
         public class RequestValidator : RuleValidatorAbstract<Request>
