@@ -31,7 +31,7 @@ I can't guarantee it will be bug-free, but there are some unit tests for common 
 
 ## Developers
 
-To work on VoidCore.Finance, you will need the [.Net Core SDK](https://dotnet.microsoft.com/download).
+To work on Payment Calculator, you will need the [.Net Core 3.0 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0).
 
 You will also need some global tools. To install them easily, just run the following:
 
