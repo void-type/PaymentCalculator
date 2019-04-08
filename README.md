@@ -28,3 +28,18 @@ I wanted to port that assignment to C#, but there wasn't a C# variant of the Mic
 So, I created this project. Within it, the beginnings of VoidCore.Financial took shape via reverse-engineering the financial functions in VB.NET and Excel. I ran into some errata in the VB implementation when I was first developing the library. I believe I worked around them by using decimal types and using some improved logic, so my implementation will not be a perfect emulation.
 
 I can't guarantee it will be bug-free, but there are some unit tests for common use-cases.
+
+## Developers
+
+To work on Payment Calculator, you will need the [.Net Core 3.0 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0).
+
+You will also need some global tools. To install them easily, just run the following:
+
+```powershell
+cd build/
+./installAndUpdateTools.ps1
+```
+
+See the /build folder for scripts used to test and build this project.
+
+There are [VSCode](https://code.visualstudio.com/) tasks for each script. The build task (ctrl + shift + b) performs the standard CI build.

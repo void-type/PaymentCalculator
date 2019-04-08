@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="all" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.138" PrivateAssets="all" />
-    <PackageReference Include="VoidCore.Model" Version="0.5.12" />
+    <PackageReference Include="VoidCore.Model" Version="0.5.13" />
     <PackageReference Include="VoidCore.Finance" Version="1.0.2" />
   </ItemGroup>
 </Project>

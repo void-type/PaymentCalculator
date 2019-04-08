@@ -1,6 +1,10 @@
 ﻿using PaymentCalculator.Model;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using VoidCore.Domain;
+using VoidCore.Domain.Events;
 using VoidCore.Finance;
 
 namespace PaymentCalculator.Wpf
@@ -10,11 +14,15 @@ namespace PaymentCalculator.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly AmortizationCalculator _amortizationCalculator = new AmortizationCalculator(new Financial());
+        private readonly IEventHandler<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
+                .AddRequestValidator(new CalculateLoan.RequestValidator());
+
             DataContext = new LoanViewModel();
             AssetCostTextBox.Focus();
         }
@@ -32,35 +40,39 @@ namespace PaymentCalculator.Wpf
 
         private async void CalcButton_Click(object sender, RoutedEventArgs e)
         {
+            var request = GetRequestFromViewModel();
+
+            await _calculateLoanHandler
+                .Handle(request)
+                .TeeOnFailureAsync(result => ShowFailureMessages(result.Failures))
+                .TeeOnSuccessAsync(response => ShowResponse(response));
+        }
+
+        private CalculateLoan.Request GetRequestFromViewModel()
+        {
             var viewModel = (LoanViewModel) DataContext;
 
-            var interestRate = viewModel.IsPercentInterest ?
-                viewModel.AnnualInterestRate / 100 :
-                viewModel.AnnualInterestRate;
-
-            var request = new CalculateLoan.Request(
+            return new CalculateLoan.Request(
                 assetCost: viewModel.AssetCost,
-                downPayment: viewModel.DownPayment, escrowPerPeriod: 0,
+                downPayment: viewModel.DownPayment,
+                escrowPerPeriod: 0,
                 numberOfYears: viewModel.Years,
                 periodsPerYear: (int) viewModel.SelectedPeriodType,
-                annualInterestRate : interestRate
-            );
+                annualInterestRate : viewModel.IsPercentInterest ? viewModel.AnnualInterestRate / 100 : viewModel.AnnualInterestRate);
+        }
 
-            var result = await new CalculateLoan.Handler(_amortizationCalculator)
-                .AddRequestValidator(new CalculateLoan.RequestValidator())
-                .Handle(request);
+        private void ShowFailureMessages(IEnumerable<IFailure> failures)
+        {
+            MessageBox.Show(string.Join("\n", failures.Select(f => f.Message)));
+        }
 
-            if (result.IsFailed)
-            {
-                MessageBox.Show(string.Join("\n", result.Failures.Select(f => f.Message)));
-                return;
-            }
-
-            var response = result.Value;
+        private void ShowResponse(CalculateLoan.Response response)
+        {
+            var viewModel = (LoanViewModel) DataContext;
 
             viewModel.Schedule = response.Schedule;
             viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
-            viewModel.TotalPrincipal = response.Request.TotalPrincipal;
+            viewModel.TotalPrincipal = response.TotalPrincipal;
             viewModel.TotalInterestPaid = response.TotalInterestPaid;
             viewModel.TotalPaid = response.TotalPaid;
         }
