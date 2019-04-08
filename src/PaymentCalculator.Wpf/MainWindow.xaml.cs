@@ -44,7 +44,7 @@ namespace PaymentCalculator.Wpf
 
             await _calculateLoanHandler
                 .Handle(request)
-                .TeeOnFailureAsync(result => ShowFailureMessages(result.Failures))
+                .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
                 .TeeOnSuccessAsync(response => ShowResponse(response));
         }
 
@@ -70,11 +70,11 @@ namespace PaymentCalculator.Wpf
         {
             var viewModel = (LoanViewModel) DataContext;
 
-            viewModel.Schedule = response.Schedule;
-            viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
             viewModel.TotalPrincipal = response.TotalPrincipal;
+            viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
             viewModel.TotalInterestPaid = response.TotalInterestPaid;
             viewModel.TotalPaid = response.TotalPaid;
+            viewModel.Schedule = response.Schedule;
         }
     }
 }
