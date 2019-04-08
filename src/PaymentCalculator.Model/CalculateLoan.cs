@@ -24,7 +24,7 @@ namespace PaymentCalculator.Model
                 {
                     var totalPrincipal = request.AssetCost - request.DownPayment;
                     var numberOfPeriods = request.NumberOfYears * request.PeriodsPerYear;
-                    var ratePerPeriod = request.AnnualInterestRate / request.PeriodsPerYear;
+                    var ratePerPeriod = request.AnnualInterestRate == 0 ? 0 : request.AnnualInterestRate / request.PeriodsPerYear;
 
                     var amortizationRequest = new AmortizationRequest(totalPrincipal, numberOfPeriods, ratePerPeriod);
 
