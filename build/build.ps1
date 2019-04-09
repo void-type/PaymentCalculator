@@ -2,7 +2,8 @@
 param(
   [string] $Configuration = "Release",
   [switch] $SkipTest,
-  [switch] $SkipPack
+  [switch] $SkipTestReport,
+  [switch] $SkipPublish
 )
 
 . ./util.ps1
@@ -35,11 +36,13 @@ if (-not $SkipTest) {
   Stop-OnError
   Pop-Location
 
-  # Generate code coverage report
-  Push-Location -Path "../coverage"
-  reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
-  Stop-OnError
-  Pop-Location
+  if (-not $SkipTestReport) {
+    # Generate code coverage report
+    Push-Location -Path "../coverage"
+    reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
+    Stop-OnError
+    Pop-Location
+  }
 }
 
 if (-not $SkipPublish) {
