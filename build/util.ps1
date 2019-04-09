@@ -5,8 +5,7 @@ function Stop-OnError {
   }
 }
 
-$shortAppName = "PaymentCalculator"
-$projectName = "$($shortAppName)"
+$projectName = "PaymentCalculator"
 
 $testProjectFolder = "../tests/$projectName.Test"
 $wpfProjectFolder = "../src/$projectName.Wpf"
