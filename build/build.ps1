@@ -28,7 +28,7 @@ if (-not $SkipTest) {
     --no-build `
     --logger 'trx' `
     --results-directory '../../testResults' `
-    /p:Exclude='[xunit.*]*' `
+    /p:Exclude="[xunit.*]*%2c[$projectName.Test]*" `
     /p:CollectCoverage=true `
     /p:CoverletOutputFormat=cobertura `
     /p:CoverletOutput="../../coverage/coverage.cobertura.xml"

@@ -20,7 +20,7 @@
         },
         {
             "label": "buildDebug",
-            "command": "./build.ps1 -Configuration Debug -SkipTest -SkipPack",
+            "command": "./build.ps1 -Configuration Debug -SkipTest -SkipPublish",
             "options": {
                 "cwd": "./build"
             },

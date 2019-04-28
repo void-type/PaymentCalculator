@@ -8,7 +8,7 @@ steps:
 - task: DotNetCoreInstaller@0
   inputs:
     packageType: 'sdk'
-    version: '3.0.100-preview3-010431'
+    version: '3.0.100-preview4-011223'
 
 - task: 'PowerShell@2'
   displayName: 'Install Build Tools'
@@ -18,10 +18,11 @@ steps:
     workingDirectory: 'build'
 
 - task: 'PowerShell@2'
-  displayName: 'Build, Test, and Pack'
+  displayName: 'Build, Test, and Publish'
   inputs:
     targetType: 'filePath'
     filePath: 'build/build.ps1'
+    arguments: '-SkipTestReport'
     workingDirectory: 'build'
 
 - task: PublishCodeCoverageResults@1
@@ -29,7 +30,6 @@ steps:
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: 'coverage/coverage.cobertura.xml'
-    reportDirectory: 'coverage'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
