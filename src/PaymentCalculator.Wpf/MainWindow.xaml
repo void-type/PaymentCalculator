@@ -28,6 +28,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="10*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -46,16 +50,21 @@
             <TextBlock x:Name="Lbl04" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Center" />
             <TextBlock x:Name="Lbl05" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Center" />
             <TextBlock x:Name="Lbl06" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="Lbl07" Text="APR %" Grid.Row="10" Grid.Column="0" TextAlignment="Center" />
 
             <TextBox x:Name="AssetCostTextBox" Text="{Binding Path=AssetCost, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" TabIndex="1" />
-            <TextBox x:Name="DownPaymentTextBox" Text="{Binding Path=DownPayment, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" TabIndex="1" />
+            <TextBox x:Name="DownPaymentTextBox" Text="{Binding Path=DownPayment, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" TabIndex="2" />
             <TextBox x:Name="AnnualInterestRateTextBox" Text="{Binding Path=AnnualInterestRate, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" TabIndex="3" />
             <TextBox x:Name="YearsTextBox" Text="{Binding Path=Years, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" TabIndex="4" />
+            <ComboBox x:Name="PeriodsPerYearComboBox" SelectedValue="{Binding SelectedPeriodType, Mode=TwoWay}" ItemsSource="{Binding PeriodTypes}" Grid.Row="8" Grid.Column="1" TabIndex="5" />
+            <CheckBox x:Name="IsPercentInterestCheckBox" IsChecked="{Binding Path=IsPercentInterest, Mode=TwoWay}" Grid.Row="10" Grid.Column="1" TabIndex="6" >
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="When checked, APR represents whole percent like 4%. When not checked, it's represented in decimal form like 0.04." />
+                    </ToolTipService.ToolTip>
+            </CheckBox>
 
-            <ComboBox x:Name="PeriodsPerYearComboBox"
-                SelectedValue="{Binding SelectedPeriodType, Mode=TwoWay}"
-                ItemsSource="{Binding PeriodTypes}"
-                Grid.Row="8" Grid.Column="1" TabIndex="5" />
+            <Button x:Name="CalcButton" Content="Calculate" Click="CalcButton_Click" Grid.Row="12" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
+            <Button x:Name="ClearButton" Content="Clear" Click="ClearButton_Click" Grid.Row="12" Grid.Column="1" TabIndex="8" HorizontalAlignment="Stretch" />
 
             <TextBlock x:Name="Lbl12" Text="Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center" />
             <TextBlock x:Name="Lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center" />
@@ -78,28 +87,8 @@
                 <TextBlock x:Name="TotalPaidTextBox" Text="{Binding Path=TotalPaid, Mode=OneWay, StringFormat=c}" />
             </Border>
 
-            <Grid Grid.Row="8" Grid.Column="3">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="APR %" />
-                    <CheckBox x:Name="IsPercentInterestCheckBox" IsChecked="{Binding Path=IsPercentInterest, Mode=TwoWay}" />
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="When checked, APR represents whole percent like 4%. When not checked, it's represented in decimal form like 0.04." />
-                    </ToolTipService.ToolTip>
-                </StackPanel>
-            </Grid>
 
-            <Grid Grid.Row="8" Grid.Column="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="45*" />
-                </Grid.ColumnDefinitions>
-
-                <Button x:Name="ClearButton" Content="Clear" Click="ClearButton_Click" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
-                <Button x:Name="CalcButton" Content="Calculate" Click="CalcButton_Click" Grid.Column="2" TabIndex="6" HorizontalAlignment="Stretch" />
-            </Grid>
-
-            <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="9" Grid.ColumnSpan="2">
+            <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="14" Grid.ColumnSpan="2">
                 <DataGrid Name="AmortizationTable" AutoGenerateColumns="False" ItemsSource="{Binding Path=Schedule, Mode=OneWay}" Margin="0,-10,0,10.4">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=PeriodNumber, Mode=OneWay}" Header="#" />

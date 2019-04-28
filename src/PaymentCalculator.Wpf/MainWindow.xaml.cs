@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Interactivity;
 using VoidCore.Domain;
 using VoidCore.Domain.Events;
 using VoidCore.Finance;
@@ -20,17 +21,12 @@ namespace PaymentCalculator.Wpf
         {
             InitializeComponent();
 
+            SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox);
+
             _calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
                 .AddRequestValidator(new CalculateLoan.RequestValidator());
 
-            DataContext = new LoanViewModel();
-            AssetCostTextBox.Focus();
-        }
-
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            DataContext = new LoanViewModel();
-            AssetCostTextBox.Focus();
+            Clear();
         }
 
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
@@ -45,7 +41,12 @@ namespace PaymentCalculator.Wpf
             await _calculateLoanHandler
                 .Handle(request)
                 .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-                .TeeOnSuccessAsync(response => ShowResponse(response));
+                .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
         }
 
         private CalculateLoan.Request GetRequestFromViewModel()
@@ -66,7 +67,7 @@ namespace PaymentCalculator.Wpf
             MessageBox.Show(string.Join("\n", failures.Select(f => f.Message)));
         }
 
-        private void ShowResponse(CalculateLoan.Response response)
+        private void ShowCalculationResponse(CalculateLoan.Response response)
         {
             var viewModel = (LoanViewModel) DataContext;
 
@@ -75,6 +76,12 @@ namespace PaymentCalculator.Wpf
             viewModel.TotalInterestPaid = response.TotalInterestPaid;
             viewModel.TotalPaid = response.TotalPaid;
             viewModel.Schedule = response.Schedule;
+        }
+
+        private void Clear()
+        {
+            DataContext = new LoanViewModel();
+            AssetCostTextBox.Focus();
         }
     }
 }
