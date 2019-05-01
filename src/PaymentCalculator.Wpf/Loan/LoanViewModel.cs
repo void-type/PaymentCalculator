@@ -9,15 +9,15 @@ namespace PaymentCalculator.Wpf
     {
         private decimal _assetCost;
         private decimal _annualInterestRate;
-        private bool _isPercentInterest = true;
         private decimal _downPayment;
         private decimal _escrowPerPeriod;
         private PeriodType _selectedPeriodType = PeriodType.Monthly;
-        private int _years;
+        private int _years = 1;
         private IEnumerable<AmortizationPeriod> _schedule;
         private decimal _paymentPerPeriod;
         private decimal _totalPaid;
         private decimal _totalInterestPaid;
+        private decimal _totalEscrowPaid;
         private decimal _totalPrincipal;
 
         public decimal AssetCost
@@ -30,12 +30,6 @@ namespace PaymentCalculator.Wpf
         {
             get => _annualInterestRate;
             set => SetProperty(ref _annualInterestRate, value);
-        }
-
-        public bool IsPercentInterest
-        {
-            get => _isPercentInterest;
-            set => SetProperty(ref _isPercentInterest, value);
         }
 
         public decimal DownPayment
@@ -80,6 +74,12 @@ namespace PaymentCalculator.Wpf
         {
             get => _totalInterestPaid;
             set => SetProperty(ref _totalInterestPaid, value);
+        }
+
+        public decimal TotalEscrowPaid
+        {
+            get => _totalEscrowPaid;
+            set => SetProperty(ref _totalEscrowPaid, value);
         }
 
         public decimal TotalPaid

@@ -34,6 +34,7 @@ namespace PaymentCalculator.Model
                         totalPrincipal: totalPrincipal,
                         paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
                         totalInterestPaid: amortizationResponse.TotalInterestPaid,
+                        totalEscrowPaid: request.EscrowPerPeriod * numberOfPeriods,
                         totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * numberOfPeriods,
                         schedule: amortizationResponse.Schedule);
 
@@ -75,11 +76,12 @@ namespace PaymentCalculator.Model
 
         public class Response
         {
-            internal Response(decimal totalPrincipal, decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule)
+            internal Response(decimal totalPrincipal, decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalEscrowPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule)
             {
                 TotalPrincipal = totalPrincipal;
                 PaymentPerPeriod = paymentPerPeriod;
                 TotalInterestPaid = totalInterestPaid;
+                TotalEscrowPaid = totalEscrowPaid;
                 TotalPaid = totalPaid;
                 Schedule = schedule;
             }
@@ -87,6 +89,7 @@ namespace PaymentCalculator.Model
             public decimal TotalPrincipal { get; set; }
             public decimal PaymentPerPeriod { get; }
             public decimal TotalInterestPaid { get; }
+            public decimal TotalEscrowPaid { get; set; }
             public decimal TotalPaid { get; }
             public IReadOnlyList<AmortizationPeriod> Schedule { get; }
         }
@@ -96,7 +99,8 @@ namespace PaymentCalculator.Model
             public RequestValidator()
             {
                 CreateRule(r => new Failure("The down payment must be less than the asset cost.", nameof(r.DownPayment)))
-                    .InvalidWhen(r => r.DownPayment >= r.AssetCost);
+                    .InvalidWhen(r => r.DownPayment >= r.AssetCost)
+                    .ExceptWhen(r => r.AssetCost == 0);
 
                 CreateRule(r => new Failure("The term must be greater than zero.", nameof(r.NumberOfYears)))
                     .InvalidWhen(r => r.NumberOfYears <= 0);
