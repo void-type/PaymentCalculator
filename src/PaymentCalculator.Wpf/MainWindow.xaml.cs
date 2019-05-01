@@ -1,6 +1,8 @@
 ﻿using PaymentCalculator.Model;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using VoidCore.Domain;
 using VoidCore.Domain.Events;
@@ -29,7 +31,8 @@ namespace PaymentCalculator.Wpf
 
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at https://github.com/void-type");
+            var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            MessageBox.Show($"Version: {version}\nAuthor: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at https://github.com/void-type");
         }
 
         private void CalcButton_Click(object sender, RoutedEventArgs e)
