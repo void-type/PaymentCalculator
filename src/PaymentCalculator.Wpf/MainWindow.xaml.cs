@@ -1,9 +1,7 @@
 ﻿using PaymentCalculator.Model;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Interactivity;
 using VoidCore.Domain;
 using VoidCore.Domain.Events;
 using VoidCore.Finance;
@@ -21,7 +19,7 @@ namespace PaymentCalculator.Wpf
         {
             InitializeComponent();
 
-            SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox);
+            SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox, EscrowPerPeriodTextBox);
 
             _calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
                 .AddRequestValidator(new CalculateLoan.RequestValidator());
@@ -34,14 +32,9 @@ namespace PaymentCalculator.Wpf
             MessageBox.Show("Author: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at https://github.com/void-type");
         }
 
-        private async void CalcButton_Click(object sender, RoutedEventArgs e)
+        private void CalcButton_Click(object sender, RoutedEventArgs e)
         {
-            var request = GetRequestFromViewModel();
-
-            await _calculateLoanHandler
-                .Handle(request)
-                .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-                .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
+            Calc();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -56,10 +49,11 @@ namespace PaymentCalculator.Wpf
             return new CalculateLoan.Request(
                 assetCost: viewModel.AssetCost,
                 downPayment: viewModel.DownPayment,
-                escrowPerPeriod: 0,
+                escrowPerPeriod: viewModel.EscrowPerPeriod,
                 numberOfYears: viewModel.Years,
                 periodsPerYear: (int) viewModel.SelectedPeriodType,
-                annualInterestRate : viewModel.IsPercentInterest ? viewModel.AnnualInterestRate / 100 : viewModel.AnnualInterestRate);
+                annualInterestRate : viewModel.AnnualInterestRate / 100
+            );
         }
 
         private void ShowFailureMessages(IEnumerable<IFailure> failures)
@@ -74,8 +68,19 @@ namespace PaymentCalculator.Wpf
             viewModel.TotalPrincipal = response.TotalPrincipal;
             viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
             viewModel.TotalInterestPaid = response.TotalInterestPaid;
+            viewModel.TotalEscrowPaid = response.TotalEscrowPaid;
             viewModel.TotalPaid = response.TotalPaid;
             viewModel.Schedule = response.Schedule;
+        }
+
+        private async void Calc()
+        {
+            var request = GetRequestFromViewModel();
+
+            await _calculateLoanHandler
+                .Handle(request)
+                .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
+                .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
         }
 
         private void Clear()

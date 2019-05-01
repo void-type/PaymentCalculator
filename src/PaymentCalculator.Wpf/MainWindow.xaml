@@ -7,7 +7,6 @@
         Title="Payment Calculator by VoidType" Height="600" Width="980">
 
     <Grid>
-
         <DockPanel>
             <Menu DockPanel.Dock ="Top">
                 <MenuItem Header="_Help">
@@ -16,85 +15,85 @@
             </Menu>
         </DockPanel>
 
-        <Grid Margin="0,30,20,0" Grid.Column="0">
-
+        <Grid Margin="20,20,20,20" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*" />
-                <ColumnDefinition Width="20*" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="20*" />
-                <ColumnDefinition Width="20*" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="30*" />
-                <ColumnDefinition Width="30*" />
+                <ColumnDefinition Width="125*" />
+                <ColumnDefinition Width="125*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="125*" />
+                <ColumnDefinition Width="125*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="400*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="Lbl02" Text="Asset Cost" Grid.Row="0" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl03" Text="Down Payment" Grid.Row="2" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl04" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl05" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl06" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl07" Text="APR %" Grid.Row="10" Grid.Column="0" TextAlignment="Center" />
+            <TextBlock x:Name="AssetCostLabel" Text="Asset Cost" Grid.Row="0" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
+            <TextBox x:Name="AssetCostTextBox" Text="{Binding Path=AssetCost, Mode=TwoWay, StringFormat=c}" TextAlignment="Right" Grid.Row="0" Grid.Column="1" TabIndex="1" />
 
-            <TextBox x:Name="AssetCostTextBox" Text="{Binding Path=AssetCost, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" TabIndex="1" />
-            <TextBox x:Name="DownPaymentTextBox" Text="{Binding Path=DownPayment, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" TabIndex="2" />
-            <TextBox x:Name="AnnualInterestRateTextBox" Text="{Binding Path=AnnualInterestRate, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" TabIndex="3" />
-            <TextBox x:Name="YearsTextBox" Text="{Binding Path=Years, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" TabIndex="4" />
+            <TextBlock x:Name="DownPaymentLabel" Text="Down Payment" Grid.Row="2" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
+            <TextBox x:Name="DownPaymentTextBox" Text="{Binding Path=DownPayment, Mode=TwoWay, StringFormat=c}" TextAlignment="Right" Grid.Row="2" Grid.Column="1" TabIndex="2" />
+
+            <TextBlock x:Name="AnnualInterestRateLabel" Text="APR" Grid.Row="4" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
+            <TextBox x:Name="AnnualInterestRateTextBox" Text="{Binding Path=AnnualInterestRate, Mode=TwoWay, StringFormat={}{0}%}" TextAlignment="Right" Grid.Row="4" Grid.Column="1" TabIndex="3" />
+
+            <TextBlock x:Name="YearsLabel" Text="Years" Grid.Row="6" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
+            <TextBox x:Name="YearsTextBox" Text="{Binding Path=Years, Mode=TwoWay}" TextAlignment="Right" Grid.Row="6" Grid.Column="1" TabIndex="4" />
+
+            <TextBlock x:Name="PeriodsPerYearLabel" Text="Period Frequency" Grid.Row="8" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
             <ComboBox x:Name="PeriodsPerYearComboBox" SelectedValue="{Binding SelectedPeriodType, Mode=TwoWay}" ItemsSource="{Binding PeriodTypes}" Grid.Row="8" Grid.Column="1" TabIndex="5" />
-            <CheckBox x:Name="IsPercentInterestCheckBox" IsChecked="{Binding Path=IsPercentInterest, Mode=TwoWay}" Grid.Row="10" Grid.Column="1" TabIndex="6" >
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="When checked, APR represents whole percent like 4%. When not checked, it's represented in decimal form like 0.04." />
-                    </ToolTipService.ToolTip>
-            </CheckBox>
 
-            <Button x:Name="CalcButton" Content="Calculate" Click="CalcButton_Click" Grid.Row="12" Grid.Column="0" TabIndex="7" HorizontalAlignment="Stretch" />
-            <Button x:Name="ClearButton" Content="Clear" Click="ClearButton_Click" Grid.Row="12" Grid.Column="1" TabIndex="8" HorizontalAlignment="Stretch" />
+            <TextBlock x:Name="EscrowPerPeriodLabel" Text="Escrow Payment" Grid.Row="10" Grid.Column="0" TextAlignment="Right" Margin="0,0,10,0" />
+            <TextBox x:Name="EscrowPerPeriodTextBox" Text="{Binding Path=EscrowPerPeriod, Mode=TwoWay, StringFormat=c}" TextAlignment="Right" Grid.Row="10" Grid.Column="1" TabIndex="6" />
 
-            <TextBlock x:Name="Lbl12" Text="Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl13" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl14" Text="Interest Paid" Grid.Row="4" Grid.Column="3" TextAlignment="Center" />
-            <TextBlock x:Name="Lbl15" Text="Total Paid" Grid.Row="6" Grid.Column="3" TextAlignment="Center" />
-
+            <TextBlock x:Name="PaymentLabel" Text="Payment" Grid.Row="0" Grid.Column="3" TextAlignment="Right" Margin="0,0,10,0" />
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="0" Grid.Column="4">
-                <TextBlock x:Name="PaymentTextBox" Text="{Binding Path=PaymentPerPeriod, Mode=OneWay, StringFormat=c}" />
+                <TextBlock x:Name="PaymentTextBox" Text="{Binding Path=PaymentPerPeriod, Mode=OneWay, StringFormat=c}" TextAlignment="Right" />
             </Border>
 
+            <TextBlock x:Name="LoanAmountLabel" Text="Loan Amount" Grid.Row="2" Grid.Column="3" TextAlignment="Right" Margin="0,0,10,0" />
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="2" Grid.Column="4">
-                <TextBlock x:Name="LoanAmountTextBox" Text="{Binding Path=TotalPrincipal, Mode=OneWay, StringFormat=c}" />
+                <TextBlock x:Name="LoanAmountTextBox" Text="{Binding Path=TotalPrincipal, Mode=OneWay, StringFormat=c}" TextAlignment="Right" />
             </Border>
 
+            <TextBlock x:Name="InterestPaidLabel" Text="Interest Paid" Grid.Row="4" Grid.Column="3" TextAlignment="Right" Margin="0,0,10,0" />
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="4" Grid.Column="4">
-                <TextBlock x:Name="InterestPaidTextBox" Text="{Binding Path=TotalInterestPaid, Mode=OneWay, StringFormat=c}" />
+                <TextBlock x:Name="InterestPaidTextBox" Text="{Binding Path=TotalInterestPaid, Mode=OneWay, StringFormat=c}" TextAlignment="Right" />
             </Border>
 
+            <TextBlock x:Name="EscrowPaidLabel" Text="Escrow Paid" Grid.Row="6" Grid.Column="3" TextAlignment="Right" Margin="0,0,10,0" />
             <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="6" Grid.Column="4">
-                <TextBlock x:Name="TotalPaidTextBox" Text="{Binding Path=TotalPaid, Mode=OneWay, StringFormat=c}" />
+                <TextBlock x:Name="EscrowPaidTextBox" Text="{Binding Path=TotalEscrowPaid, Mode=OneWay, StringFormat=c}" TextAlignment="Right" />
             </Border>
 
+            <TextBlock x:Name="TotalPaidLabel" Text="Total Paid" Grid.Row="8" Grid.Column="3" TextAlignment="Right" Margin="0,0,10,0" />
+            <Border BorderThickness="2" BorderBrush="DarkGray" Grid.Row="8" Grid.Column="4">
+                <TextBlock x:Name="TotalPaidTextBox" Text="{Binding Path=TotalPaid, Mode=OneWay, StringFormat=c}" TextAlignment="Right" />
+            </Border>
 
-            <Grid Grid.Row="0" Grid.Column="6" Grid.RowSpan="14" Grid.ColumnSpan="2">
-                <DataGrid Name="AmortizationTable" AutoGenerateColumns="False" ItemsSource="{Binding Path=Schedule, Mode=OneWay}" Margin="0,-10,0,10.4">
+            <Button x:Name="CalcButton" Content="Calculate" Click="CalcButton_Click" Grid.Row="12" Grid.Column="3" TabIndex="7" HorizontalAlignment="Stretch" Margin="10,0,0,0" Padding="0,10,0,10" />
+            <Button x:Name="ClearButton" Content="Clear" Click="ClearButton_Click" Grid.Row="12" Grid.Column="4" TabIndex="8" HorizontalAlignment="Stretch" Margin="10,0,0,0" Padding="0,10,0,10" />
+
+            <Grid Grid.RowSpan="13" Grid.Row="0" Grid.Column="6">
+                <DataGrid Name="AmortizationTable" AutoGenerateColumns="False" ItemsSource="{Binding Path=Schedule, Mode=OneWay}" ColumnWidth="*">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=PeriodNumber, Mode=OneWay}" Header="#" />
-                        <DataGridTextColumn Binding="{Binding Path=InterestPayment, Mode=OneWay, StringFormat=c}" Header="Interest Paid" />
-                        <DataGridTextColumn Binding="{Binding Path=PrincipalPayment, Mode=OneWay, StringFormat=c}" Header="Principal Paid" />
-                        <DataGridTextColumn Binding="{Binding Path=BalanceLeft, Mode=OneWay, StringFormat=c}" Header="Balance Left" />
+                        <DataGridTextColumn Binding="{Binding Path=PeriodNumber, Mode=OneWay}" Header="#" Width="2*" />
+                        <DataGridTextColumn Binding="{Binding Path=InterestPayment, Mode=OneWay, StringFormat=c}" Header="Interest Paid" Width="3*" />
+                        <DataGridTextColumn Binding="{Binding Path=PrincipalPayment, Mode=OneWay, StringFormat=c}" Header="Principal Paid" Width="3*" />
+                        <DataGridTextColumn Binding="{Binding Path=BalanceLeft, Mode=OneWay, StringFormat=c}" Header="Balance Left" Width="5*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
