@@ -26,11 +26,11 @@ namespace PaymentCalculator.Tests
         [Fact]
         public async Task SmallLoanMonthly()
         {
-            var request = new CalculateLoan.Request(2000m, 0m, 0, 5, 12, .005m);
+            var request = new CalculateLoan.Request(2000m, 0m, 15, 5, 12, .005m);
 
             var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
-            CheckLoan(33.76m, 25.52m, 2025.52m, 5 * 12, response);
+            CheckLoan(48.76m, 25.52m, 2925.52m, 5 * 12, response);
             CheckPeriod(32.97m, 0.79m, 1868.22m, response.Schedule[3]);
             CheckPeriod(33.74m, 0.01m, 0.00m, response.Schedule.Last());
         }

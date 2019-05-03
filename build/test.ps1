@@ -4,4 +4,4 @@ param(
   [switch] $SkipTestReport
 )
 
-./build.ps1 -Configuration $Configuration -SkipClient -SkipTestReport:$SkipTestReport -SkipPublish
+./build.ps1 -Configuration $Configuration -SkipTestReport:$SkipTestReport -SkipPublish
