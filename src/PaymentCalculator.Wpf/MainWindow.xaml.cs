@@ -47,15 +47,15 @@ namespace PaymentCalculator.Wpf
 
         private CalculateLoan.Request GetRequestFromViewModel()
         {
-            var viewModel = (LoanViewModel) DataContext;
+            var viewModel = (LoanViewModel)DataContext;
 
             return new CalculateLoan.Request(
                 assetCost: viewModel.AssetCost,
                 downPayment: viewModel.DownPayment,
                 escrowPerPeriod: viewModel.EscrowPerPeriod,
                 numberOfYears: viewModel.Years,
-                periodsPerYear: (int) viewModel.SelectedPeriodType,
-                annualInterestRate : viewModel.AnnualInterestRate / 100
+                periodsPerYear: (int)viewModel.SelectedPeriodType,
+                annualInterestRate: viewModel.AnnualInterestRate / 100
             );
         }
 
@@ -66,7 +66,7 @@ namespace PaymentCalculator.Wpf
 
         private void ShowCalculationResponse(CalculateLoan.Response response)
         {
-            var viewModel = (LoanViewModel) DataContext;
+            var viewModel = (LoanViewModel)DataContext;
 
             viewModel.TotalPrincipal = response.TotalPrincipal;
             viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
