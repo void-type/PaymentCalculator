@@ -9,7 +9,7 @@ Payment Calculator is a loan amortization calculator made with C#.Net and WPF on
 
 To run, download the latest [release](https://github.com/void-type/Payment_Calculator_WPF/releases) and run the PaymentCalculator.exe executable.
 
-Releases 2.0 and beyond require [.Net Core 3.0 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.0) to be installed.
+Releases 2.0.0 and later require [.Net Core 3.0 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.0) to be installed.
 Prior releases were built with .Net Framework 4.6.1 and should run on Windows 7 and up without any installs.
 
 ## Features

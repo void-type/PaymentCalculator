@@ -15,7 +15,11 @@ Remove-Item -Path "../testResults" -Recurse -ErrorAction SilentlyContinue
 
 # Build solution
 Push-Location -Path "../"
-dotnet build --configuration "$Configuration"
+dotnet format --check
+Stop-OnError
+dotnet restore
+dotnet list package --outdated
+dotnet build --configuration "$Configuration" --no-restore
 Stop-OnError
 Pop-Location
 
