@@ -6,10 +6,11 @@
     <AssemblyName>PaymentCalculator</AssemblyName>
     <StartupObject>PaymentCalculator.Wpf.App</StartupObject>
     <ApplicationIcon>LogoVoidType.ico</ApplicationIcon>
+    <CodeAnalysisRuleSet>..\..\.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.151" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.25" PrivateAssets="all" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
