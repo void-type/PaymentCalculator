@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
   [string] $Configuration = "Release",
+  [switch] $SkipFormat,
+  [switch] $SkipOutdated,
   [switch] $SkipTest,
   [switch] $SkipTestReport,
   [switch] $SkipPublish
@@ -15,10 +17,21 @@ Remove-Item -Path "../testResults" -Recurse -ErrorAction SilentlyContinue
 
 # Build solution
 Push-Location -Path "../"
-dotnet format --check
-Stop-OnError
+
+# Restore local dotnet tools
+dotnet tool restore
+
+if (-not $SkipFormat) {
+  dotnet format --check
+  Stop-OnError
+}
+
 dotnet restore
-dotnet list package --outdated
+
+if (-not $SkipOutdated) {
+  dotnet outdated
+}
+
 dotnet build --configuration "$Configuration" --no-restore
 Stop-OnError
 Pop-Location
@@ -43,7 +56,7 @@ if (-not $SkipTest) {
   if (-not $SkipTestReport) {
     # Generate code coverage report
     Push-Location -Path "../coverage"
-    reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
+    dotnet reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
     Stop-OnError
     Pop-Location
   }
@@ -52,7 +65,16 @@ if (-not $SkipTest) {
 if (-not $SkipPublish) {
   # Package build
   Push-Location -Path "$wpfProjectFolder"
-  dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts"
+
+  dotnet publish --configuration "$Configuration" --output "../../artifacts/portable" `
+    --runtime "win-x64" `
+    /p:PublishReadyToRun=true `
+    /p:PublishTrimmed=true `
+    /p:PublishSingleFile=true
+
+  dotnet publish --configuration "$Configuration" --no-build --output "../../artifacts/framework" `
+    /p:PublishSingleFile=true
+
   Stop-OnError
   Pop-Location
 }

@@ -5,17 +5,17 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 2.2'
   inputs:
     packageType: 'sdk'
-    version: '3.0.100-preview8-013656'
+    version: '2.2.401'
 
-- task: 'PowerShell@2'
-  displayName: 'Install Build Tools'
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 3.0'
   inputs:
-    targetType: 'filePath'
-    filePath: 'build/installAndUpdateTools.ps1'
-    workingDirectory: 'build'
+    packageType: 'sdk'
+    version: '3.0.100-rc1-014190'
 
 - task: 'PowerShell@2'
   displayName: 'Build, Test, and Publish'

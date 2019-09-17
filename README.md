@@ -7,10 +7,15 @@
 
 Payment Calculator is a loan amortization calculator made with C#.Net and WPF on .Net Core 3.0.
 
+PaymentCalculator only runs on Windows at this time.
+
 To run, download the latest [release](https://github.com/void-type/Payment_Calculator_WPF/releases) and run the PaymentCalculator.exe executable.
 
-Releases 2.0.0 and later require [.Net Core 3.0 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.0) to be installed.
-Prior releases were built with .Net Framework 4.6.1 and should run on Windows 7 and up without any installs.
+Releases 2.2.0 and later are single file applications. The portable version is larger, but only requires the single exe file run. The framework version requires the [.Net Core 3.0 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.0) to be installed.
+
+Releases 2.0.0 to 2.1.X require the [.Net Core 3.0 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.0) to be installed.
+
+Releases prior to 2.0.0 were built with .Net Framework 4.6.1 and should run on Windows 7 and later without any extra installs.
 
 ## Features
 
@@ -33,13 +38,6 @@ I can't guarantee it will be bug-free, but there are some unit tests for common 
 
 To work on Payment Calculator, you will need the [.Net Core 3.0 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0).
 
-You will also need some global tools. To install them easily, just run the following:
-
-```powershell
-cd build/
-./installAndUpdateTools.ps1
-```
-
-See the /build folder for scripts used to test and build this project.
+See the /build folder for scripts used to test and build this project. Run build.ps1 to make a production build.
 
 There are [VSCode](https://code.visualstudio.com/) tasks for each script. The build task (ctrl + shift + b) performs the standard CI build.
