@@ -20,7 +20,7 @@
         },
         {
             "label": "buildDebug",
-            "command": "./build.ps1 -Configuration Debug -SkipTest -SkipPublish",
+            "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipTest -SkipPublish",
             "options": {
                 "cwd": "./build"
             },
@@ -29,19 +29,10 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        },
-        {
-            "label": "installAndUpdateTools",
-            "command": "./installAndUpdateTools.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": "test"
         },
         {
             "label": "test",
-            "command": "./test.ps1",
+            "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipPublish",
             "options": {
                 "cwd": "./build"
             },
@@ -52,8 +43,8 @@
             ]
         },
         {
-            "label": "testWatch",
-            "command": "./testWatch.ps1",
+            "label": "watchTest",
+            "command": "./watchTest.ps1",
             "options": {
                 "cwd": "./build"
             },

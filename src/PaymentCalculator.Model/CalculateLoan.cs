@@ -38,13 +38,13 @@ namespace PaymentCalculator.Model
                         totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * numberOfPeriods,
                         schedule: amortizationResponse.Schedule);
 
-                    return Result.Ok(response);
+                    return Ok(response);
                 }
                 catch (System.AggregateException ex)
                 {
                     if (ex.InnerExceptions.All(e => e.GetType() == typeof(System.OverflowException)))
                     {
-                        return Result.Fail<Response>(new LoanOverflowFailure());
+                        return Fail(new LoanOverflowFailure());
                     }
                     else
                     {
