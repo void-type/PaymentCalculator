@@ -12,7 +12,7 @@ steps:
   displayName: 'Use .NET Core sdk 3.0'
   inputs:
     packageType: 'sdk'
-    version: '3.0.100'
+    version: '3.0.101'
 
 - task: 'PowerShell@2'
   displayName: 'Build, Test, and Publish'
