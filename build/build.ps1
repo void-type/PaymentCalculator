@@ -56,7 +56,7 @@ if (-not $SkipTest) {
   if (-not $SkipTestReport) {
     # Generate code coverage report
     Push-Location -Path "../coverage"
-    dotnet reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
+    dotnet reportgenerator "-reports:coverage.cobertura*.xml" "-targetdir:." "-reporttypes:HtmlInline_AzurePipelines"
     Stop-OnError
     Pop-Location
   }

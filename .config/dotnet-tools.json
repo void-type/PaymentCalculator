@@ -9,13 +9,13 @@
       ]
     },
     "dotnet-outdated": {
-      "version": "2.5.0",
+      "version": "2.8.0",
       "commands": [
         "dotnet-outdated"
       ]
     },
     "dotnet-reportgenerator-globaltool": {
-      "version": "4.2.19",
+      "version": "4.4.2",
       "commands": [
         "reportgenerator"
       ]
