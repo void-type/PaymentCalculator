@@ -1,4 +1,4 @@
-namespace PaymentCalculator.Wpf
+﻿namespace PaymentCalculator.Wpf
 {
     public enum PeriodType
     {

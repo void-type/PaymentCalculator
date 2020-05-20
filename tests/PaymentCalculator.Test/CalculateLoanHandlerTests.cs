@@ -1,4 +1,4 @@
-using PaymentCalculator.Model;
+﻿using PaymentCalculator.Model;
 using System.Linq;
 using System.Threading.Tasks;
 using VoidCore.Domain;

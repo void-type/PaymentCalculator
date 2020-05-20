@@ -1,4 +1,4 @@
-using PaymentCalculator.Model;
+﻿using PaymentCalculator.Model;
 using Xunit;
 
 namespace PaymentCalculator.Test
