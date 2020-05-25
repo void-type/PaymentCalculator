@@ -31,8 +31,8 @@ namespace PaymentCalculator.Wpf
 
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-            MessageBox.Show($"Version: {version}\nAuthor: Jeff Schreiner\nThis payment calculator is free to use and distribute.\nSee the source code at https://github.com/void-type");
+            var version = ThisAssembly.AssemblyInformationalVersion;
+            MessageBox.Show($"Version: {version}\n\nAuthor: Jeff Schreiner\n\nThis payment calculator is free to use and distribute.\n\nSee the source code at https://github.com/void-type", "About Payment Calculator");
         }
 
         private void CalcButton_Click(object sender, RoutedEventArgs e)
