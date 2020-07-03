@@ -1,8 +1,8 @@
 # Payment Calculator
 
 [![License](https://img.shields.io/github/license/void-type/PaymentCalculator.svg)](https://github.com/void-type/PaymentCalculator/blob/master/LICENSE.txt)
-[![Build Status](https://img.shields.io/azure-devops/build/void-type/PaymentCalculator/5.svg)](https://dev.azure.com/void-type/PaymentCalculator/_build/latest?definitionId=5&branchName=master)
-[![Test Coverage](https://img.shields.io/azure-devops/coverage/void-type/PaymentCalculator/5.svg)](https://dev.azure.com/void-type/PaymentCalculator/_build/latest?definitionId=5&branchName=master)
+[![Build Status](https://img.shields.io/azure-devops/build/void-type/PaymentCalculator/15.svg)](https://dev.azure.com/void-type/PaymentCalculator/_build/latest?definitionId=15&branchName=master)
+[![Test Coverage](https://img.shields.io/azure-devops/coverage/void-type/PaymentCalculator/15.svg)](https://dev.azure.com/void-type/PaymentCalculator/_build/latest?definitionId=15&branchName=master)
 [![ReleaseVersion](https://img.shields.io/github/release/void-type/PaymentCalculator.svg)](https://github.com/void-type/PaymentCalculator/releases)
 
 Payment Calculator is a loan amortization calculator made with .Net.
