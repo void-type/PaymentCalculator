@@ -16,7 +16,16 @@
             },
             "problemMatcher": [
                 "$msCompile"
-            ]
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "build"
+            }
         },
         {
             "label": "buildDebug",
@@ -28,7 +37,16 @@
             "group": "test",
             "problemMatcher": [
                 "$msCompile"
-            ]
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "build"
+            }
         },
         {
             "label": "test",
@@ -40,7 +58,16 @@
             "group": "test",
             "problemMatcher": [
                 "$msCompile"
-            ]
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "test"
+            }
         },
         {
             "label": "watchTest",
@@ -52,7 +79,16 @@
             "group": "test",
             "problemMatcher": [
                 "$msCompile"
-            ]
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "watch"
+            }
         },
     ]
 }
