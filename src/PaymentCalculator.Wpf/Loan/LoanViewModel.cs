@@ -13,7 +13,7 @@ namespace PaymentCalculator.Wpf
         private decimal _escrowPerPeriod;
         private PeriodType _selectedPeriodType = PeriodType.Monthly;
         private int _years = 1;
-        private IEnumerable<AmortizationPeriod> _schedule;
+        private IEnumerable<AmortizationPeriod> _schedule = Array.Empty<AmortizationPeriod>();
         private decimal _paymentPerPeriod;
         private decimal _totalPaid;
         private decimal _totalInterestPaid;
@@ -50,7 +50,7 @@ namespace PaymentCalculator.Wpf
             set => SetProperty(ref _selectedPeriodType, value);
         }
 
-        public IEnumerable<PeriodType> PeriodTypes => Enum.GetValues(typeof(PeriodType)).Cast<PeriodType>();
+        public static IEnumerable<PeriodType> PeriodTypes => Enum.GetValues(typeof(PeriodType)).Cast<PeriodType>();
 
         public IEnumerable<AmortizationPeriod> Schedule
         {

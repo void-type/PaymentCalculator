@@ -6,7 +6,7 @@ namespace PaymentCalculator.Wpf
 {
     public abstract class ViewModelAbstract : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
@@ -16,6 +16,7 @@ namespace PaymentCalculator.Wpf
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
                 return true;
             }
+
             return false;
         }
     }

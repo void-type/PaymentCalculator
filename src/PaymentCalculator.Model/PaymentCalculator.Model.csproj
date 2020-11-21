@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>Latest</LangVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.31" PrivateAssets="all" />
     <PackageReference Include="VoidCore.Finance" Version="5.1.1" />
     <PackageReference Include="VoidCore.Domain" Version="5.1.1" />
   </ItemGroup>

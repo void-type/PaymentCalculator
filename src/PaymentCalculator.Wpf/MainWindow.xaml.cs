@@ -1,8 +1,6 @@
 ﻿using PaymentCalculator.Model;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using VoidCore.Domain;
 using VoidCore.Domain.Events;
@@ -59,7 +57,7 @@ namespace PaymentCalculator.Wpf
             );
         }
 
-        private void ShowFailureMessages(IEnumerable<IFailure> failures)
+        private static void ShowFailureMessages(IEnumerable<IFailure> failures)
         {
             MessageBox.Show(string.Join("\n", failures.Select(f => f.Message)));
         }
@@ -76,11 +74,11 @@ namespace PaymentCalculator.Wpf
             viewModel.Schedule = response.Schedule;
         }
 
-        private async void Calc()
+        private void Calc()
         {
             var request = GetRequestFromViewModel();
 
-            await _calculateLoanHandler
+            _calculateLoanHandler
                 .Handle(request)
                 .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
                 .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
