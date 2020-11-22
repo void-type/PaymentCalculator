@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C4DEF36B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentCalculator.Test", "tests\PaymentCalculator.Test\PaymentCalculator.Test.csproj", "{CE44DE7A-C7F2-4C6B-AED8-494421701125}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentCalculator.BlazorWasm", "src\PaymentCalculator.BlazorWasm\PaymentCalculator.BlazorWasm.csproj", "{E19D884D-A17B-46B4-8218-F22BB5C6413E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,10 +64,23 @@ Global
 		{CE44DE7A-C7F2-4C6B-AED8-494421701125}.Release|x64.Build.0 = Release|Any CPU
 		{CE44DE7A-C7F2-4C6B-AED8-494421701125}.Release|x86.ActiveCfg = Release|Any CPU
 		{CE44DE7A-C7F2-4C6B-AED8-494421701125}.Release|x86.Build.0 = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|x64.Build.0 = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|x64.ActiveCfg = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|x64.Build.0 = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5091AC8C-678E-4F1E-9DFB-2FDCD6432589} = {4CDA67C1-C37D-48DA-9A60-2639CA12C607}
 		{64DEEB65-C5F1-48D3-8867-4AD1339706C9} = {4CDA67C1-C37D-48DA-9A60-2639CA12C607}
 		{CE44DE7A-C7F2-4C6B-AED8-494421701125} = {C4DEF36B-F7B0-4D96-BD4E-B8DA47398FF1}
+		{E19D884D-A17B-46B4-8218-F22BB5C6413E} = {4CDA67C1-C37D-48DA-9A60-2639CA12C607}
 	EndGlobalSection
 EndGlobal

@@ -86,10 +86,10 @@ namespace PaymentCalculator.Model
                 Schedule = schedule;
             }
 
-            public decimal TotalPrincipal { get; set; }
+            public decimal TotalPrincipal { get; }
             public decimal PaymentPerPeriod { get; }
             public decimal TotalInterestPaid { get; }
-            public decimal TotalEscrowPaid { get; set; }
+            public decimal TotalEscrowPaid { get; }
             public decimal TotalPaid { get; }
             public IReadOnlyList<AmortizationPeriod> Schedule { get; }
         }
