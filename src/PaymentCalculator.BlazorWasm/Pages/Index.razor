@@ -1,0 +1,198 @@
+﻿@page "/"
+@using PaymentCalculator.Model
+@using VoidCore.Domain
+@using VoidCore.Domain.Events
+@using VoidCore.Finance
+
+<h1>Payment Calculator</h1>
+
+<EditForm Model="inputModel" OnValidSubmit="HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  @if (validationMessages.Count() > 0)
+  {
+    <ul class="validation-errors">
+      @foreach (var msg in validationMessages)
+      {
+        <li class="validation-message">@msg</li>
+      }
+    </ul>
+  }
+
+  <div class="form-row">
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="AssetCost">Asset Cost</label>
+        <InputNumber id="AssetCost" @bind-Value="inputModel.AssetCost" class="@GetInputCss("AssetCost")" />
+      </div>
+
+      <div class="form-group">
+        <label for="DownPayment">Down Payment</label>
+        <InputNumber id="DownPayment" @bind-Value="inputModel.DownPayment" class="@GetInputCss("DownPayment")" />
+      </div>
+
+      <div class="form-group">
+        <label for="AnnualInterestRate">APR</label>
+        <InputNumber id="AnnualInterestRate" @bind-Value="inputModel.AnnualInterestRate"
+                     class="@GetInputCss("AnnualInterestRate")" />
+      </div>
+
+      <div class="form-group">
+        <label for="NumberOfYears">Years</label>
+        <InputNumber id="NumberOfYears" @bind-Value="inputModel.NumberOfYears" class="@GetInputCss("NumberOfYears")" />
+      </div>
+
+      <div class="form-group">
+        <label for="PeriodsPerYear">Period Frequency</label>
+        <InputSelect id="PeriodsPerYear" @bind-Value="inputModel.PeriodsPerYear" class="@GetInputCss("PeriodsPerYear")">
+          @foreach (var freq in periodFrequencies)
+          {
+            <option value="@freq.Value">@freq.Key</option>
+          }
+        </InputSelect>
+      </div>
+
+      <div class="form-group">
+        <label for="EscrowPerPeriod">Escrow Payment</label>
+        <InputNumber id="EscrowPerPeriod" @bind-Value="inputModel.EscrowPerPeriod"
+                     class="@GetInputCss("EscrowPerPeriod")" />
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="PaymentPerPeriod">Payment</label>
+        <InputText id="PaymentPerPeriod" @bind-Value="outputModel.PaymentPerPeriod" class="form-control" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="TotalPrincipal">Loan Amount</label>
+        <InputText id="TotalPrincipal" @bind-Value="outputModel.TotalPrincipal" class="form-control" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="TotalInterestPaid">Interest Paid</label>
+        <InputText id="TotalInterestPaid" @bind-Value="outputModel.TotalInterestPaid" class="form-control" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="TotalEscrowPaid">Escrow Paid</label>
+        <InputText id="TotalEscrowPaid" @bind-Value="outputModel.TotalEscrowPaid" class="form-control" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="TotalPaid">Total Paid</label>
+        <InputText id="TotalPaid" @bind-Value="outputModel.TotalPaid" class="form-control" disabled />
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-row">
+    <button class="btn btn-dark mr-1" type="submit">Calculate</button>
+    <button class="btn btn-dark" @onclick="Clear" @onclick:preventDefault @onclick:stopPropagation>Clear</button>
+  </div>
+</EditForm>
+
+
+@code {
+  private static Dictionary<string, int> periodFrequencies = new Dictionary<string, int>
+    {
+  ["Monthly"] = 12,
+  ["Quarterly"] = 4,
+  ["Yearly"] = 1
+    };
+
+  private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response>? calculateLoanHandler;
+  private InputModel inputModel = new InputModel();
+  private OutputModel outputModel = new OutputModel();
+  private IEnumerable<string> validationMessages = Array.Empty<string>();
+  private IEnumerable<string> validationFields = Array.Empty<string>();
+
+
+  protected override void OnInitialized()
+  {
+    calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
+      .AddRequestValidator(new CalculateLoan.RequestValidator());
+
+    Clear();
+  }
+
+  private void HandleValidSubmit()
+  {
+
+    var request = GetRequestFromInputModel();
+
+    calculateLoanHandler!
+      .Handle(request)
+    .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
+    .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
+  }
+
+  private CalculateLoan.Request GetRequestFromInputModel()
+  {
+    return new CalculateLoan.Request(
+      assetCost: inputModel.AssetCost,
+      downPayment: inputModel.DownPayment,
+      escrowPerPeriod: inputModel.EscrowPerPeriod,
+      numberOfYears: inputModel.NumberOfYears,
+      periodsPerYear: inputModel.PeriodsPerYear,
+      annualInterestRate: inputModel.AnnualInterestRate / 100
+      );
+  }
+
+  private void ShowCalculationResponse(CalculateLoan.Response response)
+  {
+    outputModel = new OutputModel();
+
+    outputModel.TotalPrincipal = $"{response.TotalPrincipal:c}";
+    outputModel.PaymentPerPeriod = $"{response.PaymentPerPeriod:c}";
+    outputModel.TotalInterestPaid = $"{response.TotalInterestPaid:c}";
+    outputModel.TotalEscrowPaid = $"{response.TotalEscrowPaid:c}";
+    outputModel.TotalPaid = $"{response.TotalPaid:c}";
+    outputModel.Schedule = response.Schedule;
+  }
+
+  private void ShowFailureMessages(IEnumerable<IFailure> failures)
+  {
+    validationMessages = failures.Select(f => f.Message);
+    validationFields = failures.Select(f => f.UiHandle);
+  }
+
+  private void Clear()
+  {
+    inputModel = new InputModel();
+    outputModel = new OutputModel();
+    validationMessages = Array.Empty<string>();
+    validationFields = Array.Empty<string>();
+  }
+
+  private string GetInputCss(string fieldName)
+  {
+    return string.Join(" ",
+      "form-control",
+      (validationFields.Contains(fieldName) ? "invalid" : null));
+  }
+
+  private class InputModel
+  {
+    public decimal AssetCost { get; set; }
+    public decimal DownPayment { get; set; }
+    public decimal EscrowPerPeriod { get; set; }
+    public int NumberOfYears { get; set; } = 30;
+    public int PeriodsPerYear { get; set; } = 12;
+    public decimal AnnualInterestRate { get; set; }
+  }
+
+  public class OutputModel
+  {
+    public string TotalPrincipal { get; set; } = String.Empty;
+    public string PaymentPerPeriod { get; set; } = String.Empty;
+    public string TotalInterestPaid { get; set; } = String.Empty;
+    public string TotalEscrowPaid { get; set; } = String.Empty;
+    public string TotalPaid { get; set; } = String.Empty;
+    public IReadOnlyList<AmortizationPeriod> Schedule { get; set; } = new List<AmortizationPeriod>();
+  }
+}

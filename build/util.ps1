@@ -10,3 +10,4 @@ $projectVersion = (dotnet nbgv get-version -f json | ConvertFrom-Json).NuGetPack
 
 $testProjectFolder = "../tests/$projectName.Test"
 $wpfProjectFolder = "../src/$projectName.Wpf"
+$blazorWasmProjectFolder = "../src/$projectName.BlazorWasm"

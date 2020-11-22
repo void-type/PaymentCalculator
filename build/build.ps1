@@ -69,6 +69,13 @@ if (-not $SkipTest) {
 
 if (-not $SkipPublish) {
   # Package build
+  Push-Location -Path "$blazorWasmProjectFolder"
+
+  dotnet publish --configuration "$Configuration" --output "../../artifacts/blazorWasm"
+
+  Stop-OnError
+  Pop-Location
+
   Push-Location -Path "$wpfProjectFolder"
 
   dotnet publish --configuration "$Configuration" --output "../../artifacts/portable" `
