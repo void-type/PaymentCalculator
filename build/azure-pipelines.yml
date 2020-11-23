@@ -28,7 +28,7 @@ steps:
   displayName: 'Publish Code Coverage'
   inputs:
     codeCoverageTool: 'cobertura'
-    summaryFileLocation: 'coverage/coverage.cobertura*.xml'
+    summaryFileLocation: 'testResults/*/coverage.cobertura.xml'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
