@@ -18,5 +18,5 @@
 </footer>
 
 @code{
-    private string version = ThisAssembly.AssemblyInformationalVersion;
+    private string version = ThisAssembly.AssemblyInformationalVersion.Split('+').FirstOrDefault() ?? "";
 }
