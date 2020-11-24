@@ -6,14 +6,14 @@
 
 <h1>Payment Calculator</h1>
 
-<EditForm Model="inputModel" OnValidSubmit="Calc">
+<EditForm Model="_inputModel" OnValidSubmit="@Calc" @onkeypress="@HandleKeyPress">
   <DataAnnotationsValidator />
   <ValidationSummary />
 
-  @if (validationMessages.Count() > 0)
+  @if (_validationMessages.Count() > 0)
   {
     <ul class="validation-errors">
-      @foreach (var msg in validationMessages)
+      @foreach (var msg in _validationMessages)
       {
         <li class="validation-message">@msg</li>
       }
@@ -22,31 +22,31 @@
 
   <div class="form-row">
 
-    <div class="col-md-6" @onkeypress="HandleKeyPress">
+    <div class="col-md-6">
       <div class="form-group">
         <label for="AssetCost">Asset Cost</label>
-        <InputNumber id="AssetCost" @bind-Value="inputModel.AssetCost" class="@GetInputCss("AssetCost")" />
+        <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" class="@GetInputCss("AssetCost")" />
       </div>
 
       <div class="form-group">
         <label for="DownPayment">Down Payment</label>
-        <InputNumber id="DownPayment" @bind-Value="inputModel.DownPayment" class="@GetInputCss("DownPayment")" />
+        <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" class="@GetInputCss("DownPayment")" />
       </div>
 
       <div class="form-group">
         <label for="AnnualInterestRate">APR</label>
-        <InputNumber id="AnnualInterestRate" @bind-Value="inputModel.AnnualInterestRate"
+        <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate"
                       class="@GetInputCss("AnnualInterestRate")" />
       </div>
 
       <div class="form-group">
         <label for="NumberOfYears">Years</label>
-        <InputNumber id="NumberOfYears" @bind-Value="inputModel.NumberOfYears" class="@GetInputCss("NumberOfYears")" />
+        <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" class="@GetInputCss("NumberOfYears")" />
       </div>
 
       <div class="form-group">
         <label for="PeriodsPerYear">Period Frequency</label>
-        <InputSelect id="PeriodsPerYear" @bind-Value="inputModel.PeriodsPerYear" class="@GetInputCss("PeriodsPerYear")">
+        <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" class="@GetInputCss("PeriodsPerYear")">
           @foreach (var freq in periodFrequencies)
               {
                 <option value="@freq.Value">@freq.Key</option>
@@ -56,7 +56,7 @@
 
           <div class="form-group">
             <label for="EscrowPerPeriod">Escrow Payment</label>
-            <InputNumber id="EscrowPerPeriod" @bind-Value="inputModel.EscrowPerPeriod"
+            <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod"
                           class="@GetInputCss("EscrowPerPeriod")" />
           </div>
         </div>
@@ -64,27 +64,27 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="PaymentPerPeriod">Payment</label>
-            <InputText id="PaymentPerPeriod" @bind-Value="outputModel.PaymentPerPeriod" class="form-control" disabled />
+            <InputText id="PaymentPerPeriod" @bind-Value="_outputModel.PaymentPerPeriod" class="form-control" disabled />
           </div>
 
           <div class="form-group">
             <label for="TotalPrincipal">Loan Amount</label>
-            <InputText id="TotalPrincipal" @bind-Value="outputModel.TotalPrincipal" class="form-control" disabled />
+            <InputText id="TotalPrincipal" @bind-Value="_outputModel.TotalPrincipal" class="form-control" disabled />
           </div>
 
           <div class="form-group">
             <label for="TotalInterestPaid">Interest Paid</label>
-            <InputText id="TotalInterestPaid" @bind-Value="outputModel.TotalInterestPaid" class="form-control" disabled />
+            <InputText id="TotalInterestPaid" @bind-Value="_outputModel.TotalInterestPaid" class="form-control" disabled />
           </div>
 
           <div class="form-group">
             <label for="TotalEscrowPaid">Escrow Paid</label>
-            <InputText id="TotalEscrowPaid" @bind-Value="outputModel.TotalEscrowPaid" class="form-control" disabled />
+            <InputText id="TotalEscrowPaid" @bind-Value="_outputModel.TotalEscrowPaid" class="form-control" disabled />
           </div>
 
           <div class="form-group">
             <label for="TotalPaid">Total Paid</label>
-            <InputText id="TotalPaid" @bind-Value="outputModel.TotalPaid" class="form-control" disabled />
+            <InputText id="TotalPaid" @bind-Value="_outputModel.TotalPaid" class="form-control" disabled />
           </div>
         </div>
 
@@ -96,7 +96,7 @@
       </div>
     </EditForm>
 
-  @if(outputModel.Schedule.Count() > 0) {
+  @if(_outputModel.Schedule.Count() > 0) {
     <table class="table table-sm mt-4">
       <thead>
         <tr>
@@ -107,7 +107,7 @@
         </tr>
       </thead>
       <tbody>
-        @foreach (var period in outputModel.Schedule)
+        @foreach (var period in _outputModel.Schedule)
         {
           <tr>
             <th scope="row">@period.PeriodNumber</th>
@@ -122,46 +122,52 @@
 
 @code {
   private static Dictionary<string, int> periodFrequencies = new Dictionary<string, int>
-    {
-  ["Monthly"] = 12,
-  ["Quarterly"] = 4,
-  ["Yearly"] = 1
-    };
+  {
+    ["Monthly"] = 12,
+    ["Quarterly"] = 4,
+    ["Yearly"] = 1
+  };
 
-  private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response>? calculateLoanHandler;
-  private InputModel inputModel = new InputModel();
-  private OutputModel outputModel = new OutputModel();
-  private IEnumerable<string> validationMessages = Array.Empty<string>();
-  private IEnumerable<string> validationFields = Array.Empty<string>();
-
+  private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler = BuildHandler();
+  private InputModel _inputModel = new InputModel();
+  private OutputModel _outputModel = new OutputModel();
+  private IEnumerable<string> _validationMessages = Array.Empty<string>();
+  private IEnumerable<string> _validationFields = Array.Empty<string>();
 
   protected override void OnInitialized()
   {
-    calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
-      .AddRequestValidator(new CalculateLoan.RequestValidator());
-
+    // TODO: This is a hack because the first calculate does not work for some reason.
+    Calc();
     Clear();
   }
 
-  private Task Calc()
+  private void Calc()
   {
-    var request = GetRequestFromInputModel();
+    var request = ConvertToRequest(_inputModel);
 
-    return calculateLoanHandler!
+    _calculateLoanHandler
       .Handle(request)
     .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-    .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
+    .TeeOnSuccessAsync(response => ShowOutput(response));
   }
 
-  private async Task HandleKeyPress(KeyboardEventArgs eventArgs)
+  private void HandleKeyPress(KeyboardEventArgs eventArgs)
   {
     if(eventArgs.Key == "enter")
     {
-      await Calc();
+      Calc();
     }
   }
 
-  private CalculateLoan.Request GetRequestFromInputModel()
+  private void Clear()
+  {
+    _inputModel = new InputModel();
+    _outputModel = new OutputModel();
+    _validationMessages = Array.Empty<string>();
+    _validationFields = Array.Empty<string>();
+  }
+
+  private static CalculateLoan.Request ConvertToRequest(InputModel inputModel)
   {
     return new CalculateLoan.Request(
       assetCost: inputModel.AssetCost,
@@ -172,37 +178,41 @@
       annualInterestRate: inputModel.AnnualInterestRate / 100);
   }
 
-  private void ShowCalculationResponse(CalculateLoan.Response response)
+  private static OutputModel ConvertToOutputModel(CalculateLoan.Response response)
   {
-    outputModel = new OutputModel();
+    return new OutputModel
+    {
+      TotalPrincipal = $"{response.TotalPrincipal:c}",
+      PaymentPerPeriod = $"{response.PaymentPerPeriod:c}",
+      TotalInterestPaid = $"{response.TotalInterestPaid:c}",
+      TotalEscrowPaid = $"{response.TotalEscrowPaid:c}",
+      TotalPaid = $"{response.TotalPaid:c}",
+      Schedule = response.Schedule.Select(p => new OutputPeriodModel(p.PeriodNumber, p.InterestPayment, p.PrincipalPayment, p.BalanceLeft)).ToList(),
+    };
+  }
 
-    outputModel.TotalPrincipal = $"{response.TotalPrincipal:c}";
-    outputModel.PaymentPerPeriod = $"{response.PaymentPerPeriod:c}";
-    outputModel.TotalInterestPaid = $"{response.TotalInterestPaid:c}";
-    outputModel.TotalEscrowPaid = $"{response.TotalEscrowPaid:c}";
-    outputModel.TotalPaid = $"{response.TotalPaid:c}";
-    outputModel.Schedule = response.Schedule.Select(p => new OutputPeriodModel(p.PeriodNumber, p.InterestPayment, p.PrincipalPayment, p.BalanceLeft)).ToList();
+  private void ShowOutput(CalculateLoan.Response response)
+  {
+    _outputModel = ConvertToOutputModel(response);
   }
 
   private void ShowFailureMessages(IEnumerable<IFailure> failures)
   {
-    validationMessages = failures.Select(f => f.Message);
-    validationFields = failures.Select(f => f.UiHandle);
-  }
-
-  private void Clear()
-  {
-    inputModel = new InputModel();
-    outputModel = new OutputModel();
-    validationMessages = Array.Empty<string>();
-    validationFields = Array.Empty<string>();
+    _validationMessages = failures.Select(f => f.Message);
+    _validationFields = failures.Select(f => f.UiHandle);
   }
 
   private string GetInputCss(string fieldName)
   {
     return string.Join(" ",
       "form-control",
-      (validationFields.Contains(fieldName) ? "invalid" : null));
+      (_validationFields.Contains(fieldName) ? "invalid" : null));
+  }
+
+  private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> BuildHandler()
+  {
+      return new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
+        .AddRequestValidator(new CalculateLoan.RequestValidator());
   }
 
   private class InputModel
