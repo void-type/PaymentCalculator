@@ -4,6 +4,8 @@
 @using VoidCore.Domain.Events
 @using VoidCore.Finance
 
+<div class="container my-4">
+
 <h1>Payment Calculator</h1>
 
 <EditForm Model="_inputModel" OnValidSubmit="@Calc" @onkeypress="@HandleKeyPress">
@@ -119,6 +121,8 @@
       </tbody>
     </table>
   }
+
+</div>
 
 @code {
   private static Dictionary<string, int> periodFrequencies = new Dictionary<string, int>

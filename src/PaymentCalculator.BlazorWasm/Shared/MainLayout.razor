@@ -7,9 +7,7 @@
 </nav>
 
 <main>
-    <div class="container my-4">
-        @Body
-    </div>
+    @Body
 </main>
 
 <footer class="text-center">
@@ -22,5 +20,6 @@
 </footer>
 
 @code{
+
     private string version = ThisAssembly.AssemblyInformationalVersion.Split('+').FirstOrDefault() ?? "";
 }

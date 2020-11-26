@@ -7,9 +7,9 @@
 
 Payment Calculator is a loan amortization calculator made with .NET.
 
-Payment Calculator runs on Windows or Web Assembly. You can try the Web Assembly version [here](https://void-type.net/payment_calculator).
+Payment Calculator runs on Windows or WebAssembly. You can try the WebAssembly version [here](https://void-type.net/payment_calculator).
 
-Releases 3.0 moved to .NET 5 and will require the runtime for the framework version. This release also brought the Web Assembly version.
+Releases 3.0 moved to .NET 5 and will require the runtime for the framework version. This release also builds for WebAssembly.
 
 Releases 2.2 have a portable version that is larger, but only requires the single exe file run. The framework version requires the [.NET Core 3.1 runtime](https://dotnet.microsoft.com/download/dotnet-core/3.1) to be installed.
 
