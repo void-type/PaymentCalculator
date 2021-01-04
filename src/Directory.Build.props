@@ -15,7 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference> -->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.14.0.22654" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740" PrivateAssets="all" />
     <PackageReference Include="SecurityCodeScan" Version="3.5.3" PrivateAssets="all" />
     <PackageReference Include="AsyncFixer" Version="1.3.0" PrivateAssets="all" />
   </ItemGroup>

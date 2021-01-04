@@ -5,7 +5,7 @@ namespace PaymentCalculator.Test
 {
     public class CalculateLoanRequestValidatorTests
     {
-        private readonly CalculateLoan.RequestValidator _validator = new CalculateLoan.RequestValidator();
+        private readonly CalculateLoan.RequestValidator _validator = new();
 
         [Fact]
         public void ValidRequest()
