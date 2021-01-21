@@ -17,18 +17,18 @@ namespace PaymentCalculator.Wpf
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.GotFocus += this.OnTextBoxGotFocus;
+            AssociatedObject.GotFocus += OnTextBoxGotFocus;
         }
 
         protected override void OnDetaching()
         {
-            this.AssociatedObject.GotFocus -= this.OnTextBoxGotFocus;
+            AssociatedObject.GotFocus -= OnTextBoxGotFocus;
             base.OnDetaching();
         }
 
         private void OnTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            this.AssociatedObject.SelectAll();
+            AssociatedObject.SelectAll();
         }
     }
 }

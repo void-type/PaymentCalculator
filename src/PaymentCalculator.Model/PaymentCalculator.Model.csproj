@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VoidCore.Finance" Version="5.1.1" />
-    <PackageReference Include="VoidCore.Domain" Version="5.1.1" />
+    <PackageReference Include="VoidCore.Finance" Version="6.0.14" />
+    <PackageReference Include="VoidCore.Domain" Version="6.0.14" />
   </ItemGroup>
 </Project>
