@@ -5,7 +5,7 @@ using VoidCore.Domain;
 using VoidCore.Finance;
 using Xunit;
 
-namespace PaymentCalculator.Tests
+namespace PaymentCalculator.Test
 {
     public class CalculateLoanHandlerTests
     {
