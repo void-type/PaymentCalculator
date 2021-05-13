@@ -258,10 +258,12 @@ dotnet_naming_rule.everything_else_naming.style = camel_case_style
 dotnet_naming_rule.everything_else_naming.severity = suggestion
 
 # Analyzers
-# dotnet_analyzer_diagnostic.severity = warning
-
 # Remove unused usings
 dotnet_diagnostic.IDE0005.severity = warning
+# False-positive, base authentication should be set site-wide
+dotnet_diagnostic.SCS0012.severity = none
+# False-positive, AntiForgery is set site-wide
+dotnet_diagnostic.SCS0016.severity = none
 
 # Javascript and Vue
 [*.{js,jsx,ts,tsx,vue}]
