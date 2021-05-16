@@ -26,9 +26,9 @@ Pop-Location
 Push-Location -Path "../"
 
 if (-not $SkipFormat) {
-  dotnet format --check --fix-whitespace --fix-style warn
+  dotnet format --check --fix-whitespace
   if($LASTEXITCODE -ne 0) {
-    Write-Error 'Please run formatter: dotnet format --fix-whitespace --fix-style warn.'
+    Write-Error 'Please run formatter: dotnet format --fix-whitespace.'
   }
   Stop-OnError
 }

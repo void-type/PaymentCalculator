@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using PaymentCalculator.Model
-@using VoidCore.Domain
-@using VoidCore.Domain.Events
+@using VoidCore.Model.Functional
+@using VoidCore.Model.Events
 @using VoidCore.Finance
 
 <div class="container my-4">
@@ -145,15 +145,18 @@
     Clear();
   }
 
+  // TODO: Razor doesn't support async interactions yet.
+  #pragma warning disable CS4014
   private void Calc()
   {
     var request = ConvertToRequest(_inputModel);
 
     _calculateLoanHandler
       .Handle(request)
-    .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-    .TeeOnSuccessAsync(response => ShowOutput(response));
+      .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
+      .TeeOnSuccessAsync(response => ShowOutput(response));
   }
+  #pragma warning restore CS4014
 
   private void HandleKeyPress(KeyboardEventArgs eventArgs)
   {

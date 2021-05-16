@@ -1,4 +1,4 @@
-﻿using VoidCore.Domain;
+﻿using VoidCore.Model.Functional;
 
 namespace PaymentCalculator.Model
 {

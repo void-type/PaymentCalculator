@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using VoidCore.Domain;
-using VoidCore.Domain.Events;
-using VoidCore.Domain.RuleValidator;
 using VoidCore.Finance;
+using VoidCore.Model.Events;
+using VoidCore.Model.Functional;
+using VoidCore.Model.RuleValidator;
 
 namespace PaymentCalculator.Model
 {

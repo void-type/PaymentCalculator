@@ -1,8 +1,8 @@
 ﻿using PaymentCalculator.Model;
 using System.Linq;
 using System.Threading.Tasks;
-using VoidCore.Domain;
 using VoidCore.Finance;
+using VoidCore.Model.Functional;
 using Xunit;
 
 namespace PaymentCalculator.Test

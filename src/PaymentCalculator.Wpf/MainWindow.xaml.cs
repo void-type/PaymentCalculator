@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using VoidCore.Domain;
-using VoidCore.Domain.Events;
 using VoidCore.Finance;
+using VoidCore.Model.Events;
+using VoidCore.Model.Functional;
 
 namespace PaymentCalculator.Wpf
 {
@@ -74,6 +74,8 @@ namespace PaymentCalculator.Wpf
             viewModel.Schedule = response.Schedule;
         }
 
+        // TODO: WPF doesn't support async interations.
+#pragma warning disable CS4014
         private void Calc()
         {
             var request = GetRequestFromViewModel();
@@ -83,6 +85,7 @@ namespace PaymentCalculator.Wpf
                 .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
                 .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
         }
+#pragma warning restore CS4014
 
         private void Clear()
         {
