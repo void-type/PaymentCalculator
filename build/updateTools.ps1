@@ -1,12 +1,12 @@
 # TODO: Use this script until dotnet tool update supports --all command
 # https://github.com/dotnet/sdk/issues/10130
 
-Push-Location $PSScriptRoot
+$manifestPath = "$PSScriptRoot/../.config/dotnet-tools.json"
 
-$json = Get-Content ../.config/dotnet-tools.json |
+$json = Get-Content -Path $manifestPath |
   ConvertFrom-Json
 
-$json.tools.psobject.Properties.Name |
-  ForEach-Object { dotnet tool update $_ }
-
-  Pop-Location
+$json.tools.PSObject.Properties.Name |
+  ForEach-Object {
+    dotnet tool update $_ --tool-manifest $manifestPath
+  }

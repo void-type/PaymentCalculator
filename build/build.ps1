@@ -8,99 +8,84 @@ param(
   [switch] $SkipPublish
 )
 
-Push-Location $PSScriptRoot
+Push-Location -Path "$PSScriptRoot/../"
+. ./build/util.ps1
 
-# Clean the artifacts folders
-Remove-Item -Path "../artifacts" -Recurse -ErrorAction SilentlyContinue
-Remove-Item -Path "../coverage" -Recurse -ErrorAction SilentlyContinue
-Remove-Item -Path "../testResults" -Recurse -ErrorAction SilentlyContinue
+try {
+  # Clean the artifacts folder
+  Remove-Item -Path "./artifacts" -Recurse -ErrorAction SilentlyContinue
 
-# Restore local dotnet tools
-Push-Location -Path "../"
-dotnet tool restore
-Pop-Location
+  # Restore local dotnet tools
+  dotnet tool restore
 
-. ./util.ps1
-
-# Build solution
-Push-Location -Path "../"
-
-if (-not $SkipFormat) {
-  dotnet format --check --fix-whitespace
-  if($LASTEXITCODE -ne 0) {
-    Write-Error 'Please run formatter: dotnet format --fix-whitespace.'
-  }
-  Stop-OnError
-}
-
-dotnet restore
-
-if (-not $SkipOutdated) {
-  dotnet outdated
-}
-
-dotnet build --configuration "$Configuration" --no-restore
-
-Stop-OnError
-Pop-Location
-
-if (-not $SkipTest) {
-  # Run tests, gather coverage
-  Push-Location -Path "$testProjectFolder"
-
-  dotnet test `
-    --configuration "$Configuration" `
-    --no-build `
-    --results-directory '../../testResults' `
-    --logger 'trx' `
-    --collect:"XPlat Code Coverage"
-
-  Stop-OnError
-
-  if (-not $SkipTestReport) {
-    # Generate code coverage report
-    dotnet reportgenerator `
-      "-reports:../../testResults/*/coverage.cobertura.xml" `
-      "-targetdir:../../coverage" `
-      "-reporttypes:HtmlInline_AzurePipelines"
-
+  # Build solution
+  if (-not $SkipFormat) {
+    dotnet format --check --fix-whitespace --fix-style warn
+    if ($LASTEXITCODE -ne 0) {
+      Write-Error 'Please run formatter: dotnet format --fix-whitespace --fix-style warn.'
+    }
     Stop-OnError
   }
 
+  dotnet restore
+
+  if (-not $SkipOutdated) {
+    dotnet outdated
+  }
+
+  dotnet build --configuration "$Configuration" --no-restore
+  Stop-OnError
+
+  if (-not $SkipTest) {
+    # Run tests, gather coverage
+    dotnet test "$testProjectFolder" `
+      --configuration "$Configuration" `
+      --no-build `
+      --results-directory './artifacts/testResults' `
+      --logger 'trx' `
+      --collect:'XPlat Code Coverage'
+
+    Stop-OnError
+
+    if (-not $SkipTestReport) {
+      # Generate code coverage report
+      dotnet reportgenerator `
+        '-reports:./artifacts/testResults/*/coverage.cobertura.xml' `
+        '-targetdir:./artifacts/testCoverage' `
+        '-reporttypes:HtmlInline_AzurePipelines'
+
+      Stop-OnError
+    }
+  }
+
+  if (-not $SkipPublish) {
+    # Package build
+
+    dotnet publish "$blazorWasmProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/blazorWasm"
+    Stop-OnError
+
+    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/portable" `
+      --runtime "win-x64" `
+      --self-contained true `
+      /p:PublishSingleFile=true `
+      /p:PublishReadyToRun=true `
+      /p:IncludeNativeLibrariesForSelfExtract=true
+    # TODO: https://github.com/dotnet/sdk/issues/14261
+    # /p:PublishTrimmed=true
+
+    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/framework" `
+      --runtime "win-x64" `
+      /p:PublishSingleFile=true
+    # TODO: https://github.com/dotnet/sdk/issues/14261
+    # /p:PublishTrimmed=true
+
+    Stop-OnError
+    Pop-Location
+  }
+
+  $projectVersion = (dotnet nbgv get-version -f json | ConvertFrom-Json).NuGetPackageVersion
+  Write-Output "`nBuilt $projectName $projectVersion`n"
+
+} finally {
   Pop-Location
 }
-
-if (-not $SkipPublish) {
-  # Package build
-  Push-Location -Path "$blazorWasmProjectFolder"
-
-  dotnet publish --configuration "$Configuration" --output "../../artifacts/blazorWasm"
-
-  Stop-OnError
-  Pop-Location
-
-  Push-Location -Path "$wpfProjectFolder"
-
-  dotnet publish --configuration "$Configuration" --output "../../artifacts/portable" `
-    --runtime "win-x64" `
-    --self-contained true `
-    /p:PublishSingleFile=true `
-    /p:PublishReadyToRun=true `
-    /p:IncludeNativeLibrariesForSelfExtract=true
-  # TODO: https://github.com/dotnet/sdk/issues/14261
-  # /p:PublishTrimmed=true
-
-  dotnet publish --configuration "$Configuration" --output "../../artifacts/framework" `
-    --runtime "win-x64" `
-    /p:PublishSingleFile=true
-  # TODO: https://github.com/dotnet/sdk/issues/14261
-  # /p:PublishTrimmed=true
-
-  Stop-OnError
-  Pop-Location
-}
-
-Pop-Location
-
-
-Write-Host "`nBuilt $projectName $projectVersion`n"
