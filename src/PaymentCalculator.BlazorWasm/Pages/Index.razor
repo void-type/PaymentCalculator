@@ -151,6 +151,8 @@
   {
     var request = ConvertToRequest(_inputModel);
 
+    // TODO: there's a bug where validation messages aren't cleared. Should clean this view logic up.
+
     _calculateLoanHandler
       .Handle(request)
       .TeeOnFailureAsync(failures => ShowFailureMessages(failures))

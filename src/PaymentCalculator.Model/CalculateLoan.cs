@@ -7,7 +7,7 @@ using VoidCore.Model.RuleValidator;
 
 namespace PaymentCalculator.Model
 {
-    public class CalculateLoan
+    public static class CalculateLoan
     {
         public class Handler : EventHandlerSyncAbstract<Request, Response>
         {
@@ -35,21 +35,14 @@ namespace PaymentCalculator.Model
                         paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
                         totalInterestPaid: amortizationResponse.TotalInterestPaid,
                         totalEscrowPaid: request.EscrowPerPeriod * numberOfPeriods,
-                        totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + request.EscrowPerPeriod * numberOfPeriods,
+                        totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + (request.EscrowPerPeriod * numberOfPeriods),
                         schedule: amortizationResponse.Schedule);
 
                     return Ok(response);
                 }
-                catch (System.AggregateException ex)
+                catch (System.AggregateException ex) when (ex.InnerExceptions.All(e => e.GetType() == typeof(System.OverflowException)))
                 {
-                    if (ex.InnerExceptions.All(e => e.GetType() == typeof(System.OverflowException)))
-                    {
-                        return Fail(new LoanOverflowFailure());
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return Fail(new LoanOverflowFailure());
                 }
             }
         }

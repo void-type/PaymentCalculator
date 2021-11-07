@@ -20,9 +20,9 @@ try {
 
   # Build solution
   if (-not $SkipFormat) {
-    dotnet format --check --fix-whitespace --fix-style warn
+    dotnet format --verify-no-changes
     if ($LASTEXITCODE -ne 0) {
-      Write-Error 'Please run formatter: dotnet format --fix-whitespace --fix-style warn.'
+      Write-Error 'Please run formatter: dotnet format.'
     }
     Stop-OnError
   }
