@@ -70,15 +70,12 @@ try {
       --self-contained true `
       /p:PublishSingleFile=true `
       /p:PublishReadyToRun=true `
-      /p:IncludeNativeLibrariesForSelfExtract=true
-    # TODO: https://github.com/dotnet/sdk/issues/14261
-    # /p:PublishTrimmed=true
+      /p:IncludeNativeLibrariesForSelfExtract=true `
 
     dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/framework" `
       --runtime "win-x64" `
+      --self-contained false `
       /p:PublishSingleFile=true
-    # TODO: https://github.com/dotnet/sdk/issues/14261
-    # /p:PublishTrimmed=true
 
     Stop-OnError
     Pop-Location
