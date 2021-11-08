@@ -27,28 +27,28 @@
     <div class="col-md-6">
       <div class="form-group">
         <label for="AssetCost">Asset Cost</label>
-        <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" class="@GetInputCss("AssetCost")" />
+        <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" class="@GetInputCssForField("AssetCost")" />
       </div>
 
       <div class="form-group">
         <label for="DownPayment">Down Payment</label>
-        <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" class="@GetInputCss("DownPayment")" />
+        <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" class="@GetInputCssForField("DownPayment")" />
       </div>
 
       <div class="form-group">
         <label for="AnnualInterestRate">APR</label>
         <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate"
-                      class="@GetInputCss("AnnualInterestRate")" />
+                      class="@GetInputCssForField("AnnualInterestRate")" />
       </div>
 
       <div class="form-group">
         <label for="NumberOfYears">Years</label>
-        <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" class="@GetInputCss("NumberOfYears")" />
+        <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" class="@GetInputCssForField("NumberOfYears")" />
       </div>
 
       <div class="form-group">
         <label for="PeriodsPerYear">Period Frequency</label>
-        <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" class="@GetInputCss("PeriodsPerYear")">
+        <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" class="@GetInputCssForField("PeriodsPerYear")">
           @foreach (var freq in periodFrequencies)
               {
                 <option value="@freq.Value">@freq.Key</option>
@@ -59,7 +59,7 @@
           <div class="form-group">
             <label for="EscrowPerPeriod">Escrow Payment</label>
             <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod"
-                          class="@GetInputCss("EscrowPerPeriod")" />
+                          class="@GetInputCssForField("EscrowPerPeriod")" />
           </div>
         </div>
 
@@ -140,8 +140,6 @@
 
   protected override void OnInitialized()
   {
-    // TODO: This is a hack because the first calculate does not work for some reason.
-    Calc();
     Clear();
   }
 
@@ -149,24 +147,17 @@
   #pragma warning disable CS4014
   private void Calc()
   {
-    var request = ConvertToRequest(_inputModel);
+    ShowFailureMessages(Enumerable.Empty<IFailure>());
 
-    // TODO: there's a bug where validation messages aren't cleared. Should clean this view logic up.
+    var request = ConvertToRequest(_inputModel);
 
     _calculateLoanHandler
       .Handle(request)
       .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-      .TeeOnSuccessAsync(response => ShowOutput(response));
+      .TeeOnSuccessAsync(response => ShowOutput(response))
+      .Wait();
   }
   #pragma warning restore CS4014
-
-  private void HandleKeyPress(KeyboardEventArgs eventArgs)
-  {
-    if(eventArgs.Key == "enter")
-    {
-      Calc();
-    }
-  }
 
   private void Clear()
   {
@@ -174,6 +165,14 @@
     _outputModel = new OutputModel();
     _validationMessages = Array.Empty<string>();
     _validationFields = Array.Empty<string>();
+  }
+
+  private void HandleKeyPress(KeyboardEventArgs eventArgs)
+  {
+    if(eventArgs.Key == "enter")
+    {
+      Calc();
+    }
   }
 
   private static CalculateLoan.Request ConvertToRequest(InputModel inputModel)
@@ -208,10 +207,13 @@
   private void ShowFailureMessages(IEnumerable<IFailure> failures)
   {
     _validationMessages = failures.Select(f => f.Message);
-    _validationFields = failures.Select(f => f.UiHandle);
+    _validationFields = failures
+      .Select(f => f.UiHandle)
+      .Where(f => f is not null)
+      .Select(f => f!);
   }
 
-  private string GetInputCss(string fieldName)
+  private string GetInputCssForField(string fieldName)
   {
     return string.Join(" ",
       "form-control",
@@ -220,7 +222,9 @@
 
   private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> BuildHandler()
   {
-      return new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
+    var calculator = new AmortizationCalculator(new Financial());
+
+      return new CalculateLoan.Handler(calculator)
         .AddRequestValidator(new CalculateLoan.RequestValidator());
   }
 

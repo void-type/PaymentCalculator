@@ -20,7 +20,8 @@ try {
 
   # Build solution
   if (-not $SkipFormat) {
-    dotnet format --verify-no-changes
+    # TODO: temporarily disabled due to bug: https://github.com/dotnet/format/issues/1337
+    dotnet format --verify-no-changes --exclude './src/PaymentCalculator.Wpf/'
     if ($LASTEXITCODE -ne 0) {
       Write-Error 'Please run formatter: dotnet format.'
     }

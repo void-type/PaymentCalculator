@@ -2,8 +2,8 @@
 {
     public enum PeriodType
     {
-        Monthly = 12,
+        Yearly = 1,
         Quarterly = 4,
-        Yearly = 1
+        Monthly = 12
     }
 }
