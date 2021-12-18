@@ -1,9 +1,12 @@
-Push-Location -Path "$PSScriptRoot/../"
-. ./build/util.ps1
+$originalLocation = Get-Location
+$projectRoot = "$PSScriptRoot/../"
 
 try {
+  Set-Location -Path $projectRoot
+  . ./build/util.ps1
+
   dotnet watch test --project "$testProjectFolder" --configuration 'Debug'
 
 } finally {
-  Pop-Location
+  Set-Location $originalLocation
 }

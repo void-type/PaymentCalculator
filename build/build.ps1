@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string] $Configuration = "Release",
+  [string] $Configuration = 'Release',
   [switch] $SkipFormat,
   [switch] $SkipOutdated,
   [switch] $SkipTest,
@@ -8,12 +8,27 @@ param(
   [switch] $SkipPublish
 )
 
-Push-Location -Path "$PSScriptRoot/../"
-. ./build/util.ps1
+function Stop-OnError([string]$errorMessage) {
+  if ($LASTEXITCODE -eq 0) {
+    return
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($errorMessage)) {
+    Write-Error $errorMessage
+  }
+
+  exit $LASTEXITCODE
+}
+
+$originalLocation = Get-Location
+$projectRoot = "$PSScriptRoot/../"
 
 try {
-  # Clean the artifacts folder
-  Remove-Item -Path "./artifacts" -Recurse -ErrorAction SilentlyContinue
+  Set-Location -Path $projectRoot
+  . ./build/util.ps1
+
+  # Clean the artifacts folders
+  Remove-Item -Path './artifacts' -Recurse -ErrorAction SilentlyContinue
 
   # Restore local dotnet tools
   dotnet tool restore
@@ -45,7 +60,6 @@ try {
       --results-directory './artifacts/testResults' `
       --logger 'trx' `
       --collect:'XPlat Code Coverage'
-
     Stop-OnError
 
     if (-not $SkipTestReport) {
@@ -54,7 +68,6 @@ try {
         '-reports:./artifacts/testResults/*/coverage.cobertura.xml' `
         '-targetdir:./artifacts/testCoverage' `
         '-reporttypes:HtmlInline_AzurePipelines'
-
       Stop-OnError
     }
   }
@@ -62,28 +75,27 @@ try {
   if (-not $SkipPublish) {
     # Package build
 
-    dotnet publish "$blazorWasmProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/blazorWasm"
+    dotnet publish "$blazorWasmProjectFolder" --configuration "$Configuration" --output './artifacts/dist/release/blazorWasm'
     Stop-OnError
 
-    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/portable" `
-      --runtime "win-x64" `
+    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output './artifacts/dist/release/portable' `
+      --runtime 'win-x64' `
       --self-contained true `
       /p:PublishSingleFile=true `
       /p:PublishReadyToRun=true `
-      /p:IncludeNativeLibrariesForSelfExtract=true `
+      /p:IncludeNativeLibrariesForSelfExtract=true
+    Stop-OnError
 
-    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output "./artifacts/dist/release/framework" `
-      --runtime "win-x64" `
+    dotnet publish "$wpfProjectFolder" --configuration "$Configuration" --output './artifacts/dist/release/framework' `
+      --runtime 'win-x64' `
       --self-contained false `
       /p:PublishSingleFile=true
-
     Stop-OnError
-    Pop-Location
   }
 
   $projectVersion = (dotnet nbgv get-version -f json | ConvertFrom-Json).NuGetPackageVersion
   Write-Output "`nBuilt $projectName $projectVersion`n"
 
 } finally {
-  Pop-Location
+  Set-Location $originalLocation
 }
