@@ -5,19 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET WASM Launch (console)",
-            "type": "coreclr",
+            "name": "Launch and Debug Standalone Blazor WebAssembly App",
+            "type": "blazorwasm",
             "request": "launch",
-            "preLaunchTask": "build-debug",
-            "program": "${workspaceFolder}/src/PaymentCalculator.BlazorWasm/bin/Debug/net7.0/PaymentCalculator.BlazorWasm.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/PaymentCalculator.BlazorWasm",
-            "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+            "cwd": "${workspaceFolder}/src/PaymentCalculator.BlazorWasm"
         },
         {
             "name": ".NET WPF Launch (console)",
