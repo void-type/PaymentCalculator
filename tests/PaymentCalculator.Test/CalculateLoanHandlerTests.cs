@@ -1,6 +1,4 @@
 ﻿using PaymentCalculator.Model;
-using System.Linq;
-using System.Threading.Tasks;
 using VoidCore.Finance;
 using VoidCore.Model.Functional;
 using Xunit;

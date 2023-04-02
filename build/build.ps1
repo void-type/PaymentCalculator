@@ -25,7 +25,7 @@ $projectRoot = "$PSScriptRoot/../"
 
 try {
   Set-Location -Path $projectRoot
-  . ./build/util.ps1
+  . ./build/buildSettings.ps1
 
   # Clean the artifacts folders
   Remove-Item -Path './artifacts' -Recurse -ErrorAction SilentlyContinue

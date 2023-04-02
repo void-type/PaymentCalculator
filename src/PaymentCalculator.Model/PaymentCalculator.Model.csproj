@@ -3,7 +3,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VoidCore.Finance" Version="8.0.12" />
-    <PackageReference Include="VoidCore.Model" Version="8.0.12" />
+    <PackageReference Include="VoidCore.Finance" Version="9.1.5" />
+    <PackageReference Include="VoidCore.Model" Version="9.1.5" />
   </ItemGroup>
 </Project>
