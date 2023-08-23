@@ -222,9 +222,7 @@
 
   private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> BuildHandler()
   {
-    var calculator = new AmortizationCalculator(new Financial());
-
-      return new CalculateLoan.Handler(calculator)
+      return new CalculateLoan.Handler()
         .AddRequestValidator(new CalculateLoan.RequestValidator());
   }
 

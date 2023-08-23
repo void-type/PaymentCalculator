@@ -7,7 +7,7 @@ namespace PaymentCalculator.Test
 {
     public class CalculateLoanHandlerTests
     {
-        private readonly CalculateLoan.Handler _calculator = new(new AmortizationCalculator(new Financial()));
+        private readonly CalculateLoan.Handler _calculator = new();
 
         [Fact]
         public async Task MediumMortgage()

@@ -9,13 +9,6 @@ namespace PaymentCalculator.Model
     {
         public class Handler : EventHandlerSyncAbstract<Request, Response>
         {
-            private readonly AmortizationCalculator _amortizationCalculator;
-
-            public Handler(AmortizationCalculator amortizationCalculator)
-            {
-                _amortizationCalculator = amortizationCalculator;
-            }
-
             protected override IResult<Response> HandleSync(Request request)
             {
                 try
@@ -26,7 +19,7 @@ namespace PaymentCalculator.Model
 
                     var amortizationRequest = new AmortizationRequest(totalPrincipal, numberOfPeriods, ratePerPeriod);
 
-                    var amortizationResponse = _amortizationCalculator.Calculate(amortizationRequest);
+                    var amortizationResponse = AmortizationCalculator.Calculate(amortizationRequest);
 
                     var response = new Response(
                         totalPrincipal: totalPrincipal,
@@ -38,7 +31,7 @@ namespace PaymentCalculator.Model
 
                     return Ok(response);
                 }
-                catch (System.AggregateException ex) when (ex.InnerExceptions.All(e => e.GetType() == typeof(System.OverflowException)))
+                catch (AggregateException ex) when (ex.InnerExceptions.All(e => e.GetType() == typeof(OverflowException)))
                 {
                     return Fail(new LoanOverflowFailure());
                 }

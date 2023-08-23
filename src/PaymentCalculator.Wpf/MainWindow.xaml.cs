@@ -19,7 +19,7 @@ namespace PaymentCalculator.Wpf
 
             SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox, EscrowPerPeriodTextBox);
 
-            _calculateLoanHandler = new CalculateLoan.Handler(new AmortizationCalculator(new Financial()))
+            _calculateLoanHandler = new CalculateLoan.Handler()
                 .AddRequestValidator(new CalculateLoan.RequestValidator());
 
             Clear();

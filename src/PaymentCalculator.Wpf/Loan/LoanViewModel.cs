@@ -9,7 +9,7 @@ namespace PaymentCalculator.Wpf
         private decimal _downPayment;
         private decimal _escrowPerPeriod;
         private PeriodType _selectedPeriodType = PeriodType.Monthly;
-        private int _years = 1;
+        private int _years = 30;
         private IEnumerable<AmortizationPeriod> _schedule = Array.Empty<AmortizationPeriod>();
         private decimal _paymentPerPeriod;
         private decimal _totalPaid;
