@@ -6,7 +6,7 @@ try {
   . ./build/buildSettings.ps1
 
   Set-Location -Path $projectRoot
-  ./build/updateTools.ps1
+  dotnet tool update --all
   dotnet outdated -u
 
   if ($LASTEXITCODE -ne 0) {
