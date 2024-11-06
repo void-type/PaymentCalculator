@@ -1,6 +1,5 @@
 ﻿using PaymentCalculator.Model;
 using System.Windows;
-using VoidCore.Finance;
 using VoidCore.Model.Events;
 using VoidCore.Model.Functional;
 
@@ -25,11 +24,13 @@ namespace PaymentCalculator.Wpf
             Clear();
         }
 
+#pragma warning disable S2325 // Methods and properties that don't access instance data should be static
         private void About_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             const string? version = ThisAssembly.AssemblyInformationalVersion;
             MessageBox.Show($"Version: {version}\n\nAuthor: Jeff Schreiner\n\nThis payment calculator is free to use and distribute.\n\nSee the source code at https://github.com/void-type/PaymentCalculator", "About Payment Calculator");
         }
+#pragma warning restore S2325 // Methods and properties that don't access instance data should be static
 
         private void CalcButton_Click(object sender, RoutedEventArgs e)
         {
@@ -72,7 +73,6 @@ namespace PaymentCalculator.Wpf
             viewModel.Schedule = response.Schedule;
         }
 
-#pragma warning disable CS4014
         private void Calc()
         {
             var request = GetRequestFromViewModel();
@@ -82,7 +82,6 @@ namespace PaymentCalculator.Wpf
                 .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
                 .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
         }
-#pragma warning restore CS4014
 
         private void Clear()
         {
