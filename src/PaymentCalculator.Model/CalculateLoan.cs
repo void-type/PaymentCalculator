@@ -3,101 +3,88 @@ using VoidCore.Model.Events;
 using VoidCore.Model.Functional;
 using VoidCore.Model.RuleValidator;
 
-namespace PaymentCalculator.Model
+namespace PaymentCalculator.Model;
+
+public static class CalculateLoan
 {
-    public static class CalculateLoan
+    public class Handler : EventHandlerSyncAbstract<Request, Response>
     {
-        public class Handler : EventHandlerSyncAbstract<Request, Response>
+        protected override IResult<Response> HandleSync(Request request)
         {
-            protected override IResult<Response> HandleSync(Request request)
+            try
             {
-                try
+                var totalPrincipal = request.AssetCost - request.DownPayment;
+                var numberOfPeriods = request.NumberOfYears * request.PeriodsPerYear;
+                var ratePerPeriod = request.AnnualInterestRate == 0 ? 0 : request.AnnualInterestRate / request.PeriodsPerYear;
+
+                var amortizationRequest = new AmortizationRequest(totalPrincipal, numberOfPeriods, ratePerPeriod, request.PaymentModifications);
+
+                var amortizationResponse = AmortizationCalculator.Calculate(amortizationRequest);
+
+                var response = new Response
                 {
-                    var totalPrincipal = request.AssetCost - request.DownPayment;
-                    var numberOfPeriods = request.NumberOfYears * request.PeriodsPerYear;
-                    var ratePerPeriod = request.AnnualInterestRate == 0 ? 0 : request.AnnualInterestRate / request.PeriodsPerYear;
+                    TotalPrincipal = totalPrincipal,
+                    PaymentPerPeriod = amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
+                    TotalInterestPaid = amortizationResponse.TotalInterestPaid,
+                    TotalEscrowPaid = request.EscrowPerPeriod * numberOfPeriods,
+                    TotalPaid = request.AssetCost + amortizationResponse.TotalInterestPaid + (request.EscrowPerPeriod * numberOfPeriods),
+                    Schedule = amortizationResponse.Schedule,
+                    Request = request
+                };
 
-                    var amortizationRequest = new AmortizationRequest(totalPrincipal, numberOfPeriods, ratePerPeriod);
-
-                    var amortizationResponse = AmortizationCalculator.Calculate(amortizationRequest);
-
-                    var response = new Response(
-                        totalPrincipal: totalPrincipal,
-                        paymentPerPeriod: amortizationResponse.PaymentPerPeriod + request.EscrowPerPeriod,
-                        totalInterestPaid: amortizationResponse.TotalInterestPaid,
-                        totalEscrowPaid: request.EscrowPerPeriod * numberOfPeriods,
-                        totalPaid: request.AssetCost + amortizationResponse.TotalInterestPaid + (request.EscrowPerPeriod * numberOfPeriods),
-                        schedule: amortizationResponse.Schedule);
-
-                    return Ok(response);
-                }
-                catch (AggregateException ex) when (ex.InnerExceptions.All(e => e.GetType() == typeof(OverflowException)))
-                {
-                    return Fail(new LoanOverflowFailure());
-                }
+                return Ok(response);
+            }
+            catch (OverflowException)
+            {
+                return Fail(new LoanOverflowFailure());
+            }
+            catch (AggregateException ex) when (ex.InnerExceptions.All(e => e.GetType() == typeof(OverflowException)))
+            {
+                return Fail(new LoanOverflowFailure());
             }
         }
+    }
 
-        public class Request
+    public record Request
+    {
+        public required decimal AssetCost { get; init; }
+        public required decimal DownPayment { get; init; }
+        public required decimal EscrowPerPeriod { get; init; }
+        public required int NumberOfYears { get; init; }
+        public required int PeriodsPerYear { get; init; }
+        public required decimal AnnualInterestRate { get; init; }
+        public required List<AmortizationPaymentModification> PaymentModifications { get; init; }
+    }
+
+    public record Response
+    {
+        public required decimal TotalPrincipal { get; init; }
+        public required decimal PaymentPerPeriod { get; init; }
+        public required decimal TotalInterestPaid { get; init; }
+        public required decimal TotalEscrowPaid { get; init; }
+        public required decimal TotalPaid { get; init; }
+        public required IReadOnlyList<AmortizationPeriod> Schedule { get; init; }
+        public required Request Request { get; init; }
+    }
+
+    public class RequestValidator : RuleValidatorAbstract<Request>
+    {
+        public RequestValidator()
         {
-            public Request(decimal assetCost, decimal downPayment, decimal escrowPerPeriod, int numberOfYears, int periodsPerYear, decimal annualInterestRate)
-            {
-                AssetCost = assetCost;
-                DownPayment = downPayment;
-                EscrowPerPeriod = escrowPerPeriod;
-                NumberOfYears = numberOfYears;
-                PeriodsPerYear = periodsPerYear;
-                AnnualInterestRate = annualInterestRate;
-            }
+            CreateRule(r => new Failure("Asset Cost must be positive.", nameof(r.AssetCost)))
+                .InvalidWhen(r => r.AssetCost < 0);
 
-            public decimal AssetCost { get; }
-            public decimal DownPayment { get; }
-            public decimal EscrowPerPeriod { get; }
-            public int NumberOfYears { get; }
-            public int PeriodsPerYear { get; }
-            public decimal AnnualInterestRate { get; }
-        }
+            CreateRule(r => new Failure("Down Payment must be less than or equal to the Asset Cost.", nameof(r.DownPayment)))
+                .InvalidWhen(r => r.DownPayment > r.AssetCost);
 
-        public class Response
-        {
-            internal Response(decimal totalPrincipal, decimal paymentPerPeriod, decimal totalInterestPaid, decimal totalEscrowPaid, decimal totalPaid, IReadOnlyList<AmortizationPeriod> schedule)
-            {
-                TotalPrincipal = totalPrincipal;
-                PaymentPerPeriod = paymentPerPeriod;
-                TotalInterestPaid = totalInterestPaid;
-                TotalEscrowPaid = totalEscrowPaid;
-                TotalPaid = totalPaid;
-                Schedule = schedule;
-            }
+            CreateRule(r => new Failure("Escrow per Period must be positive.", nameof(r.EscrowPerPeriod)))
+                .InvalidWhen(r => r.EscrowPerPeriod < 0);
 
-            public decimal TotalPrincipal { get; }
-            public decimal PaymentPerPeriod { get; }
-            public decimal TotalInterestPaid { get; }
-            public decimal TotalEscrowPaid { get; }
-            public decimal TotalPaid { get; }
-            public IReadOnlyList<AmortizationPeriod> Schedule { get; }
-        }
+            CreateRule(r => new Failure("Number of Years must be greater than zero.", nameof(r.NumberOfYears)))
+                .InvalidWhen(r => r.NumberOfYears < 1);
 
-        public class RequestValidator : RuleValidatorAbstract<Request>
-        {
-            public RequestValidator()
-            {
-                CreateRule(r => new Failure("The Asset Cost must be positive.", nameof(r.AssetCost)))
-                    .InvalidWhen(r => r.AssetCost < 0);
-
-                CreateRule(r => new Failure("The Down Payment must be less than or equal to the asset cost.", nameof(r.DownPayment)))
-                    .InvalidWhen(r => r.DownPayment > r.AssetCost)
-                    .ExceptWhen(r => r.AssetCost == 0);
-
-                CreateRule(r => new Failure("The Escrow per Period must be positive.", nameof(r.EscrowPerPeriod)))
-                    .InvalidWhen(r => r.EscrowPerPeriod < 0);
-
-                CreateRule(r => new Failure("The Number of Years must be greater than zero.", nameof(r.NumberOfYears)))
-                    .InvalidWhen(r => r.NumberOfYears < 1);
-
-                CreateRule(r => new Failure("Periods per year must be greater than zero.", nameof(r.PeriodsPerYear)))
-                    .InvalidWhen(r => r.PeriodsPerYear < 1);
-            }
+            CreateRule(r => new Failure("Periods per Year must be greater than zero.", nameof(r.PeriodsPerYear)))
+                .InvalidWhen(r => r.PeriodsPerYear < 1);
         }
     }
 }

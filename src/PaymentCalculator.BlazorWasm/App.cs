@@ -1,7 +1,6 @@
-﻿namespace PaymentCalculator.BlazorWasm
+﻿namespace PaymentCalculator.BlazorWasm;
+
+// This partial appeases dotnet-format
+public partial class App
 {
-    // This partial appeases dotnet-format
-    public partial class App
-    {
-    }
 }

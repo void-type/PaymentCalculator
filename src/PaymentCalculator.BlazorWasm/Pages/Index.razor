@@ -10,18 +10,19 @@
 
   <h1>Payment Calculator</h1>
 
-  <EditForm Model="_inputModel" OnValidSubmit="@CalcAsync" @onkeypress="@HandleKeyPressAsync">
+  <EditForm class="mt-4" Model="_inputModel" OnValidSubmit="@CalcAsync" @onkeypress="@HandleKeyPressAsync">
     <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    @if (_validationMessages.Any())
+    @if (_validationMessages.Any() || _editContext?.GetValidationMessages()?.Any() == true)
     {
-      <ul class="validation-errors">
-        @foreach (var msg in _validationMessages)
-        {
-          <li class="validation-message">@msg</li>
-        }
-      </ul>
+      <div class="mb-3">
+        <ValidationSummary class="mb-0" />
+        <ul class="validation-errors mb-0">
+          @foreach (var msg in _validationMessages)
+          {
+            <li class="validation-message">@msg</li>
+          }
+        </ul>
+      </div>
     }
 
     <div class="form-row">
@@ -29,33 +30,39 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="AssetCost">Asset Cost</label>
-          <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" DisplayName="Asset Cost"
-                       class="@GetInputCssForField("AssetCost")" />
+          <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" @bind-Value:after="CalcAsync"
+                      DisplayName="Asset Cost"
+                      class="@GetInputCssForField("AssetCost")" />
         </div>
 
         <div class="form-group">
           <label for="DownPayment">Down Payment</label>
-          <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" DisplayName="Down Payment"
-                       class="@GetInputCssForField("DownPayment")" />
+          <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" @bind-Value:after="CalcAsync"
+                      DisplayName="Down Payment"
+                      class="@GetInputCssForField("DownPayment")" />
         </div>
 
         <div class="form-group">
           <label for="AnnualInterestRate">APR</label>
-          <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate" DisplayName="Annual Interest Rate"
-                       class="@GetInputCssForField("AnnualInterestRate")" />
+          <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate"
+                      @bind-Value:after="CalcAsync"
+                      DisplayName="Annual Interest Rate"
+                      class="@GetInputCssForField("AnnualInterestRate")" />
         </div>
 
         <div class="form-group">
           <label for="NumberOfYears">Years</label>
-          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" DisplayName="Number of Years"
-                       class="@GetInputCssForField("NumberOfYears")" />
+          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" @bind-Value:after="CalcAsync"
+                      DisplayName="Number of Years"
+                      class="@GetInputCssForField("NumberOfYears")" />
         </div>
 
         <div class="form-group">
           <label for="PeriodsPerYear">Period Frequency</label>
-          <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" DisplayName="Periods per Year"
-                       class="@GetInputCssForField("PeriodsPerYear")">
-            @foreach (var freq in periodFrequencies)
+          <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" @bind-Value:after="CalcAsync"
+                      DisplayName="Periods per Year"
+                      class="@GetInputCssForField("PeriodsPerYear")">
+            @foreach (var freq in _periodFrequencies)
             {
               <option value="@freq.Value">@freq.Key</option>
             }
@@ -64,8 +71,9 @@
 
         <div class="form-group">
           <label for="EscrowPerPeriod">Escrow Payment</label>
-          <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod" DisplayName="Escrow per Period"
-                       class="@GetInputCssForField("EscrowPerPeriod")" />
+          <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod" @bind-Value:after="CalcAsync"
+                      DisplayName="Escrow per Period"
+                      class="@GetInputCssForField("EscrowPerPeriod")" />
         </div>
       </div>
 
@@ -83,7 +91,7 @@
         <div class="form-group">
           <label for="TotalInterestPaid">Interest Paid</label>
           <InputText id="TotalInterestPaid" @bind-Value="_outputModel.TotalInterestPaid" class="form-control"
-                     readonly />
+                    readonly />
         </div>
 
         <div class="form-group">
@@ -95,6 +103,17 @@
           <label for="TotalPaid">Total Paid</label>
           <InputText id="TotalPaid" @bind-Value="_outputModel.TotalPaid" class="form-control" readonly />
         </div>
+
+        <div class="form-group">
+          <label for="InterestSaved">Interest Saved</label>
+          <InputText id="InterestSaved" @bind-Value="_outputModel.InterestSaved" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="PeriodsSaved">Periods Saved</label>
+          <InputText id="PeriodsSaved" @bind-Value="_outputModel.PeriodsSaved" class="form-control" readonly />
+        </div>
+
       </div>
     </div>
 
@@ -113,6 +132,7 @@
           <th scope="col">Interest Paid</th>
           <th scope="col">Principal Paid</th>
           <th scope="col">Balance Left</th>
+          <th scope="col">Payment Modification</th>
         </tr>
       </thead>
       <tbody>
@@ -123,6 +143,13 @@
             <td>@period.InterestPayment</td>
             <td>@period.PrincipalPayment</td>
             <td>@period.BalanceLeft</td>
+            <td>
+              <input type="number"
+                     step="0.01"
+                     value="@GetModificationForPeriod(period.PeriodNumber)"
+                     @onchange="@(async (ChangeEventArgs e) => await SetModificationForPeriod(period.PeriodNumber, decimal.TryParse(e.Value?.ToString(), out var val) ? val : 0m))"
+                     class="form-control form-control-sm" />
+            </td>
           </tr>
         }
       </tbody>
@@ -131,145 +158,3 @@
 
 </div>
 
-@code {
-  private static Dictionary<string, int> periodFrequencies = new Dictionary<string, int>
-  {
-    ["Monthly"] = 12,
-    ["Quarterly"] = 4,
-    ["Yearly"] = 1
-  };
-
-  private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler =
-    new CalculateLoan.Handler()
-      .AddRequestValidator(new CalculateLoan.RequestValidator());
-
-  private InputModel _inputModel = new InputModel();
-  private OutputModel _outputModel = new OutputModel();
-  private IEnumerable<string> _validationMessages = Array.Empty<string>();
-  private IEnumerable<string> _validationFields = Array.Empty<string>();
-
-  protected override void OnInitialized()
-  {
-    Clear();
-  }
-
-  private async Task CalcAsync()
-  {
-    ShowFailureMessages(Enumerable.Empty<IFailure>());
-
-    var request = ConvertToRequest(_inputModel);
-
-    await _calculateLoanHandler
-      .Handle(request)
-      .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-      .TeeOnSuccessAsync(response => ShowOutput(response));
-  }
-
-  private void Clear()
-  {
-    _inputModel = new InputModel();
-    _outputModel = new OutputModel();
-    _validationMessages = Array.Empty<string>();
-    _validationFields = Array.Empty<string>();
-  }
-
-  private async Task HandleKeyPressAsync(KeyboardEventArgs eventArgs)
-  {
-    if (eventArgs.Key == "enter")
-    {
-      await CalcAsync();
-    }
-  }
-  private static CalculateLoan.Request ConvertToRequest(InputModel inputModel)
-  {
-    return new CalculateLoan.Request(
-      assetCost: inputModel.AssetCost,
-      downPayment: inputModel.DownPayment,
-      escrowPerPeriod: inputModel.EscrowPerPeriod,
-      numberOfYears: inputModel.NumberOfYears,
-      periodsPerYear: inputModel.PeriodsPerYear,
-      annualInterestRate: inputModel.AnnualInterestRate / 100);
-  }
-
-  private void ShowOutput(CalculateLoan.Response response)
-  {
-    _outputModel = new OutputModel
-    {
-        TotalPrincipal = $"{response.TotalPrincipal:c}",
-        PaymentPerPeriod = $"{response.PaymentPerPeriod:c}",
-        TotalInterestPaid = $"{response.TotalInterestPaid:c}",
-        TotalEscrowPaid = $"{response.TotalEscrowPaid:c}",
-        TotalPaid = $"{response.TotalPaid:c}",
-        Schedule = response.Schedule.Select(p => new OutputPeriodModel(p.PeriodNumber, p.InterestPayment, p.PrincipalPayment,
-        p.BalanceLeft)).ToList(),
-    };
-  }
-
-  private void ShowFailureMessages(IEnumerable<IFailure> failures)
-  {
-    _validationMessages = failures.Select(f => f.Message);
-    _validationFields = failures
-      .Select(f => f.UiHandle)
-      .Where(f => f is not null)
-      .Select(f => f!);
-  }
-
-  private string GetInputCssForField(string fieldName)
-  {
-    return string.Join(" ",
-      "form-control",
-      (_validationFields.Contains(fieldName) ? "invalid" : null));
-  }
-
-  private sealed class InputModel
-  {
-    [Display(Name = "Asset Cost")]
-    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
-    public decimal AssetCost { get; set; }
-
-    [Display(Name = "Down Payment")]
-    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
-    [MaxValue("AssetCost", ErrorMessage = "{0} cannot be greater than Asset Cost.")]
-    public decimal DownPayment { get; set; }
-
-    [Display(Name = "Escrow per Period")]
-    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
-    public decimal EscrowPerPeriod { get; set; }
-
-    [Display(Name = "Number of Years")]
-    [Range(1, int.MaxValue, ErrorMessage = "{0} must be at least 1.")]
-    public int NumberOfYears { get; set; } = 30;
-
-    [Display(Name = "Periods per Year")]
-    [Range(1, int.MaxValue, ErrorMessage = "{0} must be at least 1.")]
-    public int PeriodsPerYear { get; set; } = 12;
-
-    public decimal AnnualInterestRate { get; set; }
-  }
-
-  private sealed class OutputModel
-  {
-    public string TotalPrincipal { get; set; } = String.Empty;
-    public string PaymentPerPeriod { get; set; } = String.Empty;
-    public string TotalInterestPaid { get; set; } = String.Empty;
-    public string TotalEscrowPaid { get; set; } = String.Empty;
-    public string TotalPaid { get; set; } = String.Empty;
-    public IReadOnlyList<OutputPeriodModel> Schedule { get; set; } = new List<OutputPeriodModel>();
-  }
-
-  private sealed class OutputPeriodModel
-  {
-    public OutputPeriodModel(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
-    {
-      PeriodNumber = periodNumber.ToString();
-      InterestPayment = $"{interestPayment:c}";
-      PrincipalPayment = $"{principalPayment:c}";
-      BalanceLeft = $"{balanceLeft:c}";
-    }
-
-    public string PeriodNumber { get; }
-    public string InterestPayment { get; }
-    public string PrincipalPayment { get; }
-    public string BalanceLeft { get; }
-  }
-}

@@ -56,7 +56,7 @@ dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
 dotnet_style_predefined_type_for_member_access = true:suggestion
 
 # Modifier preferences
-dotnet_style_require_accessibility_modifiers = always:suggestion
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 dotnet_style_readonly_field = true:warning
 
 # Parentheses preferences
@@ -113,6 +113,12 @@ csharp_style_pattern_local_over_anonymous_function = true:suggestion
 # Null-checking preference
 csharp_style_throw_expression = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
+
+# File-scoped namespace declarations
+csharp_style_namespace_declarations = file_scoped:warning
+
+# Don't prefer primary constructors
+csharp_style_prefer_primary_constructors = false
 
 # Code block preferences
 csharp_prefer_braces = true:warning
@@ -172,11 +178,26 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
 
-## Naming conventions
+# Analyzers
+# Remove unused usings
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0060.severity = warning
+
+# We prefer the opposite, to enforce the use of the async keyword
+dotnet_diagnostic.AsyncFixer01.severity = none
+
+# CA2016: Forward the 'CancellationToken' parameter to methods
+dotnet_diagnostic.CA2016.severity = warning
+
+# VSTHRD200: Use "Async" suffix for async methods
+dotnet_diagnostic.VSTHRD200.severity = none
+
+# VSTHRD003: Avoid awaiting foreign Tasks (only relevant for VS Extensions)
+dotnet_diagnostic.VSTHRD003.severity = none
+
 [*.{cs,vb}]
 
 ## Naming styles
-
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 dotnet_naming_style.camel_case_style.capitalization = camel_case
 
@@ -257,14 +278,6 @@ dotnet_naming_rule.everything_else_naming.symbols = everything_else
 dotnet_naming_rule.everything_else_naming.style = camel_case_style
 dotnet_naming_rule.everything_else_naming.severity = suggestion
 
-# Analyzers
-# Remove unused usings
-dotnet_diagnostic.IDE0005.severity = warning
-dotnet_diagnostic.IDE0060.severity = warning
-# False-positive, base authentication should be set site-wide
-dotnet_diagnostic.SCS0012.severity = none
-# False-positive, AntiForgery is set site-wide
-dotnet_diagnostic.SCS0016.severity = none
 
 # Javascript and Vue
 [*.{js,jsx,ts,tsx,vue}]

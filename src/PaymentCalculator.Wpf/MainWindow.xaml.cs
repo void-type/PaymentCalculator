@@ -3,90 +3,89 @@ using System.Windows;
 using VoidCore.Model.Events;
 using VoidCore.Model.Functional;
 
-namespace PaymentCalculator.Wpf
+namespace PaymentCalculator.Wpf;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private readonly IEventHandler<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler;
+
+    public MainWindow()
     {
-        private readonly IEventHandler<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler;
+        InitializeComponent();
 
-        public MainWindow()
-        {
-            InitializeComponent();
+        SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox, EscrowPerPeriodTextBox);
 
-            SelectAllTextBoxBehavior.AddBehavior(AssetCostTextBox, DownPaymentTextBox, AnnualInterestRateTextBox, YearsTextBox, EscrowPerPeriodTextBox);
+        _calculateLoanHandler = new CalculateLoan.Handler()
+            .AddRequestValidator(new CalculateLoan.RequestValidator());
 
-            _calculateLoanHandler = new CalculateLoan.Handler()
-                .AddRequestValidator(new CalculateLoan.RequestValidator());
-
-            Clear();
-        }
+        Clear();
+    }
 
 #pragma warning disable S2325 // Methods and properties that don't access instance data should be static
-        private void About_MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            const string? version = ThisAssembly.AssemblyInformationalVersion;
-            MessageBox.Show($"Version: {version}\n\nAuthor: Jeff Schreiner\n\nThis payment calculator is free to use and distribute.\n\nSee the source code at https://github.com/void-type/PaymentCalculator", "About Payment Calculator");
-        }
+    private void About_MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        const string? version = ThisAssembly.AssemblyInformationalVersion;
+        MessageBox.Show($"Version: {version}\n\nAuthor: Jeff Schreiner\n\nThis payment calculator is free to use and distribute.\n\nSee the source code at https://github.com/void-type/PaymentCalculator", "About Payment Calculator");
+    }
 #pragma warning restore S2325 // Methods and properties that don't access instance data should be static
 
-        private void CalcButton_Click(object sender, RoutedEventArgs e)
-        {
-            Calc();
-        }
+    private void CalcButton_Click(object sender, RoutedEventArgs e)
+    {
+        Calc();
+    }
 
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            Clear();
-        }
+    private void ClearButton_Click(object sender, RoutedEventArgs e)
+    {
+        Clear();
+    }
 
-        private CalculateLoan.Request GetRequestFromViewModel()
-        {
-            var viewModel = (LoanViewModel)DataContext;
+    private CalculateLoan.Request GetRequestFromViewModel()
+    {
+        var viewModel = (LoanViewModel)DataContext;
 
-            return new CalculateLoan.Request(
-                assetCost: viewModel.AssetCost,
-                downPayment: viewModel.DownPayment,
-                escrowPerPeriod: viewModel.EscrowPerPeriod,
-                numberOfYears: viewModel.Years,
-                periodsPerYear: (int)viewModel.SelectedPeriodType,
-                annualInterestRate: viewModel.AnnualInterestRate / 100
-            );
-        }
+        return new CalculateLoan.Request(
+            assetCost: viewModel.AssetCost,
+            downPayment: viewModel.DownPayment,
+            escrowPerPeriod: viewModel.EscrowPerPeriod,
+            numberOfYears: viewModel.Years,
+            periodsPerYear: (int)viewModel.SelectedPeriodType,
+            annualInterestRate: viewModel.AnnualInterestRate / 100
+        );
+    }
 
-        private static void ShowFailureMessages(IEnumerable<IFailure> failures)
-        {
-            MessageBox.Show(string.Join("\n", failures.Select(f => f.Message)));
-        }
+    private static void ShowFailureMessages(IEnumerable<IFailure> failures)
+    {
+        MessageBox.Show(string.Join("\n", failures.Select(f => f.Message)));
+    }
 
-        private void ShowCalculationResponse(CalculateLoan.Response response)
-        {
-            var viewModel = (LoanViewModel)DataContext;
+    private void ShowCalculationResponse(CalculateLoan.Response response)
+    {
+        var viewModel = (LoanViewModel)DataContext;
 
-            viewModel.TotalPrincipal = response.TotalPrincipal;
-            viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
-            viewModel.TotalInterestPaid = response.TotalInterestPaid;
-            viewModel.TotalEscrowPaid = response.TotalEscrowPaid;
-            viewModel.TotalPaid = response.TotalPaid;
-            viewModel.Schedule = response.Schedule;
-        }
+        viewModel.TotalPrincipal = response.TotalPrincipal;
+        viewModel.PaymentPerPeriod = response.PaymentPerPeriod;
+        viewModel.TotalInterestPaid = response.TotalInterestPaid;
+        viewModel.TotalEscrowPaid = response.TotalEscrowPaid;
+        viewModel.TotalPaid = response.TotalPaid;
+        viewModel.Schedule = response.Schedule;
+    }
 
-        private void Calc()
-        {
-            var request = GetRequestFromViewModel();
+    private void Calc()
+    {
+        var request = GetRequestFromViewModel();
 
-            _calculateLoanHandler
-                .Handle(request)
-                .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
-                .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
-        }
+        _calculateLoanHandler
+            .Handle(request)
+            .TeeOnFailureAsync(failures => ShowFailureMessages(failures))
+            .TeeOnSuccessAsync(response => ShowCalculationResponse(response));
+    }
 
-        private void Clear()
-        {
-            DataContext = new LoanViewModel();
-            AssetCostTextBox.Focus();
-        }
+    private void Clear()
+    {
+        DataContext = new LoanViewModel();
+        AssetCostTextBox.Focus();
     }
 }
