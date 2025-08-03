@@ -12,7 +12,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task MediumMortgage()
     {
-        var request = new CalculateLoan.Request(350000, 10000, 0, 30, 12, .045m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 30,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -24,7 +33,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task SmallLoanMonthly()
     {
-        var request = new CalculateLoan.Request(2000m, 0m, 15, 5, 12, .005m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 2000m,
+            DownPayment = 0m,
+            EscrowPerPeriod = 15,
+            NumberOfYears = 5,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .005m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -36,7 +54,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task HugeLoanMonthly()
     {
-        var request = new CalculateLoan.Request(1100000m, 100000m, 0, 40, 12, 0.20m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 1100000m,
+            DownPayment = 100000m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 40,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = 0.20m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -48,7 +75,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task HugeLoanQuarterly()
     {
-        var request = new CalculateLoan.Request(1100000m, 100000m, 0, 40, 4, 0.20m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 1100000m,
+            DownPayment = 100000m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 40,
+            PeriodsPerYear = 4,
+            AnnualInterestRate = 0.20m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -60,7 +96,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task HugeLoanYearly()
     {
-        var request = new CalculateLoan.Request(1100000m, 100000m, 0, 40, 1, 0.20m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 1100000m,
+            DownPayment = 100000m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 40,
+            PeriodsPerYear = 1,
+            AnnualInterestRate = 0.20m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -72,7 +117,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task NoLoan()
     {
-        var request = new CalculateLoan.Request(0m, 0m, 0, 40, 12, 0.20m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 0m,
+            DownPayment = 0m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 40,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = 0.20m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -84,7 +138,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task PaidLoan()
     {
-        var request = new CalculateLoan.Request(10m, 10m, 0, 40, 12, 0.20m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 10m,
+            DownPayment = 10m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 40,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = 0.20m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -96,7 +159,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task LongLoanMonthly()
     {
-        var request = new CalculateLoan.Request(1100m, 10m, 0, 200, 12, 0.05m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 1100m,
+            DownPayment = 10m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 200,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = 0.05m,
+            PaymentModifications = []
+        };
 
         var response = await _calculator.Handle(request).MapAsync(r => r.Value);
 
@@ -108,7 +180,16 @@ public class CalculateLoanHandlerTests
     [Fact]
     public async Task TooLargeLoanReturnsFailure()
     {
-        var request = new CalculateLoan.Request(1100m, 10m, 0, 20000000, 12, 0.5m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 1100m,
+            DownPayment = 10m,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 20000000,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = 0.5m,
+            PaymentModifications = []
+        };
 
         var result = await _calculator.Handle(request);
 

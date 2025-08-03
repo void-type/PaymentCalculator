@@ -46,14 +46,17 @@ public partial class MainWindow : Window
     {
         var viewModel = (LoanViewModel)DataContext;
 
-        return new CalculateLoan.Request(
-            assetCost: viewModel.AssetCost,
-            downPayment: viewModel.DownPayment,
-            escrowPerPeriod: viewModel.EscrowPerPeriod,
-            numberOfYears: viewModel.Years,
-            periodsPerYear: (int)viewModel.SelectedPeriodType,
-            annualInterestRate: viewModel.AnnualInterestRate / 100
-        );
+        return new CalculateLoan.Request
+        {
+            AssetCost = viewModel.AssetCost,
+            DownPayment = viewModel.DownPayment,
+            EscrowPerPeriod = viewModel.EscrowPerPeriod,
+            NumberOfYears = viewModel.Years,
+            PeriodsPerYear = (int)viewModel.SelectedPeriodType,
+            AnnualInterestRate = viewModel.AnnualInterestRate / 100,
+            // TODO: Implement payment modifications UI
+            PaymentModifications = []
+        };
     }
 
     private static void ShowFailureMessages(IEnumerable<IFailure> failures)

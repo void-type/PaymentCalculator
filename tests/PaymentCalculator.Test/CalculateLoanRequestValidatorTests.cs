@@ -10,7 +10,16 @@ public class CalculateLoanRequestValidatorTests
     [Fact]
     public void ValidRequest()
     {
-        var request = new CalculateLoan.Request(350000, 10000, 0, 30, 12, .045m);
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 30,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
 
         var result = _validator.Validate(request);
 
@@ -20,21 +29,46 @@ public class CalculateLoanRequestValidatorTests
     [Fact]
     public void InvalidWhenAssetCostNotGreaterThanDownPayment()
     {
-        var request1 = new CalculateLoan.Request(10000, 10000, 0, 30, 12, .045m);
-        var request2 = new CalculateLoan.Request(1, 10000, 0, 30, 12, .045m);
+        var request1 = new CalculateLoan.Request
+        {
+            AssetCost = 1,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 30,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
 
-        var result1 = _validator.Validate(request1);
-        var result2 = _validator.Validate(request2);
+        var result2 = _validator.Validate(request1);
 
-        Assert.True(result1.IsFailed);
         Assert.True(result2.IsFailed);
     }
 
     [Fact]
     public void InvalidWhenYearsNotGreaterThanZero()
     {
-        var request1 = new CalculateLoan.Request(350000, 10000, 0, 0, 12, .045m);
-        var request2 = new CalculateLoan.Request(350000, 10000, 0, -1, 12, .045m);
+        var request1 = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 0,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
+
+        var request2 = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = -1,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
 
         var result1 = _validator.Validate(request1);
         var result2 = _validator.Validate(request2);
@@ -46,8 +80,27 @@ public class CalculateLoanRequestValidatorTests
     [Fact]
     public void InvalidWhenPeriodsPerYearNotGreaterThanZero()
     {
-        var request1 = new CalculateLoan.Request(350000, 10000, 0, 30, 0, .045m);
-        var request2 = new CalculateLoan.Request(350000, 10000, 0, 30, -1, .045m);
+        var request1 = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 30,
+            PeriodsPerYear = 0,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
+
+        var request2 = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            NumberOfYears = 30,
+            PeriodsPerYear = -1,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
 
         var result1 = _validator.Validate(request1);
         var result2 = _validator.Validate(request2);

@@ -205,7 +205,7 @@ public partial class Index : ComponentBase
         public decimal AnnualInterestRate { get; set; }
 
         [Display(Name = "Payment Modifications")]
-        public List<AmortizationInputPaymentModificationViewModel> PaymentModifications { get; set; } = new();
+        public List<AmortizationInputPaymentModificationViewModel> PaymentModifications { get; set; } = [];
     }
 
     private sealed class AmortizationInputPaymentModificationViewModel
