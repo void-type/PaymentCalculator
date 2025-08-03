@@ -23,10 +23,10 @@ public partial class Index : ComponentBase
             .AddRequestValidator(new CalculateLoan.RequestValidator());
 
     private EditContext? _editContext;
-    private AmortizationInputViewModel _inputModel = new AmortizationInputViewModel();
-    private AmortizationOutputViewModel _outputModel = new AmortizationOutputViewModel();
-    private IEnumerable<string> _validationMessages = Array.Empty<string>();
-    private IEnumerable<string> _validationFields = Array.Empty<string>();
+    private AmortizationInputViewModel _inputModel = new();
+    private AmortizationOutputViewModel _outputModel = new();
+    private IEnumerable<string> _validationMessages = [];
+    private IEnumerable<string> _validationFields = [];
 
     protected override void OnInitialized()
     {
@@ -36,7 +36,7 @@ public partial class Index : ComponentBase
 
     private async Task CalcAsync()
     {
-        ShowFailureMessages(Enumerable.Empty<IFailure>());
+        ShowFailureMessages([]);
 
         var request = ConvertToRequest(_inputModel);
 
@@ -94,8 +94,7 @@ public partial class Index : ComponentBase
             TotalEscrowPaid = $"{response.TotalEscrowPaid:c}",
             TotalPaid = $"{response.TotalPaid:c}",
             InterestSaved = interestSaved > 0 ? $"{interestSaved:c}" : string.Empty,
-            PeriodsSaved = $"{periodsSaved}",
-            // PeriodsSaved = periodsSaved > 0 ? $"{periodsSaved}" : string.Empty,
+            PeriodsSaved = periodsSaved > 0 ? $"{periodsSaved}" : string.Empty,
             Schedule = response.Schedule
                 .Select(p => new AmortizationOutputPeriodViewModel(
                     p.PeriodNumber,
@@ -119,8 +118,8 @@ public partial class Index : ComponentBase
     {
         _inputModel = new AmortizationInputViewModel();
         _outputModel = new AmortizationOutputViewModel();
-        _validationMessages = Array.Empty<string>();
-        _validationFields = Array.Empty<string>();
+        _validationMessages = [];
+        _validationFields = [];
 
         _editContext = new EditContext(_inputModel);
     }

@@ -109,7 +109,7 @@
         </div>
 
         <div class="form-group">
-          <label for="PeriodsSaved">Periods Saved</label>
+          <label for="PeriodsSaved">Payments Saved</label>
           <InputText id="PeriodsSaved" @bind-Value="_outputModel.PeriodsSaved" class="form-control" readonly />
         </div>
 
@@ -147,7 +147,8 @@
                      step="0.01"
                      value="@GetModificationForPeriod(period.PeriodNumber)"
                      @onchange="@(async (ChangeEventArgs e) => await SetModificationForPeriod(period.PeriodNumber, decimal.TryParse(e.Value?.ToString(), out var val) ? val : 0m))"
-                     class="form-control form-control-sm" />
+                     class="form-control form-control-sm"
+                     title="Enter amount that you want to add or remove to the payment for this period" />
             </td>
           </tr>
         }
