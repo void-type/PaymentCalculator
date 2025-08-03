@@ -15,5 +15,5 @@
 
 @code{
 
-    private string version = ThisAssembly.AssemblyInformationalVersion.Split('+').FirstOrDefault() ?? "";
+    private readonly string version = ThisAssembly.AssemblyInformationalVersion.Split('+').FirstOrDefault() ?? "";
 }

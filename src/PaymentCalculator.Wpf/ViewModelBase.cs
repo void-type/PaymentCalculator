@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace PaymentCalculator.Wpf
 {
-    public abstract class ViewModelAbstract : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

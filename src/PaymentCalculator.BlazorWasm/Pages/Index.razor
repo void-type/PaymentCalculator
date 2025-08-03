@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using PaymentCalculator.BlazorWasm.Attributes
 @using PaymentCalculator.Model
+@using System.ComponentModel.DataAnnotations
 @using VoidCore.Model.Functional
 @using VoidCore.Model.Events
 @using VoidCore.Finance
@@ -12,7 +14,7 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    @if (_validationMessages.Count() > 0)
+    @if (_validationMessages.Any())
     {
       <ul class="validation-errors">
         @foreach (var msg in _validationMessages)
@@ -27,30 +29,31 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="AssetCost">Asset Cost</label>
-          <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" class="@GetInputCssForField("AssetCost")" />
+          <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" DisplayName="Asset Cost"
+                       class="@GetInputCssForField("AssetCost")" />
         </div>
 
         <div class="form-group">
           <label for="DownPayment">Down Payment</label>
-          <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment"
+          <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" DisplayName="Down Payment"
                        class="@GetInputCssForField("DownPayment")" />
         </div>
 
         <div class="form-group">
           <label for="AnnualInterestRate">APR</label>
-          <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate"
+          <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate" DisplayName="Annual Interest Rate"
                        class="@GetInputCssForField("AnnualInterestRate")" />
         </div>
 
         <div class="form-group">
           <label for="NumberOfYears">Years</label>
-          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears"
+          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" DisplayName="Number of Years"
                        class="@GetInputCssForField("NumberOfYears")" />
         </div>
 
         <div class="form-group">
           <label for="PeriodsPerYear">Period Frequency</label>
-          <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear"
+          <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" DisplayName="Periods per Year"
                        class="@GetInputCssForField("PeriodsPerYear")">
             @foreach (var freq in periodFrequencies)
             {
@@ -61,7 +64,7 @@
 
         <div class="form-group">
           <label for="EscrowPerPeriod">Escrow Payment</label>
-          <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod"
+          <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod" DisplayName="Escrow per Period"
                        class="@GetInputCssForField("EscrowPerPeriod")" />
         </div>
       </div>
@@ -93,7 +96,6 @@
           <InputText id="TotalPaid" @bind-Value="_outputModel.TotalPaid" class="form-control" readonly />
         </div>
       </div>
-
     </div>
 
     <div class="form-row">
@@ -102,7 +104,7 @@
     </div>
   </EditForm>
 
-  @if (_outputModel.Schedule.Count() > 0)
+  @if (_outputModel.Schedule.Any())
   {
     <table class="table table-sm mt-4">
       <thead>
@@ -131,15 +133,15 @@
 
 @code {
   private static Dictionary<string, int> periodFrequencies = new Dictionary<string, int>
-    {
-      ["Monthly"] = 12,
-      ["Quarterly"] = 4,
-      ["Yearly"] = 1
-    };
+  {
+    ["Monthly"] = 12,
+    ["Quarterly"] = 4,
+    ["Yearly"] = 1
+  };
 
   private static EventHandlerDecorator<CalculateLoan.Request, CalculateLoan.Response> _calculateLoanHandler =
     new CalculateLoan.Handler()
-    .AddRequestValidator(new CalculateLoan.RequestValidator());
+      .AddRequestValidator(new CalculateLoan.RequestValidator());
 
   private InputModel _inputModel = new InputModel();
   private OutputModel _outputModel = new OutputModel();
@@ -192,7 +194,7 @@
   private void ShowOutput(CalculateLoan.Response response)
   {
     _outputModel = new OutputModel
-      {
+    {
         TotalPrincipal = $"{response.TotalPrincipal:c}",
         PaymentPerPeriod = $"{response.PaymentPerPeriod:c}",
         TotalInterestPaid = $"{response.TotalInterestPaid:c}",
@@ -200,7 +202,7 @@
         TotalPaid = $"{response.TotalPaid:c}",
         Schedule = response.Schedule.Select(p => new OutputPeriodModel(p.PeriodNumber, p.InterestPayment, p.PrincipalPayment,
         p.BalanceLeft)).ToList(),
-      };
+    };
   }
 
   private void ShowFailureMessages(IEnumerable<IFailure> failures)
@@ -219,17 +221,33 @@
       (_validationFields.Contains(fieldName) ? "invalid" : null));
   }
 
-  private class InputModel
+  private sealed class InputModel
   {
+    [Display(Name = "Asset Cost")]
+    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
     public decimal AssetCost { get; set; }
+
+    [Display(Name = "Down Payment")]
+    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
+    [MaxValue("AssetCost", ErrorMessage = "{0} cannot be greater than Asset Cost.")]
     public decimal DownPayment { get; set; }
+
+    [Display(Name = "Escrow per Period")]
+    [Range(0, double.MaxValue, ErrorMessage = "{0} must be a positive number.")]
     public decimal EscrowPerPeriod { get; set; }
+
+    [Display(Name = "Number of Years")]
+    [Range(1, int.MaxValue, ErrorMessage = "{0} must be at least 1.")]
     public int NumberOfYears { get; set; } = 30;
+
+    [Display(Name = "Periods per Year")]
+    [Range(1, int.MaxValue, ErrorMessage = "{0} must be at least 1.")]
     public int PeriodsPerYear { get; set; } = 12;
+
     public decimal AnnualInterestRate { get; set; }
   }
 
-  private class OutputModel
+  private sealed class OutputModel
   {
     public string TotalPrincipal { get; set; } = String.Empty;
     public string PaymentPerPeriod { get; set; } = String.Empty;
@@ -239,7 +257,7 @@
     public IReadOnlyList<OutputPeriodModel> Schedule { get; set; } = new List<OutputPeriodModel>();
   }
 
-  private class OutputPeriodModel
+  private sealed class OutputPeriodModel
   {
     public OutputPeriodModel(int periodNumber, decimal interestPayment, decimal principalPayment, decimal balanceLeft)
     {

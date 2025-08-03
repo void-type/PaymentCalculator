@@ -2,7 +2,7 @@
 
 namespace PaymentCalculator.Wpf
 {
-    public class LoanViewModel : ViewModelAbstract
+    public class LoanViewModel : ViewModelBase
     {
         private decimal _assetCost;
         private decimal _annualInterestRate;

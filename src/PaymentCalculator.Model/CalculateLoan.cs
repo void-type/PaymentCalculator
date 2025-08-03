@@ -82,15 +82,21 @@ namespace PaymentCalculator.Model
         {
             public RequestValidator()
             {
-                CreateRule(r => new Failure("The down payment must be less than the asset cost.", nameof(r.DownPayment)))
-                    .InvalidWhen(r => r.DownPayment >= r.AssetCost)
+                CreateRule(r => new Failure("The Asset Cost must be positive.", nameof(r.AssetCost)))
+                    .InvalidWhen(r => r.AssetCost < 0);
+
+                CreateRule(r => new Failure("The Down Payment must be less than or equal to the asset cost.", nameof(r.DownPayment)))
+                    .InvalidWhen(r => r.DownPayment > r.AssetCost)
                     .ExceptWhen(r => r.AssetCost == 0);
 
-                CreateRule(r => new Failure("The term must be greater than zero.", nameof(r.NumberOfYears)))
-                    .InvalidWhen(r => r.NumberOfYears <= 0);
+                CreateRule(r => new Failure("The Escrow per Period must be positive.", nameof(r.EscrowPerPeriod)))
+                    .InvalidWhen(r => r.EscrowPerPeriod < 0);
+
+                CreateRule(r => new Failure("The Number of Years must be greater than zero.", nameof(r.NumberOfYears)))
+                    .InvalidWhen(r => r.NumberOfYears < 1);
 
                 CreateRule(r => new Failure("Periods per year must be greater than zero.", nameof(r.PeriodsPerYear)))
-                    .InvalidWhen(r => r.PeriodsPerYear <= 0);
+                    .InvalidWhen(r => r.PeriodsPerYear < 1);
             }
         }
     }
