@@ -48,8 +48,8 @@ public partial class Investment : ComponentBase
 
     private static InvestmentRequest ConvertToRequest(InvestmentInputViewModel inputModel)
     {
-        var numberOfPeriods = inputModel.NumberOfYears * inputModel.ContributionFrequency;
-        var ratePerPeriod = (inputModel.AnnualReturnRate / 100) / inputModel.ContributionFrequency;
+        var numberOfPeriods = inputModel.NumberOfYears * inputModel.PeriodFrequency;
+        var ratePerPeriod = (inputModel.AnnualReturnRate / 100) / inputModel.PeriodFrequency;
 
         return new InvestmentRequest(
             inputModel.InitialInvestment,
@@ -60,14 +60,11 @@ public partial class Investment : ComponentBase
 
     private async Task ShowOutput(InvestmentResponse response)
     {
-        var totalGain = response.FinalValue - response.Request.InitialInvestment - response.TotalContributions;
-
         _outputModel = new InvestmentOutputViewModel
         {
             FinalValue = $"{response.FinalValue:c}",
             TotalContributions = $"{response.TotalContributions:c}",
             TotalInterestEarned = $"{response.TotalInterestEarned:c}",
-            TotalGain = $"{totalGain:c}",
             Schedule = response.Schedule
                 .Select(p => new InvestmentOutputPeriodViewModel(
                     p.PeriodNumber.ToString(),
@@ -123,13 +120,13 @@ public partial class Investment : ComponentBase
         public decimal PeriodicContribution { get; set; }
 
         [Display(Name = "Annual Return Rate")]
-        public decimal AnnualReturnRate { get; set; } = 7;
+        public decimal AnnualReturnRate { get; set; }
 
         [Display(Name = "Number of Years")]
         public int NumberOfYears { get; set; } = 30;
 
         [Display(Name = "Contribution Frequency")]
-        public int ContributionFrequency { get; set; } = 12;
+        public int PeriodFrequency { get; set; } = 12;
     }
 
     private sealed class InvestmentOutputViewModel
@@ -137,7 +134,6 @@ public partial class Investment : ComponentBase
         public string FinalValue { get; set; } = string.Empty;
         public string TotalContributions { get; set; } = string.Empty;
         public string TotalInterestEarned { get; set; } = string.Empty;
-        public string TotalGain { get; set; } = string.Empty;
         public IReadOnlyList<InvestmentOutputPeriodViewModel> Schedule { get; set; } = new List<InvestmentOutputPeriodViewModel>();
     }
 

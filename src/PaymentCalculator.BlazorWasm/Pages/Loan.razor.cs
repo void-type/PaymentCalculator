@@ -9,7 +9,7 @@ using VoidCore.Model.Functional;
 
 namespace PaymentCalculator.BlazorWasm.Pages;
 
-public partial class Index : ComponentBase
+public partial class Loan : ComponentBase
 {
     private static readonly Dictionary<string, int> _periodFrequencies = new()
     {

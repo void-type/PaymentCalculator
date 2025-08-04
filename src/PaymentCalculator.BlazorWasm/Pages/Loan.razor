@@ -1,0 +1,160 @@
+﻿@page "/loan"
+@using PaymentCalculator.Model
+@using System.ComponentModel.DataAnnotations
+@using VoidCore.Model.Functional
+@using VoidCore.Model.Events
+@using VoidCore.Finance
+
+<div class="container my-4">
+
+  <h1>Loan Calculator</h1>
+  <PageTitle>Loan Calculator</PageTitle>
+
+  <EditForm class="mt-4" Model="_inputModel" OnValidSubmit="@CalcAsync" @onkeypress="@HandleKeyPressAsync">
+    <DataAnnotationsValidator />
+    @if (_validationMessages.Any() || _editContext?.GetValidationMessages()?.Any() == true)
+    {
+      <div class="mb-3">
+        <ValidationSummary class="mb-0" />
+        <ul class="validation-errors mb-0">
+          @foreach (var msg in _validationMessages)
+          {
+            <li class="validation-message">@msg</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="form-row">
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="AssetCost">Asset Cost</label>
+          <InputNumber id="AssetCost" @bind-Value="_inputModel.AssetCost" @bind-Value:after="CalcAsync"
+                       DisplayName="Asset Cost"
+                       class="@GetInputCssForField("AssetCost")" />
+        </div>
+
+        <div class="form-group">
+          <label for="DownPayment">Down Payment</label>
+          <InputNumber id="DownPayment" @bind-Value="_inputModel.DownPayment" @bind-Value:after="CalcAsync"
+                       DisplayName="Down Payment"
+                       class="@GetInputCssForField("DownPayment")" />
+        </div>
+
+        <div class="form-group">
+          <label for="AnnualInterestRate">APR (%)</label>
+          <InputNumber id="AnnualInterestRate" @bind-Value="_inputModel.AnnualInterestRate"
+                       @bind-Value:after="CalcAsync"
+                       DisplayName="Annual Interest Rate"
+                       class="@GetInputCssForField("AnnualInterestRate")" />
+        </div>
+
+        <div class="form-group">
+          <label for="NumberOfYears">Years</label>
+          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" @bind-Value:after="CalcAsync"
+                       DisplayName="Number of Years"
+                       class="@GetInputCssForField("NumberOfYears")" />
+        </div>
+
+        <div class="form-group">
+          <label for="PeriodsPerYear">Period Frequency</label>
+          <InputSelect id="PeriodsPerYear" @bind-Value="_inputModel.PeriodsPerYear" @bind-Value:after="CalcAsync"
+                       DisplayName="Periods per Year"
+                       class="@GetInputCssForField("PeriodsPerYear")">
+            @foreach (var freq in _periodFrequencies)
+            {
+              <option value="@freq.Value">@freq.Key</option>
+            }
+          </InputSelect>
+        </div>
+
+        <div class="form-group">
+          <label for="EscrowPerPeriod">Escrow Payment</label>
+          <InputNumber id="EscrowPerPeriod" @bind-Value="_inputModel.EscrowPerPeriod" @bind-Value:after="CalcAsync"
+                       DisplayName="Escrow per Period"
+                       class="@GetInputCssForField("EscrowPerPeriod")" />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="PaymentPerPeriod">Payment</label>
+          <InputText id="PaymentPerPeriod" @bind-Value="_outputModel.PaymentPerPeriod" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalPrincipal">Loan Amount</label>
+          <InputText id="TotalPrincipal" @bind-Value="_outputModel.TotalPrincipal" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalInterestPaid">Interest Paid</label>
+          <InputText id="TotalInterestPaid" @bind-Value="_outputModel.TotalInterestPaid" class="form-control"
+                     readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalEscrowPaid">Escrow Paid</label>
+          <InputText id="TotalEscrowPaid" @bind-Value="_outputModel.TotalEscrowPaid" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalPaid">Total Paid</label>
+          <InputText id="TotalPaid" @bind-Value="_outputModel.TotalPaid" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="InterestSaved">Interest Saved</label>
+          <InputText id="InterestSaved" @bind-Value="_outputModel.InterestSaved" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="PeriodsSaved">Payments Saved</label>
+          <InputText id="PeriodsSaved" @bind-Value="_outputModel.PeriodsSaved" class="form-control" readonly />
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-row">
+      <button class="btn btn-dark mr-1" type="submit">Calculate</button>
+      <button class="btn btn-dark" @onclick="Clear">Clear</button>
+    </div>
+  </EditForm>
+
+  @if (_outputModel.Schedule.Any())
+  {
+    <table class="table table-sm mt-4">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Interest Paid</th>
+          <th scope="col">Principal Paid</th>
+          <th scope="col">Balance Left</th>
+          <th scope="col">Payment Modification</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var period in _outputModel.Schedule)
+        {
+          <tr>
+            <th scope="row">@period.PeriodNumber</th>
+            <td>@period.InterestPayment</td>
+            <td>@period.PrincipalPayment</td>
+            <td>@period.BalanceLeft</td>
+            <td>
+              <input type="number"
+                     step="0.01"
+                     value="@GetModificationForPeriod(period.PeriodNumber)"
+                     @onchange="@(async (ChangeEventArgs e) => await SetModificationForPeriod(period.PeriodNumber, decimal.TryParse(e.Value?.ToString(), out var val) ? val : 0m))"
+                     class="form-control form-control-sm"
+                     title="Enter amount that you want to add or remove to the payment for this period" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+</div>

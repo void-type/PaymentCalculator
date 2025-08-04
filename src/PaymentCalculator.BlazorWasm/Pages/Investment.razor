@@ -8,6 +8,7 @@
 <div class="container my-4">
 
   <h1>Investment Calculator</h1>
+  <PageTitle>Investment Calculator</PageTitle>
 
   <EditForm class="mt-4" Model="_inputModel" OnValidSubmit="@CalcAsync" @onkeypress="@HandleKeyPressAsync">
     <DataAnnotationsValidator />
@@ -30,37 +31,38 @@
         <div class="form-group">
           <label for="InitialInvestment">Initial Investment</label>
           <InputNumber id="InitialInvestment" @bind-Value="_inputModel.InitialInvestment" @bind-Value:after="CalcAsync"
-                      DisplayName="Initial Investment"
-                      class="@GetInputCssForField("InitialInvestment")" />
+                       DisplayName="Initial Investment"
+                       class="@GetInputCssForField("InitialInvestment")" />
         </div>
 
         <div class="form-group">
           <label for="PeriodicContribution">Periodic Contribution</label>
-          <InputNumber id="PeriodicContribution" @bind-Value="_inputModel.PeriodicContribution" @bind-Value:after="CalcAsync"
-                      DisplayName="Periodic Contribution"
-                      class="@GetInputCssForField("PeriodicContribution")" />
+          <InputNumber id="PeriodicContribution" @bind-Value="_inputModel.PeriodicContribution"
+                       @bind-Value:after="CalcAsync"
+                       DisplayName="Periodic Contribution"
+                       class="@GetInputCssForField("PeriodicContribution")" />
         </div>
 
         <div class="form-group">
-          <label for="AnnualReturnRate">Annual Return Rate (%)</label>
+          <label for="AnnualReturnRate">APY (%)</label>
           <InputNumber id="AnnualReturnRate" @bind-Value="_inputModel.AnnualReturnRate"
-                      @bind-Value:after="CalcAsync"
-                      DisplayName="Annual Return Rate"
-                      class="@GetInputCssForField("AnnualReturnRate")" />
+                       @bind-Value:after="CalcAsync"
+                       DisplayName="APY (%)"
+                       class="@GetInputCssForField("AnnualReturnRate")" />
         </div>
 
         <div class="form-group">
           <label for="NumberOfYears">Years</label>
           <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" @bind-Value:after="CalcAsync"
-                      DisplayName="Number of Years"
-                      class="@GetInputCssForField("NumberOfYears")" />
+                       DisplayName="Number of Years"
+                       class="@GetInputCssForField("NumberOfYears")" />
         </div>
 
         <div class="form-group">
-          <label for="ContributionFrequency">Contribution Frequency</label>
-          <InputSelect id="ContributionFrequency" @bind-Value="_inputModel.ContributionFrequency" @bind-Value:after="CalcAsync"
-                      DisplayName="Contribution Frequency"
-                      class="@GetInputCssForField("ContributionFrequency")">
+          <label for="PeriodFrequency">Period Frequency</label>
+          <InputSelect id="PeriodFrequency" @bind-Value="_inputModel.PeriodFrequency" @bind-Value:after="CalcAsync"
+                       DisplayName="Period Frequency"
+                       class="@GetInputCssForField("PeriodFrequency")">
             @foreach (var freq in _contributionFrequencies)
             {
               <option value="@freq.Value">@freq.Key</option>
@@ -77,18 +79,14 @@
 
         <div class="form-group">
           <label for="TotalContributions">Total Contributions</label>
-          <InputText id="TotalContributions" @bind-Value="_outputModel.TotalContributions" class="form-control" readonly />
+          <InputText id="TotalContributions" @bind-Value="_outputModel.TotalContributions" class="form-control"
+                     readonly />
         </div>
 
         <div class="form-group">
           <label for="TotalInterestEarned">Interest Earned</label>
           <InputText id="TotalInterestEarned" @bind-Value="_outputModel.TotalInterestEarned" class="form-control"
-                    readonly />
-        </div>
-
-        <div class="form-group">
-          <label for="TotalGain">Total Gain</label>
-          <InputText id="TotalGain" @bind-Value="_outputModel.TotalGain" class="form-control" readonly />
+                     readonly />
         </div>
       </div>
     </div>
