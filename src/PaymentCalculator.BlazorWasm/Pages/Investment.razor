@@ -1,0 +1,127 @@
+@page "/investment"
+@using PaymentCalculator.Model
+@using System.ComponentModel.DataAnnotations
+@using VoidCore.Model.Functional
+@using VoidCore.Model.Events
+@using VoidCore.Finance
+
+<div class="container my-4">
+
+  <h1>Investment Growth Calculator</h1>
+
+  <EditForm class="mt-4" Model="_inputModel" OnValidSubmit="@CalcAsync" @onkeypress="@HandleKeyPressAsync">
+    <DataAnnotationsValidator />
+    @if (_validationMessages.Any() || _editContext?.GetValidationMessages()?.Any() == true)
+    {
+      <div class="mb-3">
+        <ValidationSummary class="mb-0" />
+        <ul class="validation-errors mb-0">
+          @foreach (var msg in _validationMessages)
+          {
+            <li class="validation-message">@msg</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="form-row">
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="InitialInvestment">Initial Investment</label>
+          <InputNumber id="InitialInvestment" @bind-Value="_inputModel.InitialInvestment" @bind-Value:after="CalcAsync"
+                      DisplayName="Initial Investment"
+                      class="@GetInputCssForField("InitialInvestment")" />
+        </div>
+
+        <div class="form-group">
+          <label for="PeriodicContribution">Periodic Contribution</label>
+          <InputNumber id="PeriodicContribution" @bind-Value="_inputModel.PeriodicContribution" @bind-Value:after="CalcAsync"
+                      DisplayName="Periodic Contribution"
+                      class="@GetInputCssForField("PeriodicContribution")" />
+        </div>
+
+        <div class="form-group">
+          <label for="AnnualReturnRate">Annual Return Rate (%)</label>
+          <InputNumber id="AnnualReturnRate" @bind-Value="_inputModel.AnnualReturnRate"
+                      @bind-Value:after="CalcAsync"
+                      DisplayName="Annual Return Rate"
+                      class="@GetInputCssForField("AnnualReturnRate")" />
+        </div>
+
+        <div class="form-group">
+          <label for="NumberOfYears">Years</label>
+          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" @bind-Value:after="CalcAsync"
+                      DisplayName="Number of Years"
+                      class="@GetInputCssForField("NumberOfYears")" />
+        </div>
+
+        <div class="form-group">
+          <label for="ContributionFrequency">Contribution Frequency</label>
+          <InputSelect id="ContributionFrequency" @bind-Value="_inputModel.ContributionFrequency" @bind-Value:after="CalcAsync"
+                      DisplayName="Contribution Frequency"
+                      class="@GetInputCssForField("ContributionFrequency")">
+            @foreach (var freq in _contributionFrequencies)
+            {
+              <option value="@freq.Value">@freq.Key</option>
+            }
+          </InputSelect>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="FinalValue">Final Value</label>
+          <InputText id="FinalValue" @bind-Value="_outputModel.FinalValue" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalContributions">Total Contributions</label>
+          <InputText id="TotalContributions" @bind-Value="_outputModel.TotalContributions" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalInterestEarned">Interest Earned</label>
+          <InputText id="TotalInterestEarned" @bind-Value="_outputModel.TotalInterestEarned" class="form-control"
+                    readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="TotalGain">Total Gain</label>
+          <InputText id="TotalGain" @bind-Value="_outputModel.TotalGain" class="form-control" readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <button class="btn btn-dark mr-1" type="submit">Calculate</button>
+      <button class="btn btn-dark" @onclick="Clear">Clear</button>
+    </div>
+  </EditForm>
+
+  @if (_outputModel.Schedule.Any())
+  {
+    <table class="table table-sm mt-4">
+      <thead>
+        <tr>
+          <th scope="col">Period</th>
+          <th scope="col">Contribution</th>
+          <th scope="col">Interest Earned</th>
+          <th scope="col">Period End Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var period in _outputModel.Schedule)
+        {
+          <tr>
+            <th scope="row">@period.PeriodNumber</th>
+            <td>@period.Contribution</td>
+            <td>@period.InterestEarned</td>
+            <td>@period.PeriodEndBalance</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+</div>
