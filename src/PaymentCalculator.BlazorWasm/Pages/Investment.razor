@@ -52,23 +52,36 @@
         </div>
 
         <div class="form-group">
-          <label for="NumberOfYears">Years</label>
-          <InputNumber id="NumberOfYears" @bind-Value="_inputModel.NumberOfYears" @bind-Value:after="CalcAsync"
-                       DisplayName="Number of Years"
-                       class="@GetInputCssForField("NumberOfYears")" />
+          <label for="LengthUnit">Length Unit</label>
+          <InputSelect id="LengthUnit" @bind-Value="_inputModel.LengthUnit" @bind-Value:after="CalcAsync"
+                       DisplayName="Length Unit"
+                       class="@GetInputCssForField("LengthUnit")">
+            <option value="Years">Years</option>
+            <option value="Months">Months</option>
+          </InputSelect>
         </div>
 
         <div class="form-group">
-          <label for="PeriodFrequency">Period Frequency</label>
-          <InputSelect id="PeriodFrequency" @bind-Value="_inputModel.PeriodFrequency" @bind-Value:after="CalcAsync"
-                       DisplayName="Period Frequency"
-                       class="@GetInputCssForField("PeriodFrequency")">
-            @foreach (var freq in _contributionFrequencies)
-            {
-              <option value="@freq.Value">@freq.Key</option>
-            }
-          </InputSelect>
+          <label for="Length">@(_inputModel.LengthUnit == LengthUnit.Years ? "Years" : "Months")</label>
+          <InputNumber id="Length" @bind-Value="_inputModel.Length" @bind-Value:after="CalcAsync"
+                       DisplayName="Length"
+                       class="@GetInputCssForField("Length")" />
         </div>
+
+        @if (_inputModel.LengthUnit == LengthUnit.Years)
+        {
+          <div class="form-group">
+            <label for="PeriodFrequency">Period Frequency</label>
+            <InputSelect id="PeriodFrequency" @bind-Value="_inputModel.PeriodsPerYear" @bind-Value:after="CalcAsync"
+                         DisplayName="Period Frequency"
+                         class="@GetInputCssForField("PeriodFrequency")">
+              @foreach (var freq in _contributionFrequencies)
+              {
+                <option value="@freq.Value">@freq.Key</option>
+              }
+            </InputSelect>
+          </div>
+        }
       </div>
 
       <div class="col-md-6">

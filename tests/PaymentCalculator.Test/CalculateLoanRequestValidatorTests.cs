@@ -15,7 +15,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 30,
+            LengthUnit = LengthUnit.Years,
+            Length = 30,
             PeriodsPerYear = 12,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -34,7 +35,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 1,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 30,
+            LengthUnit = LengthUnit.Years,
+            Length = 30,
             PeriodsPerYear = 12,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -53,7 +55,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 0,
+            LengthUnit = LengthUnit.Years,
+            Length = 0,
             PeriodsPerYear = 12,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -64,7 +67,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = -1,
+            LengthUnit = LengthUnit.Years,
+            Length = -1,
             PeriodsPerYear = 12,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -85,7 +89,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 30,
+            LengthUnit = LengthUnit.Years,
+            Length = 30,
             PeriodsPerYear = 0,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -96,7 +101,8 @@ public class CalculateLoanRequestValidatorTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 30,
+            LengthUnit = LengthUnit.Years,
+            Length = 30,
             PeriodsPerYear = -1,
             AnnualInterestRate = .045m,
             PaymentModifications = []

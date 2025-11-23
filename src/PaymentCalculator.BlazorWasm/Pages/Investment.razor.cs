@@ -48,8 +48,14 @@ public partial class Investment : ComponentBase
 
     private static InvestmentRequest ConvertToRequest(InvestmentInputViewModel inputModel)
     {
-        var numberOfPeriods = inputModel.NumberOfYears * inputModel.PeriodFrequency;
-        var ratePerPeriod = (inputModel.AnnualReturnRate / 100) / inputModel.PeriodFrequency;
+        var numberOfPeriods = inputModel.LengthUnit == LengthUnit.Years
+            ? inputModel.Length * inputModel.PeriodsPerYear
+            : inputModel.Length;
+
+        // When using months, assume monthly periods (12 per year)
+        var periodsPerYear = inputModel.LengthUnit == LengthUnit.Months ? 12 : inputModel.PeriodsPerYear;
+
+        var ratePerPeriod = inputModel.AnnualReturnRate / 100 / periodsPerYear;
 
         return new InvestmentRequest(
             inputModel.InitialInvestment,
@@ -88,7 +94,11 @@ public partial class Investment : ComponentBase
 
     private void Clear()
     {
-        _inputModel = new InvestmentInputViewModel();
+        _inputModel = new InvestmentInputViewModel
+        {
+            Length = 30,
+            LengthUnit = LengthUnit.Years
+        };
         _outputModel = new InvestmentOutputViewModel();
         _validationMessages = [];
         _validationFields = [];
@@ -122,11 +132,14 @@ public partial class Investment : ComponentBase
         [Display(Name = "Annual Return Rate")]
         public decimal AnnualReturnRate { get; set; }
 
-        [Display(Name = "Number of Years")]
-        public int NumberOfYears { get; set; } = 30;
+        [Display(Name = "Length Unit")]
+        public LengthUnit LengthUnit { get; set; } = LengthUnit.Years;
+
+        [Display(Name = "Length")]
+        public int Length { get; set; } = 30;
 
         [Display(Name = "Contribution Frequency")]
-        public int PeriodFrequency { get; set; } = 12;
+        public int PeriodsPerYear { get; set; } = 12;
     }
 
     private sealed class InvestmentOutputViewModel
@@ -151,5 +164,11 @@ public partial class Investment : ComponentBase
         public string Contribution { get; }
         public string InterestEarned { get; }
         public string PeriodEndBalance { get; }
+    }
+
+    private enum LengthUnit
+    {
+        Months,
+        Years
     }
 }

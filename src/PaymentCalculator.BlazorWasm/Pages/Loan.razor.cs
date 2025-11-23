@@ -57,7 +57,8 @@ public partial class Loan : ComponentBase
             AssetCost = inputModel.AssetCost,
             DownPayment = inputModel.DownPayment,
             EscrowPerPeriod = inputModel.EscrowPerPeriod,
-            NumberOfYears = inputModel.NumberOfYears,
+            LengthUnit = inputModel.LengthUnit,
+            Length = inputModel.Length,
             PeriodsPerYear = inputModel.PeriodsPerYear,
             AnnualInterestRate = inputModel.AnnualInterestRate / 100,
             PaymentModifications = ignoreModifications ? [] : modifications
@@ -194,8 +195,11 @@ public partial class Loan : ComponentBase
         [Display(Name = "Escrow per Period")]
         public decimal EscrowPerPeriod { get; set; }
 
-        [Display(Name = "Number of Years")]
-        public int NumberOfYears { get; set; } = 30;
+        [Display(Name = "Length Unit")]
+        public LengthUnit LengthUnit { get; set; } = LengthUnit.Years;
+
+        [Display(Name = "Length")]
+        public int Length { get; set; } = 30;
 
         [Display(Name = "Periods per Year")]
         public int PeriodsPerYear { get; set; } = 12;
@@ -219,11 +223,11 @@ public partial class Loan : ComponentBase
 
     private sealed class AmortizationOutputViewModel
     {
-        public string TotalPrincipal { get; set; } = String.Empty;
-        public string PaymentPerPeriod { get; set; } = String.Empty;
-        public string TotalInterestPaid { get; set; } = String.Empty;
-        public string TotalEscrowPaid { get; set; } = String.Empty;
-        public string TotalPaid { get; set; } = String.Empty;
+        public string TotalPrincipal { get; set; } = string.Empty;
+        public string PaymentPerPeriod { get; set; } = string.Empty;
+        public string TotalInterestPaid { get; set; } = string.Empty;
+        public string TotalEscrowPaid { get; set; } = string.Empty;
+        public string TotalPaid { get; set; } = string.Empty;
         public string InterestSaved { get; set; } = string.Empty;
         public string PeriodsSaved { get; set; } = string.Empty;
         public IReadOnlyList<AmortizationOutputPeriodViewModel> Schedule { get; set; } = new List<AmortizationOutputPeriodViewModel>();

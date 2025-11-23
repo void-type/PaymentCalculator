@@ -51,7 +51,9 @@ public partial class MainWindow : Window
             AssetCost = viewModel.AssetCost,
             DownPayment = viewModel.DownPayment,
             EscrowPerPeriod = viewModel.EscrowPerPeriod,
-            NumberOfYears = viewModel.Years,
+            // TODO: Implement LengthUnit selection in UI
+            LengthUnit = LengthUnit.Years,
+            Length = viewModel.Years,
             PeriodsPerYear = (int)viewModel.SelectedPeriodType,
             AnnualInterestRate = viewModel.AnnualInterestRate / 100,
             // TODO: Implement payment modifications UI

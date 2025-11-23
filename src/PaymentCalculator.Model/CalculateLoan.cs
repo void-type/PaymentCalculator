@@ -14,8 +14,15 @@ public static class CalculateLoan
             try
             {
                 var totalPrincipal = request.AssetCost - request.DownPayment;
-                var numberOfPeriods = request.NumberOfYears * request.PeriodsPerYear;
-                var ratePerPeriod = request.AnnualInterestRate == 0 ? 0 : request.AnnualInterestRate / request.PeriodsPerYear;
+
+                var numberOfPeriods = request.LengthUnit == LengthUnit.Years
+                    ? request.Length * request.PeriodsPerYear
+                    : request.Length;
+
+                // When using months, assume monthly periods (12 per year)
+                var periodsPerYear = request.LengthUnit == LengthUnit.Months ? 12 : request.PeriodsPerYear;
+                
+                var ratePerPeriod = request.AnnualInterestRate == 0 ? 0 : request.AnnualInterestRate / periodsPerYear;
 
                 var amortizationRequest = new AmortizationRequest(totalPrincipal, numberOfPeriods, ratePerPeriod, request.PaymentModifications);
 
@@ -50,7 +57,8 @@ public static class CalculateLoan
         public required decimal AssetCost { get; init; }
         public required decimal DownPayment { get; init; }
         public required decimal EscrowPerPeriod { get; init; }
-        public required int NumberOfYears { get; init; }
+        public required LengthUnit LengthUnit { get; init; } = LengthUnit.Years;
+        public required int Length { get; init; }
         public required int PeriodsPerYear { get; init; }
         public required decimal AnnualInterestRate { get; init; }
         public required List<AmortizationPaymentModification> PaymentModifications { get; init; }
@@ -80,11 +88,17 @@ public static class CalculateLoan
             CreateRule(r => new Failure("Escrow per Period must be positive.", nameof(r.EscrowPerPeriod)))
                 .InvalidWhen(r => r.EscrowPerPeriod < 0);
 
-            CreateRule(r => new Failure("Number of Years must be greater than zero.", nameof(r.NumberOfYears)))
-                .InvalidWhen(r => r.NumberOfYears < 1);
+            CreateRule(r => new Failure("Number of Years must be greater than zero.", nameof(r.Length)))
+                .InvalidWhen(r => r.Length < 1);
 
             CreateRule(r => new Failure("Periods per Year must be greater than zero.", nameof(r.PeriodsPerYear)))
                 .InvalidWhen(r => r.PeriodsPerYear < 1);
         }
     }
+}
+
+public enum LengthUnit
+{
+    Months,
+    Years
 }

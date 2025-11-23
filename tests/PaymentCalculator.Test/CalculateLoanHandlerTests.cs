@@ -17,7 +17,30 @@ public class CalculateLoanHandlerTests
             AssetCost = 350000,
             DownPayment = 10000,
             EscrowPerPeriod = 0,
-            NumberOfYears = 30,
+            LengthUnit = LengthUnit.Years,
+            Length = 30,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .045m,
+            PaymentModifications = []
+        };
+
+        var response = await _calculator.Handle(request).MapAsync(r => r.Value);
+
+        CheckLoan(1722.73m, 280182.82m, 630182.82m, 30 * 12, response);
+        CheckPeriod(452.79m, 1269.94m, 338198.98m, response.Schedule[3]);
+        CheckPeriod(1716.29m, 6.44m, 0.00m, response.Schedule[response.Schedule.Count - 1]);
+    }
+
+    [Fact]
+    public async Task MediumMortgageLengthUnitMonths()
+    {
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 350000,
+            DownPayment = 10000,
+            EscrowPerPeriod = 0,
+            LengthUnit = LengthUnit.Months,
+            Length = 360,
             PeriodsPerYear = 12,
             AnnualInterestRate = .045m,
             PaymentModifications = []
@@ -38,7 +61,30 @@ public class CalculateLoanHandlerTests
             AssetCost = 2000m,
             DownPayment = 0m,
             EscrowPerPeriod = 15,
-            NumberOfYears = 5,
+            LengthUnit = LengthUnit.Years,
+            Length = 5,
+            PeriodsPerYear = 12,
+            AnnualInterestRate = .005m,
+            PaymentModifications = []
+        };
+
+        var response = await _calculator.Handle(request).MapAsync(r => r.Value);
+
+        CheckLoan(48.76m, 25.52m, 2925.52m, 5 * 12, response);
+        CheckPeriod(32.97m, 0.79m, 1868.22m, response.Schedule[3]);
+        CheckPeriod(33.74m, 0.01m, 0.00m, response.Schedule[response.Schedule.Count - 1]);
+    }
+
+    [Fact]
+    public async Task SmallLoanMonthlyLengthUnitMonths()
+    {
+        var request = new CalculateLoan.Request
+        {
+            AssetCost = 2000m,
+            DownPayment = 0m,
+            EscrowPerPeriod = 15,
+            LengthUnit = LengthUnit.Months,
+            Length = 60,
             PeriodsPerYear = 12,
             AnnualInterestRate = .005m,
             PaymentModifications = []
@@ -59,7 +105,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 1100000m,
             DownPayment = 100000m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 40,
+            LengthUnit = LengthUnit.Years,
+            Length = 40,
             PeriodsPerYear = 12,
             AnnualInterestRate = 0.20m,
             PaymentModifications = []
@@ -80,7 +127,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 1100000m,
             DownPayment = 100000m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 40,
+            LengthUnit = LengthUnit.Years,
+            Length = 40,
             PeriodsPerYear = 4,
             AnnualInterestRate = 0.20m,
             PaymentModifications = []
@@ -101,7 +149,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 1100000m,
             DownPayment = 100000m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 40,
+            LengthUnit = LengthUnit.Years,
+            Length = 40,
             PeriodsPerYear = 1,
             AnnualInterestRate = 0.20m,
             PaymentModifications = []
@@ -122,7 +171,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 0m,
             DownPayment = 0m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 40,
+            LengthUnit = LengthUnit.Years,
+            Length = 40,
             PeriodsPerYear = 12,
             AnnualInterestRate = 0.20m,
             PaymentModifications = []
@@ -143,7 +193,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 10m,
             DownPayment = 10m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 40,
+            LengthUnit = LengthUnit.Years,
+            Length = 40,
             PeriodsPerYear = 12,
             AnnualInterestRate = 0.20m,
             PaymentModifications = []
@@ -164,7 +215,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 1100m,
             DownPayment = 10m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 200,
+            LengthUnit = LengthUnit.Years,
+            Length = 200,
             PeriodsPerYear = 12,
             AnnualInterestRate = 0.05m,
             PaymentModifications = []
@@ -185,7 +237,8 @@ public class CalculateLoanHandlerTests
             AssetCost = 1100m,
             DownPayment = 10m,
             EscrowPerPeriod = 0,
-            NumberOfYears = 20000000,
+            LengthUnit = LengthUnit.Years,
+            Length = 20000000,
             PeriodsPerYear = 12,
             AnnualInterestRate = 0.5m,
             PaymentModifications = []
