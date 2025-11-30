@@ -1,155 +1,148 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "./build.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "build"
-            }
-        },
-        {
-            "label": "build-debug",
-            "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipTest -SkipPublish",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": "test",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "build"
-            }
-        },
-        {
-            "label": "test",
-            "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipPublish",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": "test",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "test"
-            }
-        },
-        {
-            "label": "format",
-            "command": "./format.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "build"
-            }
-        },
-        {
-            "label": "update-dependencies",
-            "command": "./updateDependencies.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "build"
-            }
-        },
-        {
-            "label": "watch-blazor-wasm",
-            "command": "./watchBlazorWasm.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": "test",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "watch"
-            }
-        },
-        {
-            "label": "watch-test",
-            "command": "./watchTest.ps1",
-            "options": {
-                "cwd": "./build"
-            },
-            "type": "shell",
-            "group": "test",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false,
-                "group": "watch"
-            }
-        },
-    ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "linux": {
+    "options": {
+      "shell": {
+        "executable": "pwsh"
+      }
+    }
+  },
+  "tasks": [
+    {
+      "label": "build",
+      "command": "./build.ps1",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "build"
+      }
+    },
+    {
+      "label": "build-debug",
+      "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipTest -SkipPublish",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "group": "test",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "build"
+      }
+    },
+    {
+      "label": "test",
+      "command": "./build.ps1 -Configuration Debug -SkipFormat -SkipOutdated -SkipPublish",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "group": "test",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "test"
+      }
+    },
+    {
+      "label": "format",
+      "command": "./format.ps1",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "build"
+      }
+    },
+    {
+      "label": "update-dependencies",
+      "command": "./updateDependencies.ps1",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "build"
+      }
+    },
+    {
+      "label": "watch-blazor-wasm",
+      "command": "./watchBlazorWasm.ps1",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "group": "test",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "watch"
+      }
+    },
+    {
+      "label": "watch-test",
+      "command": "./watchTest.ps1",
+      "options": {
+        "cwd": "./build"
+      },
+      "type": "shell",
+      "group": "test",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+        "group": "watch"
+      }
+    }
+  ]
 }
