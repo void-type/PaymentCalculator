@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/PaymentCalculator.BlazorWasm/PaymentCalculator.BlazorWasm.csproj" />
+    <Project Path="src/PaymentCalculator.Model/PaymentCalculator.Model.csproj" />
+    <Project Path="src/PaymentCalculator.Wpf/PaymentCalculator.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PaymentCalculator.Test/PaymentCalculator.Test.csproj" />
+  </Folder>
+</Solution>
