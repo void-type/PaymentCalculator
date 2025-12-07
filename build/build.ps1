@@ -33,6 +33,9 @@ try {
   # Restore local dotnet tools
   dotnet tool restore
 
+  # Use dotnet tool because the Nuget doesn't seem to set it on build since migrating to slnx.
+  dotnet nbgv cloud
+
   # Build solution
   if (-not $SkipFormat) {
     # TODO: temporarily disabled due to bug: https://github.com/dotnet/format/issues/1337
